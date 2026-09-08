@@ -62,6 +62,35 @@ tr.kanja td{background:var(--green)}tr.preroll td{background:var(--pink)}tr.edib
  body{background:white}.hero,.tabs,.noPrint,.btn{display:none!important}.app{max-width:none;padding:0}.section{display:none!important}#docket.section.active{display:block!important}
  .card{border:0;box-shadow:none;padding:0}.docket{border:0;padding:0}.printOnly{display:block}
 }
+
+/* v0.3.2 compact iPhone tables */
+.tablewrap table{table-layout:fixed}
+.tablewrap th,.tablewrap td{
+  white-space:normal;
+  overflow-wrap:normal;
+  word-break:normal;
+  hyphens:none;
+  vertical-align:middle;
+}
+.tablewrap input[type="number"]{
+  width:100% !important;
+  min-width:0;
+  padding:7px 5px;
+  text-align:center;
+}
+#deliveryLines td:first-child,
+#weekRows td:first-child,
+#catalogueRows td:first-child,
+#dockRows td:first-child{
+  white-space:normal;
+  overflow-wrap:normal;
+  word-break:normal;
+}
+@media(max-width:650px){
+  .tablewrap table{min-width:600px}
+  .tablewrap th,.tablewrap td{padding:6px 5px;font-size:12px;line-height:1.25}
+}
+
 </style>
 </head>
 <body>
@@ -114,7 +143,9 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
         <button class="btn gold" id="addDeliveryLine">Add line</button></div><div class="row" style="margin-top:10px"><div class="field"><label>Delivery note (optional)</label><input id="delNote" placeholder="e.g. Sunday restock / extra gummies"></div>
       </div>
       <div class="tablewrap" style="margin-top:12px">
-        <table><thead><tr><th>Product</th><th>Qty</th><th>Cost</th><th>Retail</th><th>Cost total</th><th></th></tr></thead><tbody id="deliveryLines"></tbody></table>
+        <table>
+<colgroup><col style="width:38%"><col style="width:10%"><col style="width:13%"><col style="width:13%"><col style="width:18%"><col style="width:8%"></colgroup>
+<thead><tr><th>Product</th><th>Qty</th><th>Cost</th><th>Retail</th><th>Cost total</th><th></th></tr></thead><tbody id="deliveryLines"></tbody></table>
       </div>
       <div class="totalbar"><span>Total cost: <span id="deliveryTotal">฿0</span></span></div>
       <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
@@ -134,7 +165,9 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
       </div>
       <div class="notice">Enter the shop's closing stock. The app calculates sold units from opening stock + recorded deliveries − take-outs − closing stock. Any mismatch is preserved and flagged.</div>
       <div class="tablewrap">
-        <table><thead><tr><th>Product</th><th>Opening</th><th>Deliveries</th><th>Take out</th><th>Expected total</th><th>Closing</th><th>Sold</th><th>Sales</th><th>Pin payable</th><th>Check</th></tr></thead><tbody id="weekRows"></tbody></table>
+        <table>
+<colgroup><col style="width:28%"><col style="width:8%"><col style="width:9%"><col style="width:8%"><col style="width:10%"><col style="width:8%"><col style="width:7%"><col style="width:8%"><col style="width:9%"><col style="width:5%"></colgroup>
+<thead><tr><th>Product</th><th>Opening</th><th>Deliveries</th><th>Take out</th><th>Expected total</th><th>Closing</th><th>Sold</th><th>Sales</th><th>Pin payable</th><th>Check</th></tr></thead><tbody id="weekRows"></tbody></table>
       </div>
       <div class="totalbar" id="weekTotals"></div>
       <div style="margin-top:12px;text-align:right"><button class="btn" id="saveWeek">Save Weekly Check</button></div>
@@ -145,7 +178,9 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div class="card">
       <div class="docket" id="docketPaper">
         <div class="docketHead"><div><b>DELIVERY DOCKET</b><div class="small">Magic Dragon Samui</div></div><div style="text-align:right"><b id="dockBranch">—</b><div class="small" id="dockDate">—</div></div></div>
-        <table style="min-width:0"><thead><tr><th>Description</th><th>Qty</th><th>Unit cost</th><th>Retail</th><th>Amount</th></tr></thead><tbody id="dockRows"></tbody></table>
+        <table style="min-width:0;table-layout:fixed">
+<colgroup><col style="width:46%"><col style="width:10%"><col style="width:14%"><col style="width:14%"><col style="width:16%"></colgroup>
+<thead><tr><th>Description</th><th>Qty</th><th>Unit cost</th><th>Retail</th><th>Amount</th></tr></thead><tbody id="dockRows"></tbody></table>
         <div class="totalbar"><span>TOTAL COST <span id="dockTotal">฿0</span></span></div>
         <p class="small printOnly">Received by: ____________________________ &nbsp;&nbsp; Date: ______________</p>
       </div>
@@ -199,7 +234,9 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
       <h2>Product catalogue</h2>
       <div class="small">Prices can be changed per product. Cost and retail are deliberately stored separately.</div>
       <div class="tablewrap" style="margin-top:10px">
-        <table><thead><tr><th>Product</th><th>Type</th><th>Cost</th><th>Retail</th></tr></thead><tbody id="catalogueRows"></tbody></table>
+        <table>
+<colgroup><col style="width:56%"><col style="width:18%"><col style="width:13%"><col style="width:13%"></colgroup>
+<thead><tr><th>Product</th><th>Type</th><th>Cost</th><th>Retail</th></tr></thead><tbody id="catalogueRows"></tbody></table>
       </div>
       <div style="margin-top:14px">
         <button class="btn alt" id="exportData">Export backup</button>
