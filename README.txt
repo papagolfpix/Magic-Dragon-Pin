@@ -1,12 +1,7 @@
-MAGIC DRAGON PIN v0.3.2
+MAGIC DRAGON PIN v0.3.3
 
-TABLE LAYOUT UPDATE
-- Constrained product-name columns.
-- Product names wrap on whole words.
-- Words are not cut in half.
-- Numeric columns are proportionally narrower.
-- Weekly Check, New Delivery, Product Catalogue and Delivery Docket tables now use explicit column widths.
-- Tighter iPhone spacing for table cells.
-- Updated offline cache version.
-
-Goal: keep more useful columns visible and stop long product names pushing the whole table excessively wide.
+VISIBLE VERSION UPDATE
+- Active app version is now displayed directly in the top app header.
+- This gives an immediate visual confirmation that GitHub Pages/iPhone has loaded the latest deployment.
+- Retains the compact table improvements from v0.3.2.
+- Offline/service-worker cache version bumped for deployment.
