@@ -478,7 +478,7 @@ tr.kanja td{background:var(--green)}tr.preroll td{background:var(--pink)}tr.edib
 }
 
 
-/* v0.9.3 master catalogue setup */
+/* v0.9.4 master catalogue exact-name save fix */
 .masterSetupHead,.masterSetupRow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:center}
 .masterSetupHead{padding:8px 10px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px 10px 0 0;font-size:12px;color:#475569}
 .masterSetupRow{padding:9px 10px;border:1px solid #e5e7eb;border-top:0;background:#fff}
@@ -498,7 +498,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div class="mark"><img src="Magic-Dragon-logo.jpeg" alt="Magic Dragon logo"></div>
     <div><h1>Magic Dragon • Pin</h1><p>Stock, delivery dockets, weekly reconciliation & payment splits</p>
 <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:6px">
-<span class="app-version">v0.9.3</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
+<span class="app-version">v0.9.4</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
 </div></div>
   </div>
 
@@ -1555,7 +1555,8 @@ function applyMasterProductSetup(){
    sources.forEach(sourceName=>entries.push({sourceName,desired,currentProductId}));
  });
  if(entries.some(x=>!x.desired))return alert("Every Pin product name must contain a name. Please fill the blank field(s).");
- const changedKeys=entries.filter(e=>normalizeProductKey(e.desired)!==normalizeProductKey(currentMasterNameForSource(e.sourceName))).map(e=>normalizeProductKey(e.sourceName));
+ const cleanDisplayName=s=>String(s||"").trim().replace(/\s+/g," ");
+ const changedKeys=entries.filter(e=>cleanDisplayName(e.desired)!==cleanDisplayName(currentMasterNameForSource(e.sourceName))).map(e=>normalizeProductKey(e.sourceName));
  const desiredGroups=new Map();entries.forEach(e=>{const k=normalizeProductKey(e.desired);if(!desiredGroups.has(k))desiredGroups.set(k,[]);desiredGroups.get(k).push(e)});
  ensureProductAliases();
  desiredGroups.forEach((group,desiredKey)=>{
@@ -1569,6 +1570,13 @@ function applyMasterProductSetup(){
      const firstExact=db.products.find(p=>normalizeProductKey(p.name)===normalizeProductKey(group[0].sourceName));
      if(firstExact){target=firstExact;const old=target.name;target.name=desiredName;db.productAliases[normalizeProductKey(old)]=target.id}
      else target=createMasterProduct(desiredName,group[0].sourceName);
+   }
+   // Pin's typed spelling/capitalisation/punctuation is authoritative, even when
+   // the normalized lookup key is unchanged (for example "1 g." -> "1g").
+   if(target&&cleanDisplayName(target.name)!==cleanDisplayName(desiredName)){
+     const oldMasterName=target.name;
+     if(oldMasterName)db.productAliases[normalizeProductKey(oldMasterName)]=target.id;
+     target.name=desiredName;
    }
    const currentIds=[...new Set(group.map(e=>e.currentProductId).filter(Boolean))];
    currentIds.forEach(pid=>{if(pid!==target.id){reassignProductReferences(pid,target.id);db.products=db.products.filter(p=>p.id!==pid)}});
@@ -2122,7 +2130,7 @@ document.getElementById("saveMasterProducts").onclick=applyMasterProductSetup;
 document.getElementById("resetData").onclick=()=>{if(confirm("Delete all local Magic Dragon Pin data on this browser?")){localStorage.removeItem("mdpin-db");location.reload()}}
 cleanupDataIntegrity();refreshStoredReconciliations();renderImport();renderArchive();renderAll();
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=093", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=094", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;
