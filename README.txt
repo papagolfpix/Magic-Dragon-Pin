@@ -1,23 +1,23 @@
-MAGIC DRAGON PIN v0.9.16 — SUNDAY CHAIN REPAIR TEST
+MAGIC DRAGON PIN v0.9.17 — COMPACT UI POLISH
 
-Focused test build.
+Focused cosmetic build. No reconciliation, payment, import, delivery or archive logic is intentionally changed.
 
 What is new:
-- Rebuilds the Sunday-report chain branch-by-branch before reconciliation.
-- Normalizes legacy branch labels so Lamai reports remain linked even if old imports used slightly different branch text.
-- A valid 5–9 day gap is treated as the previous Sunday relationship.
-- Lamai 23 Aug -> 30 Aug -> 6 Sep should now form one continuous chain.
-- Archive status now shows the actual Previous Sunday date when a link exists.
-- “Baseline / incomplete history” is no longer used for every unknown case: linked reports can show Mapping review or Incomplete product history instead.
-- No payment, profit split, invoice, delivery-docket or archive-delete logic was changed.
+- Stock Flow Check product rows are compact and collapsible.
+- Review items are listed before fully reconciled items.
+- Collapsed stock rows show product, Prev / Del / Close values and status.
+- Full stock-flow figures and explanation remain one tap away.
+- Settings is reorganized into uniform collapsible sections: Business rules, Catalogue integrity, Master Product Setup, Product mappings, Product catalogue, and Backup & local data.
+- Main 3 x 3 navigation button dimensions are unchanged, but label font is larger and slightly heavier.
+- Mobile spacing in these areas is tightened without changing underlying data behaviour.
 
 Test:
-1. Refresh App and confirm v0.9.16.
-2. Open Sunday Import -> Sunday Report Archive.
-3. Lamai 23 Aug should remain Baseline / incomplete history.
-4. Lamai 30 Aug should show Previous Sunday: 2026-08-23.
-5. Lamai 6 Sep should show Previous Sunday: 2026-08-30.
-6. Expand Lamai 6 Sep reconciliation / Stock flow check and confirm the 2 Sep Lamai delivery quantities are used.
-7. Do not delete or re-import the existing reports for this test.
+1. Refresh App and confirm v0.9.17.
+2. Open Sunday Import -> 6 Sep Lamai -> Stock flow check.
+3. Confirm product rows are compact; tap several rows open/closed and verify all prior detail remains available.
+4. Confirm review items appear before OK items and the stock-flow summary count is unchanged.
+5. Open Settings. Confirm each major section is a collapsed row with a chevron and opens correctly.
+6. Check Master Product Setup, Product Catalogue and Backup controls still work/display when their section is opened.
+7. Check the nine sticky navigation buttons are the same size as before, with easier-to-read labels.
 
 Deployment: replace all seven files in the GitHub Pages repository root.
