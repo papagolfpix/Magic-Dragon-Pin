@@ -1,18 +1,23 @@
-MAGIC DRAGON PIN v0.4.0
+MAGIC DRAGON PIN v0.4.1 — CORRECTED DEPLOYMENT BUILD
 
-MAJOR SUNDAY IMPORT TEST BUILD
-- New Sunday Import screen.
-- Multiple screenshot selection from iPhone Photos.
-- Browser OCR reader with per-row confidence.
-- Green / amber / red / purple review states.
-- Reconciliation runs at the same time as OCR review.
-- High OCR confidence never overrides a reconciliation mismatch.
-- Possible delivery/data-entry problems are distinguished from OCR uncertainty.
-- Editable closing stock and reported-sold fields.
-- Sunday check is not committed until Pin confirms it.
-- Visible v0.4.0 build badge.
-- Refresh App button clears Magic Dragon app caches/service worker and reloads with a cache-busting URL.
-- Existing local records are preserved by Refresh App.
+IMPORTANT FIX
+The previous v0.4.0 deployment ZIP accidentally omitted:
+- sw.js
+- manifest.webmanifest
 
-NOTE
-OCR is loaded on demand from Tesseract.js CDN, so internet access is required while reading screenshots in this test build. The rest of the app remains local/offline-first.
+That meant the new cache/update behavior could not work as intended.
+
+v0.4.1 includes:
+- visible v0.4.1 badge at the top of the app
+- Refresh App button
+- complete service worker
+- complete PWA manifest
+- cache version magic-dragon-pin-v0.4.1
+- network-first loading for page navigation so GitHub Pages updates are fetched
+- automatic deletion of older Magic Dragon caches
+- service-worker registration with updateViaCache:none
+- Sunday Screenshot Import test workflow retained
+
+DEPLOYMENT
+Upload the individual files from this ZIP to the ROOT of the GitHub repository, replacing files with the same names.
+Do not upload the ZIP itself as the app file.
