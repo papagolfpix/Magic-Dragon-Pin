@@ -1,10 +1,11 @@
-const CACHE_NAME = "magic-dragon-pin-v0.5.1";
+const CACHE_NAME = "magic-dragon-pin-v0.6.0";
 const APP_ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./icon-192.png",
-  "./icon-512.png"
+  "./icon-512.png",
+  "./Magic-Dragon-logo.jpeg"
 ];
 
 self.addEventListener("install", event => {
