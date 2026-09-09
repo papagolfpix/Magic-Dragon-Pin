@@ -1,4 +1,4 @@
-MAGIC DRAGON PIN v0.9.18 — COMPACT UI POLISH
+MAGIC DRAGON PIN v0.9.19 — PROGRESSIVE DISCLOSURE CLEANUP
 
 Focused cosmetic build. No reconciliation, payment, import, delivery or archive logic is intentionally changed.
 
@@ -12,7 +12,7 @@ What is new:
 - Mobile spacing in these areas is tightened without changing underlying data behaviour.
 
 Test:
-1. Refresh App and confirm v0.9.18.
+1. Refresh App and confirm v0.9.19.
 2. Open Sunday Import -> 6 Sep Lamai -> Stock flow check.
 3. Confirm product rows are compact; tap several rows open/closed and verify all prior detail remains available.
 4. Confirm review items appear before OK items and the stock-flow summary count is unchanged.
@@ -21,3 +21,10 @@ Test:
 7. Check the nine sticky navigation buttons are the same size as before, with easier-to-read labels.
 
 Deployment: replace all seven files in the GitHub Pages repository root.
+
+
+v0.9.19 UI cleanup:
+- Removed the obsolete manual/OCR product cards from the normal Sunday Import view.
+- Manual/OCR reconciliation remains available inside the Emergency Backup section.
+- Data Integrity diagnostics are collapsed by default.
+- Sunday Report Archive remains the primary reconciliation workflow.
