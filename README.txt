@@ -1,4 +1,4 @@
-MAGIC DRAGON PIN v0.9.15 — SUNDAY CHAIN REPAIR TEST
+MAGIC DRAGON PIN v0.9.16 — SUNDAY CHAIN REPAIR TEST
 
 Focused test build.
 
@@ -12,7 +12,7 @@ What is new:
 - No payment, profit split, invoice, delivery-docket or archive-delete logic was changed.
 
 Test:
-1. Refresh App and confirm v0.9.15.
+1. Refresh App and confirm v0.9.16.
 2. Open Sunday Import -> Sunday Report Archive.
 3. Lamai 23 Aug should remain Baseline / incomplete history.
 4. Lamai 30 Aug should show Previous Sunday: 2026-08-23.
