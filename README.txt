@@ -1,4 +1,4 @@
-MAGIC DRAGON PIN v0.9.17 — COMPACT UI POLISH
+MAGIC DRAGON PIN v0.9.18 — COMPACT UI POLISH
 
 Focused cosmetic build. No reconciliation, payment, import, delivery or archive logic is intentionally changed.
 
@@ -12,7 +12,7 @@ What is new:
 - Mobile spacing in these areas is tightened without changing underlying data behaviour.
 
 Test:
-1. Refresh App and confirm v0.9.17.
+1. Refresh App and confirm v0.9.18.
 2. Open Sunday Import -> 6 Sep Lamai -> Stock flow check.
 3. Confirm product rows are compact; tap several rows open/closed and verify all prior detail remains available.
 4. Confirm review items appear before OK items and the stock-flow summary count is unchanged.
