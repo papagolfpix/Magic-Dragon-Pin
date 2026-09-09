@@ -59,7 +59,7 @@ tr.kanja td{background:var(--green)}tr.preroll td{background:var(--pink)}tr.edib
 .printOnly{display:none}
 @media(max-width:820px){.grid{grid-template-columns:repeat(2,1fr)}.app{padding:8px 8px 92px}.hero{border-radius:18px}.hero h1{font-size:19px}}
 
-/* v0.9.5 catalogue integrity */
+/* v0.9.6 catalogue integrity */
 .catalogueIntegrity{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0 14px}
 .integrityCard{border:1px solid #dbe3ec;border-radius:13px;background:#fff;padding:11px;min-width:0}
 .integrityCard.warn{border-color:#f2c46d;background:#fffaf0}
@@ -68,7 +68,21 @@ tr.kanja td{background:var(--green)}tr.preroll td{background:var(--pink)}tr.edib
 .integrityNums b{font-size:16px}
 .integrityMissing{margin-top:8px;padding-top:7px;border-top:1px solid #e5e7eb;font-size:11px;color:#6b7280;line-height:1.35}
 @media(max-width:650px){.catalogueIntegrity{grid-template-columns:1fr}}
+.docketArchiveItem{border:1px solid #d8dee8;border-radius:12px;margin:8px 0;background:#fff;overflow:hidden}
+.docketArchiveItem summary{list-style:none;cursor:pointer;padding:13px 14px;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.docketArchiveItem summary::-webkit-details-marker{display:none}
+.docketArchiveItem summary::after{content:"⌄";font-size:20px;line-height:1;transition:transform .15s ease}
+.docketArchiveItem[open] summary::after{transform:rotate(180deg)}
+.docketArchiveBody{border-top:1px solid #e5e7eb;padding:12px}
+.docketArchiveBody .docket{padding:12px}
+.printDocketOnly{display:none}
 @media print{
+ body.printingDocket .app>*{display:none!important}
+ body.printingDocket #docket.section{display:block!important}
+ body.printingDocket #docket>.card>*{display:none!important}
+ body.printingDocket #docketPrintArea{display:block!important}
+ body.printingDocket #docketPrintArea .docket{display:block!important}
+
  body{background:white}.hero,.tabs,.noPrint,.btn{display:none!important}.app{max-width:none;padding:0}.section{display:none!important}#docket.section.active{display:block!important}
  .card{border:0;box-shadow:none;padding:0}.docket{border:0;padding:0}.printOnly{display:block}
 }
@@ -488,7 +502,7 @@ tr.kanja td{background:var(--green)}tr.preroll td{background:var(--pink)}tr.edib
 }
 
 
-/* v0.9.5 master catalogue exact-name save fix */
+/* v0.9.6 master catalogue exact-name save fix */
 .masterSetupHead,.masterSetupRow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:center}
 .masterSetupHead{padding:8px 10px;background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px 10px 0 0;font-size:12px;color:#475569}
 .masterSetupRow{padding:9px 10px;border:1px solid #e5e7eb;border-top:0;background:#fff}
@@ -508,7 +522,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div class="mark"><img src="Magic-Dragon-logo.jpeg" alt="Magic Dragon logo"></div>
     <div><h1>Magic Dragon • Pin</h1><p>Stock, delivery dockets, weekly reconciliation & payment splits</p>
 <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:6px">
-<span class="app-version">v0.9.5</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
+<span class="app-version">v0.9.6</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
 </div></div>
   </div>
 
@@ -667,15 +681,19 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
 
   <section id="docket" class="section">
     <div class="card">
-      <div class="docket" id="docketPaper">
-        <div class="docketHead"><div><b>DELIVERY DOCKET</b><div class="small">Magic Dragon Samui</div></div><div style="text-align:right"><b id="dockBranch">—</b><div class="small" id="dockDate">—</div></div></div>
-        <table style="min-width:0;table-layout:fixed">
+      <h2 style="margin-top:0">Delivery dockets</h2>
+      <div class="small" style="margin-bottom:12px">Newest first. Tap a date and branch to open the complete saved docket.</div>
+      <div id="docketArchive"></div>
+      <div id="docketPrintArea" class="printDocketOnly">
+        <div class="docket" id="docketPaper">
+          <div class="docketHead"><div><b>DELIVERY DOCKET</b><div class="small">Magic Dragon Samui</div></div><div style="text-align:right"><b id="dockBranch">—</b><div class="small" id="dockDate">—</div></div></div>
+          <table style="min-width:0;table-layout:fixed">
 <colgroup><col style="width:46%"><col style="width:10%"><col style="width:14%"><col style="width:14%"><col style="width:16%"></colgroup>
 <thead><tr><th>Description</th><th>Qty</th><th>Unit cost</th><th>Retail</th><th>Amount</th></tr></thead><tbody id="dockRows"></tbody></table>
-        <div class="totalbar"><span>TOTAL COST <span id="dockTotal">฿0</span></span></div>
-        <p class="small printOnly">Received by: ____________________________ &nbsp;&nbsp; Date: ______________</p>
+          <div class="totalbar"><span>TOTAL COST <span id="dockTotal">฿0</span></span></div>
+          <p class="small printOnly">Received by: ____________________________ &nbsp;&nbsp; Date: ______________</p>
+        </div>
       </div>
-      <div class="noPrint" style="margin-top:12px;text-align:right"><button class="btn" onclick="window.print()">Print / Save PDF</button></div>
     </div>
   </section>
 
@@ -798,16 +816,35 @@ document.getElementById("addDeliveryLine").onclick=()=>{
 document.getElementById("clearDelivery").onclick=()=>{currentDelivery=[];renderDelivery()}
 document.getElementById("saveDelivery").onclick=()=>{
  if(!currentDelivery.length)return alert("Add at least one product.");
- const d={id:"D"+Date.now(),branch:document.getElementById("delBranch").value,date:document.getElementById("delDate").value||today(),note:document.getElementById("delNote").value.trim(),lines:currentDelivery.map(x=>({...x}))};
+ const d={id:"D"+Date.now(),branch:document.getElementById("delBranch").value,date:document.getElementById("delDate").value||today(),note:document.getElementById("delNote").value.trim(),lines:currentDelivery.map(x=>{const p=db.products.find(q=>q.id===x.productId);return {...x,productName:p?.name||"",cost:Number(p?.cost||0),retail:Number(p?.retail||0)}})};
  db.deliveries.push(d); currentDelivery=[]; document.getElementById("delNote").value=""; save(); renderDocket(d); switchTab("docket");
 }
 
-function renderDocket(d){
- if(!d){d=db.deliveries.at(-1);if(!d)return}
- document.getElementById("dockBranch").textContent=d.branch;document.getElementById("dockDate").textContent=d.date+(d.note?` · ${d.note}`:"")+` · Ref ${d.id}`;
- let total=0;document.getElementById("dockRows").innerHTML=d.lines.map(l=>{const p=db.products.find(x=>x.id===l.productId);const a=l.qty*p.cost;total+=a;return `<tr><td>${p.name}</td><td>${l.qty}</td><td>${baht(p.cost)}</td><td>${baht(p.retail)}</td><td>${baht(a)}</td></tr>`}).join("");
- document.getElementById("dockTotal").textContent=baht(total);
+function docketMarkup(d){
+ let total=0;
+ const rows=(d.lines||[]).map(l=>{
+  const p=db.products.find(x=>x.id===l.productId);
+  const name=l.productName||p?.name||"Unknown product";
+  const cost=Number(l.cost ?? p?.cost ?? 0), retail=Number(l.retail ?? p?.retail ?? 0), amount=Number(l.qty||0)*cost; total+=amount;
+  return `<tr><td>${escapeHtml(name)}</td><td>${l.qty||0}</td><td>${baht(cost)}</td><td>${baht(retail)}</td><td>${baht(amount)}</td></tr>`;
+ }).join("");
+ return `<div class="docket"><div class="docketHead"><div><b>DELIVERY DOCKET</b><div class="small">Magic Dragon Samui</div></div><div style="text-align:right"><b>${escapeHtml(d.branch||"—")}</b><div class="small">${escapeHtml(d.date||"—")}${d.note?` · ${escapeHtml(d.note)}`:""}</div></div></div><table style="min-width:0;table-layout:fixed"><colgroup><col style="width:46%"><col style="width:10%"><col style="width:14%"><col style="width:14%"><col style="width:16%"></colgroup><thead><tr><th>Description</th><th>Qty</th><th>Unit cost</th><th>Retail</th><th>Amount</th></tr></thead><tbody>${rows}</tbody></table><div class="totalbar"><span>TOTAL COST ${baht(total)}</span></div></div>`;
 }
+function renderDocketArchive(openId){
+ const box=document.getElementById("docketArchive"); if(!box)return;
+ const items=[...db.deliveries].sort((a,b)=>(b.date||"").localeCompare(a.date||"")||String(b.id).localeCompare(String(a.id)));
+ if(!items.length){box.innerHTML=`<div class="notice">No delivery dockets yet.<div style="margin-top:10px"><button class="btn" onclick='switchTab("delivery")'>Create New Delivery</button></div></div>`;return;}
+ box.innerHTML=items.map(d=>`<details class="docketArchiveItem" ${d.id===openId?"open":""} data-docket-id="${d.id}"><summary><span>${escapeHtml(d.date||"No date")} — ${escapeHtml(d.branch||"No branch")}</span></summary><div class="docketArchiveBody">${docketMarkup(d)}<div style="text-align:right;margin-top:10px"><button class="btn" onclick='printDocket("${d.id}")'>Print / Save PDF</button></div></div></details>`).join("");
+ box.querySelectorAll("details").forEach(el=>el.addEventListener("toggle",()=>{if(!el.open)return;box.querySelectorAll("details[open]").forEach(other=>{if(other!==el)other.open=false})}));
+}
+function renderDocket(d){ renderDocketArchive(d?.id); }
+window.printDocket=id=>{
+ const d=db.deliveries.find(x=>x.id===id);if(!d)return;
+ document.getElementById("dockBranch").textContent=d.branch||"—"; document.getElementById("dockDate").textContent=(d.date||"—")+(d.note?` · ${d.note}`:"");
+ let total=0; document.getElementById("dockRows").innerHTML=(d.lines||[]).map(l=>{const p=db.products.find(x=>x.id===l.productId);const name=l.productName||p?.name||"Unknown product";const cost=Number(l.cost??p?.cost??0),retail=Number(l.retail??p?.retail??0),a=Number(l.qty||0)*cost;total+=a;return `<tr><td>${escapeHtml(name)}</td><td>${l.qty||0}</td><td>${baht(cost)}</td><td>${baht(retail)}</td><td>${baht(a)}</td></tr>`}).join("");
+ document.getElementById("dockTotal").textContent=baht(total); document.body.classList.add("printingDocket"); setTimeout(()=>window.print(),50);
+};
+window.addEventListener("afterprint",()=>document.body.classList.remove("printingDocket"));
 
 function deliveriesSinceLastWeek(branch,date){
  const previous=db.weeks.filter(w=>w.branch===branch && w.date<date).sort((a,b)=>a.date.localeCompare(b.date)).at(-1);
@@ -903,7 +940,7 @@ function renderHistory(){
  ].sort((a,b)=>b.date.localeCompare(a.date));
  box.innerHTML=items.length?items.map(x=>`<div style="padding:11px 0;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;gap:10px"><div><b>${x.kind}</b> · ${x.branch}<div class="small">${x.date}${x.obj.note?` · ${x.obj.note}`:""}</div></div><div style="display:flex;gap:6px;align-items:center">${x.kind==="Delivery"?`<button class="btn alt" onclick='showDock("${x.obj.id}")'>Docket</button>`:`<b>${baht(x.obj.totals?.sales||0)}</b>`}<button class="btn alt" onclick='deleteRecord("${x.kind}","${x.obj.id}")'>Delete</button></div></div>`).join(""):`<div class="small">No saved records yet.</div>`;
 }
-window.showDock=id=>{const d=db.deliveries.find(x=>x.id===id);renderDocket(d);switchTab("docket")}
+window.showDock=id=>{switchTab("docket");renderDocketArchive(id)}
 window.deleteRecord=(kind,id)=>{
  if(!confirm(`Delete this ${kind.toLowerCase()} record?`))return;
  if(kind==="Delivery")db.deliveries=db.deliveries.filter(x=>x.id!==id);else db.weeks=db.weeks.filter(x=>x.id!==id);
@@ -2167,7 +2204,7 @@ document.getElementById("forceRefresh").onclick=async()=>{
  const u=new URL(location.href);u.searchParams.set("_fresh",Date.now());location.replace(u.toString());
 };
 
-function renderAll(){fillProducts();renderDelivery();renderHistory();renderCatalogue();renderMetrics();renderAudit();renderHistorical();renderMasterProductSetup();renderCatalogueIntegrity();renderMappingManager();renderMappingReview();if(db.deliveries.length)renderDocket(db.deliveries.at(-1))}
+function renderAll(){fillProducts();renderDelivery();renderHistory();renderCatalogue();renderMetrics();renderAudit();renderHistorical();renderMasterProductSetup();renderCatalogueIntegrity();renderMappingManager();renderMappingReview();renderDocketArchive()}
 function switchTab(id){document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===id));document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===id));if(id==="weekly"&&!document.querySelector("#weekRows tr"))loadWeek()}
 document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>switchTab(t.dataset.tab));
 
@@ -2183,7 +2220,7 @@ document.getElementById("saveMasterProducts").onclick=applyMasterProductSetup;
 document.getElementById("resetData").onclick=()=>{if(confirm("Delete all local Magic Dragon Pin data on this browser?")){localStorage.removeItem("mdpin-db");location.reload()}}
 cleanupDataIntegrity();refreshStoredReconciliations();renderImport();renderArchive();renderAll();
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=095", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=096", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;

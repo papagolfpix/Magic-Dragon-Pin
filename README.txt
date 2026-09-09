@@ -1,8 +1,8 @@
-MAGIC DRAGON PIN v0.9.5 — MASTER NAME SAVE / VISUAL CONFIRMATION FIX
+MAGIC DRAGON PIN v0.9.6 — MASTER NAME SAVE / VISUAL CONFIRMATION FIX
 
 Deploy all files in this folder to the GitHub repository root.
 
-WHAT CHANGED IN v0.9.5
+WHAT CHANGED IN v0.9.6
 - Fixes Master Product Setup so saved corrections immediately become the main displayed product names.
 - The shop's original wording is retained only as an alias/reference under Pin's saved master name.
 - Multiple shop spellings mapped to the same master product are grouped under Pin's canonical product identity after save.
@@ -11,11 +11,11 @@ WHAT CHANGED IN v0.9.5
 - Renaming a saved master product now reuses the existing product identity rather than accidentally creating a duplicate product.
 - Delivery, weekly-history and stock references are reassigned when products are merged.
 - Existing localStorage data and prior imports are preserved.
-- Service worker/cache version bumped to v0.9.5.
+- Service worker/cache version bumped to v0.9.6.
 
 QUICK TEST
 1. Deploy all 7 files and open the live GitHub Pages app.
-2. Tap Refresh App and confirm the header says v0.9.5.
+2. Tap Refresh App and confirm the header says v0.9.6.
 3. Open Settings > Master Product Setup.
 4. Change one or more Pin product names and press Save Pin's Master Product List.
 5. Confirm the corrected names now appear as the bold/main names.
@@ -34,11 +34,20 @@ FILES
 - README.txt
 
 
-v0.9.5 fix: Master Product Setup now treats Pin's exact typed spelling, capitalization, spacing and punctuation as authoritative. Exact-format corrections save even when the normalized matching key is unchanged, and edited rows are highlighted green after Save.
+v0.9.6 fix: Master Product Setup now treats Pin's exact typed spelling, capitalization, spacing and punctuation as authoritative. Exact-format corrections save even when the normalized matching key is unchanged, and edited rows are highlighted green after Save.
 
 
-v0.9.5 test chunk:
+v0.9.6 test chunk:
 - 3x3 sticky navigation grid; hero scrolls away.
 - Master product save count reports edited rows, not alias updates.
 - Consecutive/leading/trailing whitespace in Pin product names is cleaned automatically.
 - Catalogue Integrity cards compare each branch latest Sunday sheet with products historically seen there and flag missing/unmapped names for review.
+
+
+v0.9.6
+- Delivery Docket is now a newest-first archive.
+- Collapsed rows show only date and branch.
+- Tap a row to expand the complete saved docket; one docket opens at a time.
+- Each expanded docket can Print / Save PDF.
+- Empty archive shows Create New Delivery instead of a blank docket.
+- New deliveries snapshot product name/cost/retail at creation for historical fidelity.
