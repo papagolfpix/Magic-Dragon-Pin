@@ -63,7 +63,7 @@ tr.kanja td{background:var(--green)}tr.preroll td{background:var(--pink)}tr.edib
  .card{border:0;box-shadow:none;padding:0}.docket{border:0;padding:0}.printOnly{display:block}
 }
 
-/* v0.6.1 compact iPhone tables */
+/* v0.7.0 compact iPhone tables */
 .tablewrap table{table-layout:fixed}
 .tablewrap th,.tablewrap td{
   white-space:normal;
@@ -131,7 +131,7 @@ tr.kanja td{background:var(--green)}tr.preroll td{background:var(--pink)}tr.edib
 }
 
 
-/* v0.6.1 Sunday Import mobile layout */
+/* v0.7.0 Sunday Import mobile layout */
 @media(max-width:650px){
   .tablewrap{overflow:visible!important}
   .importReview{display:block!important;min-width:0!important;width:100%!important;border-collapse:separate!important;border-spacing:0!important}
@@ -227,7 +227,7 @@ tr.kanja td{background:var(--green)}tr.preroll td{background:var(--pink)}tr.edib
 .selectionFile{font-weight:800;overflow-wrap:anywhere;margin-top:4px}
 
 
-/* v0.6.1 header refinement */
+/* v0.7.0 header refinement */
 .hero{
   padding:8px 10px!important;
   gap:12px!important;
@@ -325,6 +325,72 @@ tr.kanja td{background:var(--green)}tr.preroll td{background:var(--pink)}tr.edib
   .reconReportHead{display:block}
 }
 
+
+.productRecon{
+  border-top:1px solid #eef2f7;
+  background:#fff;
+}
+.productRecon:first-child{border-top:0}
+.productRecon summary{
+  list-style:none;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto;
+  gap:10px;
+  align-items:center;
+  padding:11px 0;
+  cursor:pointer;
+}
+.productRecon summary::-webkit-details-marker{display:none}
+.productReconName{font-weight:850;font-size:15px;line-height:1.15}
+.productReconMini{font-size:12px;color:#6b7280;margin-top:3px}
+.productRecon .chev{
+  font-size:18px;
+  color:#6b7280;
+  transition:transform .15s ease;
+}
+.productRecon[open] .chev{transform:rotate(180deg)}
+.productReconBody{
+  padding:0 0 11px 0;
+}
+.productReconBody .reconLine{
+  padding:8px 10px;
+  margin-top:6px;
+  background:#f8fafc;
+  border-radius:10px;
+}
+@media(max-width:650px){
+  .productRecon summary{grid-template-columns:minmax(0,1fr) auto auto}
+  .productReconName{font-size:14px}
+}
+
+
+@media(max-width:650px){
+  #deliveryLines tr{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(82px,110px)!important;
+    gap:8px 10px!important;
+    border:1px solid #e5e7eb!important;
+    border-radius:12px!important;
+    padding:10px!important;
+    margin-bottom:10px!important;
+    background:#fff!important;
+  }
+  #deliveryLines td{display:block!important;width:auto!important;max-width:none!important;border:0!important;padding:0!important}
+  #deliveryLines td:first-child{grid-column:1/-1!important;font-weight:800}
+  #deliveryLines td:before{
+    content:attr(data-label);
+    display:block;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    color:#6b7280;
+    font-weight:800;
+    margin-bottom:2px;
+  }
+  #deliveryLines td:first-child:before{display:none}
+  #deliveryLines input,#deliveryLines select{width:100%!important;min-width:0!important}
+}
+
 </style>
 </head>
 <body>
@@ -337,7 +403,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div class="mark"><img src="Magic-Dragon-logo.jpeg" alt="Magic Dragon logo"></div>
     <div><h1>Magic Dragon • Pin</h1><p>Stock, delivery dockets, weekly reconciliation & payment splits</p>
 <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:6px">
-<span class="app-version">v0.6.1</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
+<span class="app-version">v0.7.0</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
 </div></div>
   </div>
 
@@ -526,7 +592,12 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
       <div class="notice"><b>Source transcription.</b> These records were entered from Pin's supplied photographs/spreadsheets. They are kept separate from live records so historical evidence is not accidentally edited. Any uncertain field is explicitly flagged.</div>
       <div id="histMetrics" class="grid" style="margin:12px 0"></div>
       <h2>Lamai weekly reports</h2>
-      <div class="tablewrap"><table><thead><tr><th>Period</th><th>Sales</th><th>Cost</th><th>Profit</th><th>BM</th><th>Alix</th><th>Pin profit</th><th>Pay Pin</th><th>Check</th></tr></thead><tbody id="histWeeks"></tbody></table></div>
+      <div class="field" style="margin:10px 0 8px">
+      <label>Find product</label>
+      <input id="deliveryProductSearch" type="search" placeholder="Type product name…" autocomplete="off">
+    </div>
+    <div class="small" style="margin-bottom:8px">Enter only the products being delivered. Quantities are saved to the branch ledger and will be used for Sunday reconciliation.</div>
+    <div class="tablewrap"><table><thead><tr><th>Period</th><th>Sales</th><th>Cost</th><th>Profit</th><th>BM</th><th>Alix</th><th>Pin profit</th><th>Pay Pin</th><th>Check</th></tr></thead><tbody id="histWeeks"></tbody></table></div>
       <h2>Delivery dockets</h2>
       <div class="row"><div class="field"><label>Branch</label><select id="histBranch"><option>All branches</option><option>BM Bangrak</option><option>Lamai</option></select></div></div>
       <div id="histDockets"></div><div class="actionbar"><button class="btn alt" id="exportHistorical">Export historical JSON</button></div>
@@ -982,7 +1053,7 @@ function reconcileExcelReport(rep){
   const nearestEarlier=getNearestEarlierSundayReport(rep.branch,rep.date);
   const previousGap=nearestEarlier?daysBetween(nearestEarlier.date,rep.date):null;
   const periodStart=previous?.date || rep.oldDate || null;
-  let verified=0, issues=0, unknown=0, dataIssues=0, mappingIssues=0;
+  let verified=0, stockErrorRows=0, deliveryIssueRows=0, historyPendingRows=0, mappingRows=0;
   const details=[];
 
   rep.rows.forEach(rr=>{
@@ -991,17 +1062,18 @@ function reconcileExcelReport(rep){
     const prev=rowByProductName(previous,rr.product);
     const rowIssues=[];
     let rowVerified=true;
+    let rowHasStockError=false, rowHasDeliveryIssue=false, rowHasHistoryPending=false, rowHasMapping=false;
 
     // Workbook self arithmetic.
     const old=rr.oldStock||0, del=rr.newDeliver||0, take=rr.takeOut||0;
     const expectedTotal=old+del-take;
     if(rr.total!=null && Math.abs(expectedTotal-rr.total)>0.001){
       rowIssues.push({type:"bad",msg:`Workbook total mismatch: ${old} + ${del} − ${take} = ${expectedTotal}, sheet says ${rr.total}.`});
-      rowVerified=false; issues++;
+      rowVerified=false; rowHasStockError=true;
     }
     if(rr.inStock!=null && rr.sold!=null && Math.abs((expectedTotal-rr.inStock)-rr.sold)>0.001){
       rowIssues.push({type:"bad",msg:`Workbook sold mismatch: calculated ${expectedTotal-rr.inStock}, sheet says ${rr.sold}.`});
-      rowVerified=false; issues++;
+      rowVerified=false; rowHasStockError=true;
     }
 
     // Previous Sunday closing -> this Sunday opening.
@@ -1009,44 +1081,54 @@ function reconcileExcelReport(rep){
       if(prev && prev.inStock!=null && rr.oldStock!=null){
         if(Math.abs(prev.inStock-rr.oldStock)>0.001){
           rowIssues.push({type:"bad",msg:`Opening stock differs from previous Sunday: previous closing ${prev.inStock}, this sheet opening ${rr.oldStock}.`});
-          rowVerified=false; issues++;
+          rowVerified=false; rowHasStockError=true;
         }
       }else{
         rowIssues.push({type:"unknown",msg:"Could not match this product to the previous Sunday report."});
-        rowVerified=false; unknown++;
+        rowVerified=false; rowHasHistoryPending=true;
       }
     }else{
       rowIssues.push({type:"unknown",msg: nearestEarlier && previousGap>9 ? `Earlier report exists (${nearestEarlier.date}) but there is a ${previousGap}-day gap, so it is not valid for week-to-week reconciliation.` : "Baseline report — no earlier imported Sunday report exists yet."});
-      rowVerified=false; unknown++;
+      rowVerified=false; rowHasHistoryPending=true;
     }
 
     // Shop deliveries -> Pin's independently recorded deliveries.
-    if(periodStart && p){
-      const appQty=appDeliveryQty(rep.branch,periodStart,rep.date,p.id);
+    if(previous && p){
+      const appQty=appDeliveryQty(rep.branch,previous.date,rep.date,p.id);
       const shopQty=Number(rr.newDeliver)||0;
       if(appQty!==shopQty){
         rowIssues.push({
           type:"data",
           msg:`Delivery records differ: shop sheet ${shopQty}, Magic Dragon delivery ledger ${appQty}. Check for a missing/incorrect delivery entry.`
         });
-        rowVerified=false; dataIssues++;
+        rowVerified=false; rowHasDeliveryIssue=true;
       }
     }else if(!p){
       rowIssues.push({type:"warn",msg:`Product name needs catalogue mapping review${pm.score?` (match score ${Math.round(pm.score*100)}%)`:""}.`});
-      rowVerified=false; mappingIssues++;
-    }else{
-      rowIssues.push({type:"unknown",msg:"Delivery comparison needs a known start date."});
-      rowVerified=false; unknown++;
+      rowVerified=false; rowHasMapping=true;
     }
 
     if(rowVerified) verified++;
-    if(rowIssues.length) details.push({product:rr.product,issues:rowIssues});
+    if(rowHasStockError) stockErrorRows++;
+    if(rowHasDeliveryIssue) deliveryIssueRows++;
+    if(rowHasHistoryPending) historyPendingRows++;
+    if(rowHasMapping) mappingRows++;
+    if(rowIssues.length) details.push({
+      product:rr.product,
+      inStock:rr.inStock,
+      sold:rr.sold,
+      delivered:rr.newDeliver,
+      sellPrice:rr.sellPrice,
+      issues:rowIssues,
+      flags:{rowHasStockError,rowHasDeliveryIssue,rowHasHistoryPending,rowHasMapping}
+    });
   });
 
-  const status = issues>0 ? "bad" : dataIssues>0 ? "data" : (unknown>0 || mappingIssues>0) ? "unknown" : "ok";
+  const status = stockErrorRows>0 ? "bad" : deliveryIssueRows>0 ? "data" : (historyPendingRows>0 || mappingRows>0) ? "unknown" : "ok";
   return {
-    branch:rep.branch,date:rep.date,previousDate:previous?.date||null,periodStart,
-    verified,issues,unknown,dataIssues,mappingIssues,totalRows:rep.rows.length,status,details
+    branch:rep.branch,date:rep.date,previousDate:previous?.date||null,
+    verified,stockErrorRows,deliveryIssueRows,historyPendingRows,mappingRows,
+    totalRows:rep.rows.length,status,details
   };
 }
 
@@ -1070,26 +1152,51 @@ function renderExcelReconciliation(reports){
   panel.style.display="block";
 
   const totals=reports.reduce((a,r)=>{
-    a.rows+=r.totalRows;a.verified+=r.verified;a.errors+=r.issues;a.data+=r.dataIssues;a.unknown+=r.unknown+r.mappingIssues;
+    a.rows+=r.totalRows;
+    a.verified+=r.verified;
+    a.errors+=r.stockErrorRows;
+    a.delivery+=r.deliveryIssueRows;
+    a.history+=r.historyPendingRows;
+    a.mapping+=r.mappingRows;
     return a;
-  },{rows:0,verified:0,errors:0,data:0,unknown:0});
+  },{rows:0,verified:0,errors:0,delivery:0,history:0,mapping:0});
 
   summary.innerHTML=[
     ["Rows checked",totals.rows],
-    ["Verified",totals.verified],
-    ["Stock/math errors",totals.errors],
-    ["Delivery checks",totals.data],
-    ["Not yet verifiable",totals.unknown]
+    ["Verified rows",totals.verified],
+    ["Stock/math error rows",totals.errors],
+    ["Delivery issue rows",totals.delivery],
+    ["Waiting for prior week",totals.history],
+    ["Mapping review rows",totals.mapping]
   ].map(x=>`<div class="card metric reconMetric"><div class="k">${x[0]}</div><div class="v">${x[1]}</div></div>`).join("");
 
   box.innerHTML=reports.map(r=>{
     const [cls,label]=reconStatusLabel(r);
     const important=r.details.filter(d=>d.issues.some(i=>i.type!=="unknown") || r.status!=="ok");
-    const rows=important.length ? important.map(d=>`
-      <div class="reconIssue">
-        <b>${d.product}</b>
-        ${d.issues.map(i=>`<div class="reconLine"><div class="small">${i.msg}</div><span class="reconStatus ${i.type}">${i.type==="data"?"Delivery":i.type==="bad"?"Error":i.type==="warn"?"Mapping":"Info"}</span></div>`).join("")}
-      </div>`).join("") : `<div class="notice" style="margin:10px 12px"><b>100% agreement.</b> Every row that could be independently checked matches the previous stock position and recorded deliveries.</div>`;
+    const rows=important.length ? important.map(d=>{
+      const primary = d.flags?.rowHasStockError ? ["bad","Stock error"] :
+                      d.flags?.rowHasDeliveryIssue ? ["data","Delivery check"] :
+                      d.flags?.rowHasMapping ? ["warn","Mapping"] :
+                      ["unknown","History pending"];
+      const mini = [
+        d.inStock!=null ? `Stock ${d.inStock}` : null,
+        d.sold!=null ? `Sold ${d.sold}` : null,
+        d.delivered!=null ? `Delivered ${d.delivered}` : null
+      ].filter(Boolean).join(" • ");
+      return `<details class="productRecon">
+        <summary>
+          <div class="productReconMain">
+            <div class="productReconName">${d.product}</div>
+            <div class="productReconMini">${mini||"Tap for details"}</div>
+          </div>
+          <span class="reconStatus ${primary[0]}">${primary[1]}</span>
+          <span class="chev">⌄</span>
+        </summary>
+        <div class="productReconBody">
+          ${d.issues.map(i=>`<div class="reconLine"><div class="small">${i.msg}</div><span class="reconStatus ${i.type}">${i.type==="data"?"Delivery":i.type==="bad"?"Error":i.type==="warn"?"Mapping":"Info"}</span></div>`).join("")}
+        </div>
+      </details>`;
+    }).join("") : `<div class="notice" style="margin:10px 12px"><b>100% agreement.</b> Every row that could be independently checked matches the previous stock position and recorded deliveries.</div>`;
     return `<div class="reconReport">
       <div class="reconReportHead">
         <div><b>${r.branch} · ${r.date}</b><div class="small">${r.previousDate?`Previous Sunday: ${r.previousDate}`:"First imported baseline"}</div></div>
@@ -1354,6 +1461,18 @@ function calcImport(){
  });
  document.getElementById("impSummary").innerHTML=`<span>Entered ${entered}</span><span>Verified ${exact}</span><span>OCR checks ${amber}</span><span>Errors ${bad}</span><span>No history ${unknown}</span>`;
  return {entered,exact,amber,bad,purple,unknown};
+}
+
+
+const deliverySearch=document.getElementById("deliveryProductSearch");
+if(deliverySearch){
+  deliverySearch.oninput=()=>{
+    const q=norm(deliverySearch.value);
+    document.querySelectorAll("#deliveryLines tr").forEach(tr=>{
+      const product=norm(tr.querySelector("td")?.textContent||"");
+      tr.style.display=!q || product.includes(q) ? "" : "none";
+    });
+  };
 }
 
 document.getElementById("impFiles").onchange=e=>{
