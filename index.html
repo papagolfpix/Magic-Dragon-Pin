@@ -425,6 +425,43 @@ tr.kanja td{background:var(--green)}tr.preroll td{background:var(--pink)}tr.edib
  .weekDetail{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 
+
+/* v0.9.0 reconciliation compression + archive management */
+.compactReconReport{margin-top:10px;border:1px solid #e2e8f0;border-radius:13px;overflow:hidden;background:#fff}
+.compactReconReport>summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto 18px;gap:9px;align-items:center;cursor:pointer}
+.compactReconReport>summary::-webkit-details-marker{display:none}
+.compactReconReport .chev,.reconGroup .chev{font-size:17px;color:#64748b;transition:transform .15s ease}
+.compactReconReport[open]>summary .chev,.reconGroup[open]>summary .chev{transform:rotate(180deg)}
+.reconGroup{border-top:1px solid #eef2f7}
+.reconGroup>summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto 18px;gap:8px;align-items:center;padding:10px 0;cursor:pointer}
+.reconGroup>summary::-webkit-details-marker{display:none}
+.reconGroupBody{padding:0 0 10px}
+.mappingGroup{margin:10px 0;border:1px solid #fde68a;border-radius:12px;padding:0 10px;background:#fffbeb}
+.mappingItem{padding:8px 0;border-top:1px solid rgba(0,0,0,.06)}
+.mappingItem:first-child{border-top:0}
+.compactNames{display:flex;flex-wrap:wrap;gap:6px}
+.compactNames span{background:#f1f5f9;border-radius:999px;padding:4px 7px;font-size:11px;color:#475569}
+.archiveActions{display:flex;gap:7px;align-items:center}
+.dangerBtn{background:#fff!important;color:#991b1b!important;border:1px solid #fecaca!important}
+@media(max-width:650px){
+  .archiveActions{display:grid;grid-template-columns:1fr 1fr;width:100%}
+  .archiveActions .btn{width:100%}
+  .compactReconReport>summary{grid-template-columns:minmax(0,1fr) auto 16px}
+}
+
+
+.detectedBlocksPanel{margin:10px 0 12px;border:1px solid #dbe4ee;border-radius:12px;background:#fff;overflow:hidden}
+.detectedBlocksHead{padding:10px 12px;background:#f8fafc;border-bottom:1px solid #e5e7eb}
+.detectedBlock{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px;border-bottom:1px solid #eef2f7}
+.detectedBlock:last-child{border-bottom:0}.detectedBlock input{width:20px;height:20px}.detectedBlockMeta{font-size:12px;color:#6b7280}
+.mappingReviewPanel{margin-top:14px;border:1px solid #f1d58a;border-radius:14px;background:#fffdf7;padding:12px}
+.mappingReviewItem{border-top:1px solid #f3ead0;padding:10px 0}.mappingReviewItem:first-child{border-top:0}
+.mappingSuggestion{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;margin-top:8px}
+.mappingActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.mappingAliasTag{display:inline-flex;gap:6px;align-items:center;padding:5px 8px;margin:3px 5px 3px 0;border-radius:999px;background:#f1f5f9;font-size:12px}
+.mappingAliasTag button{border:0;background:transparent;color:#991b1b;font-weight:900}
+@media(max-width:650px){.detectedBlock{grid-template-columns:auto minmax(0,1fr)}.mappingSuggestion{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -437,7 +474,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div class="mark"><img src="Magic-Dragon-logo.jpeg" alt="Magic Dragon logo"></div>
     <div><h1>Magic Dragon • Pin</h1><p>Stock, delivery dockets, weekly reconciliation & payment splits</p>
 <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:6px">
-<span class="app-version">v0.8.0</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
+<span class="app-version">v0.9.0</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
 </div></div>
   </div>
 
@@ -501,10 +538,13 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
       <div class="notice"><b>Excel is now the preferred Sunday workflow.</b> The app reads the actual spreadsheet cells, detects the shop and date automatically, archives the source record under a chronological name, and runs reconciliation. Screenshot OCR remains available as a fallback. Missing historical stock is shown grey and is never treated as zero.</div>
 <div class="xlsxPanel" style="margin-top:12px">
         <h3 style="margin:0 0 6px">Preferred: Excel Sunday Reports</h3>
-        <div class="small" style="margin-bottom:8px">Select one or both shop files together. The app will detect the branch and check date from the workbook; you do not need to choose BM Bangrak or Lamai first.</div>
+        <div class="small" style="margin-bottom:8px">Select one or both shop files together. The app detects branch and dates automatically. If several weekly reports are pasted vertically on one worksheet, each block is detected separately before import.</div>
         <label class="btn gold" style="display:inline-block">Choose Excel file(s)<input id="xlsxFiles" type="file" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" multiple hidden></label>
         <div id="xlsxSelectionCard" class="selectionCard empty"><b>No Excel files selected</b><div class="small">Choose one or both Sunday report files.</div></div>
-        <button class="btn" id="importXlsx">Import Excel Report(s)</button>
+        <div id="detectedBlocksPanel" class="detectedBlocksPanel" style="display:none">
+<div class="detectedBlocksHead"><b>Detected weekly reports</b><span class="small">Choose which blocks to import.</span></div>
+<div id="detectedBlocksList"></div></div>
+<button class="btn" id="importXlsx">Import Excel Report(s)</button>
         <button class="btn alt" id="exportMaster">Export Master Workbook</button>
         <button class="btn alt" id="clearXlsxSelection">Clear Selection</button>
         
@@ -517,8 +557,11 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
             </div>
           </div>
           <div id="excelReconSummary" class="grid" style="margin:10px 0"></div>
-          <div id="excelReconReports"></div>
-        </div>
+          <div id="excelReconReports"></div></div>
+<div id="mappingReviewPanel" class="mappingReviewPanel" style="display:none">
+<h3 style="margin:0">Product Mapping Review</h3>
+<div class="small">Confirm a shop product name once. The alias is remembered and applied to previous and future imports.</div>
+<div id="mappingReviewList"></div></div>
       </div>
       
       
@@ -643,7 +686,10 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
         <div><b>Edibles</b><div class="small">Profit: BM 40% · Alix 20% · Pin 40%</div></div>
         <div><b>Pay Pin</b><div class="small">Product cost recovery + Pin's profit share</div></div>
       </div>
-      <h2>Product catalogue</h2>
+      <h2>Product mappings</h2>
+<div class="small">Confirmed aliases are used automatically. Remove an alias here if a merge was wrong.</div>
+<div id="mappingManager" style="margin-top:10px"></div>
+<h2>Product catalogue</h2>
       <div class="small">Prices can be changed per product. Cost and retail are deliberately stored separately.</div>
       <div class="tablewrap" style="margin-top:10px">
         <table>
@@ -914,60 +960,46 @@ function findHeaderRow(rows){
   return 2; // current BM format fallback
 }
 
-function parseSundayWorkbook(arrayBuffer, filename){
-  const wb=XLSX.read(arrayBuffer,{type:"array",cellDates:false,cellFormula:true,cellNF:false});
-  if(!wb.SheetNames.length) throw new Error("Workbook contains no worksheets.");
-  // Prefer the Cannabis sheet, otherwise first sheet.
-  const sheetName=wb.SheetNames.find(n=>/cannabis/i.test(n)) || wb.SheetNames[0];
-  const ws=wb.Sheets[sheetName];
-  const rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null});
-  const branch=detectBranchFromWorkbook(rows,filename);
 
-  let checkDate=null, oldDate=null;
-  for(const row of rows.slice(0,5)){
-    for(const cell of row||[]){
-      const t=String(cell||"");
-      if(/check date/i.test(t)) checkDate=parseDateFromText(t);
-      if(/old stock from/i.test(t)) oldDate=parseDateFromText(t);
-    }
-  }
-
-  // Current known shop template columns:
-  // B Product, C Old Stock, D New Deliver, E Take out, F Total, G Instock, H Sold,
-  // I Sell Price, J Cost, L Total Sales, M Total Cost, N Total Profit, O BM, P Alix, Q Pin.
-  const parsed=[];
-  for(let r=4;r<rows.length;r++){
-    const row=rows[r]||[];
-    const no=row[0], product=row[1];
-    if(typeof no!=="number" || !product || typeof product!=="string") continue;
-    const item={
-      no,
-      product:String(product).trim(),
-      oldStock:numOrNull(row[2]),
-      newDeliver:numOrNull(row[3]),
-      takeOut:numOrNull(row[4]),
-      total:numOrNull(row[5]),
-      inStock:numOrNull(row[6]),
-      sold:numOrNull(row[7]),
-      sellPrice:numOrNull(row[8]),
-      cost:numOrNull(row[9]),
-      totalSales:numOrNull(row[11]),
-      totalCost:numOrNull(row[12]),
-      totalProfit:numOrNull(row[13]),
-      bmShare:numOrNull(row[14]),
-      alixShare:numOrNull(row[15]),
-      pinShare:numOrNull(row[16])
-    };
-    parsed.push(item);
-  }
-  if(!parsed.length) throw new Error("No product rows were found in the expected Sunday stock format.");
-
-  const date=checkDate || today();
-  const branchLabel=branch || "Unknown-Branch";
-  const archiveName=`${date}_${sanitizeArchivePart(branchLabel)}_Sunday-Stock.xlsx`;
-
-  return {sheetName,branch,date,oldDate,rows:parsed,archiveName,originalFilename:filename};
+function findWeeklyBlockStarts(rows){
+ const starts=[];
+ for(let i=0;i<rows.length;i++){
+  const vals=(rows[i]||[]).map(v=>String(v??"").toLowerCase());
+  const ok=vals.some(v=>v.includes("product"))&&vals.some(v=>v.includes("old stock"))&&vals.some(v=>v.includes("deliver"))&&vals.some(v=>v.includes("sold"));
+  if(ok)starts.push(i);
+ }
+ if(!starts.length&&rows.length>4)starts.push(3);
+ return starts;
 }
+function findDateNearBlock(rows,start){
+ let checkDate=null,oldDate=null;
+ for(let i=Math.max(0,start-8);i<=Math.min(rows.length-1,start+6);i++){
+  for(const cell of rows[i]||[]){const t=String(cell||"");if(/check date/i.test(t))checkDate=parseDateFromText(t)||checkDate;if(/old stock from/i.test(t))oldDate=parseDateFromText(t)||oldDate}
+ }
+ return {checkDate,oldDate};
+}
+function parseWeeklyBlock(rows,start,end,branch,filename,sheetName,idx){
+ const parsed=[];
+ for(let r=start+1;r<end;r++){
+  const row=rows[r]||[],no=row[0],product=row[1];
+  if(typeof no!=="number"||!product||typeof product!=="string")continue;
+  parsed.push({no,product:String(product).trim(),oldStock:numOrNull(row[2]),newDeliver:numOrNull(row[3]),takeOut:numOrNull(row[4]),total:numOrNull(row[5]),inStock:numOrNull(row[6]),sold:numOrNull(row[7]),sellPrice:numOrNull(row[8]),cost:numOrNull(row[9]),totalSales:numOrNull(row[11]),totalCost:numOrNull(row[12]),totalProfit:numOrNull(row[13]),bmShare:numOrNull(row[14]),alixShare:numOrNull(row[15]),pinShare:numOrNull(row[16])});
+ }
+ if(!parsed.length)return null;
+ const dates=findDateNearBlock(rows,start),date=dates.checkDate||today(),branchLabel=branch||"Unknown-Branch";
+ return {sheetName,branch,date,oldDate:dates.oldDate,rows:parsed,archiveName:`${date}_${sanitizeArchivePart(branchLabel)}_Sunday-Stock.xlsx`,originalFilename:filename,blockIndex:idx,startRow:start+1,endRow:end};
+}
+function parseSundayWorkbook(arrayBuffer,filename){
+ const wb=XLSX.read(arrayBuffer,{type:"array",cellDates:false,cellFormula:true,cellNF:false}); if(!wb.SheetNames.length)throw new Error("Workbook contains no worksheets.");
+ const reports=[];
+ for(const sheetName of wb.SheetNames){
+  const rows=XLSX.utils.sheet_to_json(wb.Sheets[sheetName],{header:1,raw:true,defval:null});
+  const branch=detectBranchFromWorkbook(rows,filename),starts=findWeeklyBlockStarts(rows);
+  starts.forEach((start,i)=>{const rep=parseWeeklyBlock(rows,start,i+1<starts.length?starts[i+1]:rows.length,branch,filename,sheetName,i);if(rep)reports.push(rep)});
+ }
+ if(!reports.length)throw new Error("No weekly stock report blocks were found."); return reports;
+}
+
 
 function numOrNull(v){
   if(v===null || v===undefined || v==="") return null;
@@ -989,17 +1021,18 @@ function normalizeProductKey(s){
     .replace(/[’']/g,""));
 }
 
+
+function ensureProductAliases(){if(!db.productAliases)db.productAliases={}}
 function canonicalProductMatch(name){
-  const n=normalizeProductKey(name);
-  let exact=db.products.find(p=>normalizeProductKey(p.name)===n);
-  if(exact) return {product:exact,score:1};
-  let best=null,bestScore=0;
-  db.products.forEach(p=>{
-    const s=similarity(n,normalizeProductKey(p.name));
-    if(s>bestScore){bestScore=s;best=p}
-  });
-  return {product:bestScore>=0.58?best:null,score:bestScore};
+ ensureProductAliases(); const n=normalizeProductKey(name);
+ const aid=db.productAliases[n];
+ if(aid){const p=db.products.find(x=>x.id===aid);if(p)return {product:p,score:1,viaAlias:true}}
+ let exact=db.products.find(p=>normalizeProductKey(p.name)===n);if(exact)return {product:exact,score:1,viaAlias:false};
+ let best=null,bestScore=0;db.products.forEach(p=>{const s=similarity(n,normalizeProductKey(p.name));if(s>bestScore){bestScore=s;best=p}});
+ return {product:bestScore>=0.58?best:null,score:bestScore,viaAlias:false};
 }
+function saveProductAlias(sourceName,productId){ensureProductAliases();db.productAliases[normalizeProductKey(sourceName)]=productId;save()}
+
 
 function isExcelSourceRecord(r){
   return /excel/i.test(String(r?.source||"")) || r?.importAudit?.type==="xlsx";
@@ -1212,73 +1245,125 @@ function reconStatusLabel(r){
   return ["unknown","Baseline / incomplete history"];
 }
 
+
+function summarizeUniqueMappingNames(reports){
+  const map=new Map();
+  (reports||[]).forEach(r=>{
+    (r.details||[]).forEach(d=>{
+      if(!d.flags?.rowHasMapping) return;
+      const key=normalizeProductKey(d.product);
+      if(!map.has(key)) map.set(key,{name:d.product,reports:[]});
+      map.get(key).reports.push(`${r.branch} ${r.date}`);
+    });
+  });
+  return [...map.values()];
+}
+
 function renderExcelReconciliation(reports){
   const panel=document.getElementById("excelReconPanel");
   const summary=document.getElementById("excelReconSummary");
   const box=document.getElementById("excelReconReports");
   if(!reports?.length){
-    panel.style.display="none";
-    summary.innerHTML="";
-    box.innerHTML="";
-    return;
+    panel.style.display="none"; summary.innerHTML=""; box.innerHTML=""; return;
   }
   panel.style.display="block";
 
   const totals=reports.reduce((a,r)=>{
-    a.rows+=r.totalRows;
-    a.verified+=r.verified;
-    a.errors+=r.stockErrorRows;
-    a.delivery+=r.deliveryIssueRows;
-    a.history+=r.historyPendingRows;
-    a.mapping+=r.mappingRows;
+    a.rows+=r.totalRows||0;
+    a.verified+=r.verified||0;
+    a.errors+=r.stockErrorRows||0;
+    a.delivery+=r.deliveryIssueRows||0;
+    a.history+=r.historyPendingRows||0;
+    a.mapping+=r.mappingRows||0;
     return a;
   },{rows:0,verified:0,errors:0,delivery:0,history:0,mapping:0});
 
   summary.innerHTML=[
     ["Rows checked",totals.rows],
-    ["Verified rows",totals.verified],
-    ["Stock/math error rows",totals.errors],
-    ["Delivery issue rows",totals.delivery],
-    ["Waiting for prior week",totals.history],
-    ["Mapping review rows",totals.mapping]
+    ["Verified",totals.verified],
+    ["Stock errors",totals.errors],
+    ["Delivery checks",totals.delivery],
+    ["History pending",totals.history],
+    ["Mapping",totals.mapping]
   ].map(x=>`<div class="card metric reconMetric"><div class="k">${x[0]}</div><div class="v">${x[1]}</div></div>`).join("");
 
-  box.innerHTML=reports.map(r=>{
-    const [cls,label]=reconStatusLabel(r);
-    const important=r.details.filter(d=>d.issues.some(i=>i.type!=="unknown") || r.status!=="ok");
-    const rows=important.length ? important.map(d=>{
-      const primary = d.flags?.rowHasStockError ? ["bad","Stock error"] :
-                      d.flags?.rowHasDeliveryIssue ? ["data","Delivery check"] :
-                      d.flags?.rowHasMapping ? ["warn","Mapping"] :
-                      ["unknown","History pending"];
-      const mini = [
-        d.inStock!=null ? `Stock ${d.inStock}` : null,
-        d.sold!=null ? `Sold ${d.sold}` : null,
-        d.delivered!=null ? `Delivered ${d.delivered}` : null
-      ].filter(Boolean).join(" • ");
-      return `<details class="productRecon">
-        <summary>
-          <div class="productReconMain">
-            <div class="productReconName">${d.product}</div>
-            <div class="productReconMini">${mini||"Tap for details"}</div>
-          </div>
-          <span class="reconStatus ${primary[0]}">${primary[1]}</span>
-          <span class="chev">⌄</span>
-        </summary>
-        <div class="productReconBody">
-          ${d.issues.map(i=>`<div class="reconLine"><div class="small">${i.msg}</div><span class="reconStatus ${i.type}">${i.type==="data"?"Delivery":i.type==="bad"?"Error":i.type==="warn"?"Mapping":"Info"}</span></div>`).join("")}
-        </div>
-      </details>`;
-    }).join("") : `<div class="notice" style="margin:10px 12px"><b>100% agreement.</b> Every row that could be independently checked matches the previous stock position and recorded deliveries.</div>`;
-    return `<div class="reconReport">
-      <div class="reconReportHead">
-        <div><b>${r.branch} · ${r.date}</b><div class="small">${r.previousDate?`Previous Sunday: ${r.previousDate}`:"First imported baseline"}</div></div>
-        <span class="reconStatus ${cls}">${label}</span>
+  const uniqueMappings=summarizeUniqueMappingNames(reports);
+  const mappingBlock=uniqueMappings.length ? `
+    <details class="reconGroup mappingGroup">
+      <summary><b>Mapping review</b><span>${uniqueMappings.length} unique product name${uniqueMappings.length===1?"":"s"}</span><span class="chev">⌄</span></summary>
+      <div class="reconGroupBody">
+        ${uniqueMappings.map(m=>`<div class="mappingItem"><b>${m.name}</b><div class="small">${[...new Set(m.reports)].join(" • ")}</div></div>`).join("")}
       </div>
-      <div class="reconIssues">${rows}</div>
-    </div>`;
+    </details>` : "";
+
+  box.innerHTML=mappingBlock + reports.map(r=>{
+    const [cls,label]=reconStatusLabel(r);
+    const serious=(r.details||[]).filter(d=>d.flags?.rowHasStockError||d.flags?.rowHasDeliveryIssue);
+    const mapping=(r.details||[]).filter(d=>d.flags?.rowHasMapping);
+    const history=(r.details||[]).filter(d=>d.flags?.rowHasHistoryPending);
+
+    const seriousBlock=serious.length?`
+      <details class="reconGroup" open>
+        <summary><b>Needs attention</b><span>${serious.length}</span><span class="chev">⌄</span></summary>
+        <div class="reconGroupBody">${serious.map(d=>{
+          const primary=d.flags?.rowHasStockError?["bad","Stock error"]:["data","Delivery check"];
+          return `<details class="productRecon">
+            <summary>
+              <div class="productReconMain">
+                <div class="productReconName">${d.product}</div>
+                <div class="productReconMini">${[
+                  d.inStock!=null?`Stock ${d.inStock}`:null,
+                  d.sold!=null?`Sold ${d.sold}`:null,
+                  d.delivered!=null?`Delivered ${d.delivered}`:null
+                ].filter(Boolean).join(" • ")}</div>
+              </div>
+              <span class="reconStatus ${primary[0]}">${primary[1]}</span><span class="chev">⌄</span>
+            </summary>
+            <div class="productReconBody">${d.issues.map(i=>`<div class="reconLine"><div class="small">${i.msg}</div><span class="reconStatus ${i.type}">${i.type==="data"?"Delivery":i.type==="bad"?"Error":i.type==="warn"?"Mapping":"Info"}</span></div>`).join("")}</div>
+          </details>`;
+        }).join("")}</div>
+      </details>`:"";
+
+    const mapBlock=mapping.length?`
+      <details class="reconGroup">
+        <summary><b>Mapping review</b><span>${mapping.length}</span><span class="chev">⌄</span></summary>
+        <div class="reconGroupBody">${mapping.map(d=>`<div class="mappingItem"><b>${d.product}</b><div class="small">${d.issues.filter(i=>i.type==="warn").map(i=>i.msg).join(" ")}</div></div>`).join("")}</div>
+      </details>`:"";
+
+    const histBlock=history.length?`
+      <details class="reconGroup historyGroup">
+        <summary><b>History pending</b><span>${history.length} product${history.length===1?"":"s"}</span><span class="chev">⌄</span></summary>
+        <div class="reconGroupBody compactNames">${history.map(d=>`<span>${d.product}</span>`).join("")}</div>
+      </details>`:"";
+
+    return `<details class="reconReport compactReconReport">
+      <summary class="reconReportHead">
+        <div><b>${r.branch} · ${r.date}</b><div class="small">${r.previousDate?`Previous Sunday: ${r.previousDate}`:"Baseline / incomplete history"}</div></div>
+        <span class="reconStatus ${cls}">${label}</span><span class="chev">⌄</span>
+      </summary>
+      <div class="reconIssues">
+        ${seriousBlock}${mapBlock}${histBlock}
+        ${!serious.length&&!mapping.length&&!history.length?`<div class="notice" style="margin:10px 0"><b>Fully reconciled.</b> No issues found.</div>`:""}
+      </div>
+    </details>`;
   }).join("");
 }
+
+
+function collectUnmappedProductNames(){
+ const seen=new Map();ensureSundayArchive();
+ db.sundayImports.forEach(r=>(r.rows||[]).forEach(rr=>{const pm=canonicalProductMatch(rr.product);if(pm.product)return;const key=normalizeProductKey(rr.product);if(!seen.has(key))seen.set(key,{key,name:rr.product,examples:[],best:null,bestScore:0});const it=seen.get(key);it.examples.push(`${r.branch} ${r.date}`);db.products.forEach(p=>{const s=similarity(key,normalizeProductKey(p.name));if(s>it.bestScore){it.bestScore=s;it.best=p}})}));
+ return [...seen.values()].sort((a,b)=>b.bestScore-a.bestScore);
+}
+function renderMappingReview(){
+ const panel=document.getElementById("mappingReviewPanel"),box=document.getElementById("mappingReviewList");if(!panel||!box)return;
+ const items=collectUnmappedProductNames();if(!items.length){panel.style.display="none";box.innerHTML="";return}panel.style.display="block";
+ box.innerHTML=items.map(it=>`<div class="mappingReviewItem" data-mapkey="${it.key}"><b>${it.name}</b><div class="small">${[...new Set(it.examples)].join(" • ")}</div><div class="mappingSuggestion"><select class="mappingTarget">${db.products.map(p=>`<option value="${p.id}" ${it.best?.id===p.id?"selected":""}>${p.name}</option>`).join("")}</select><span class="reconStatus warn">${Math.round(it.bestScore*100)}% suggestion</span></div><div class="mappingActions"><button class="btn" onclick="confirmMapping('${it.key.replace(/'/g,"\\'")}')">Merge as same product</button><button class="btn alt" onclick="keepMappingSeparate('${it.key.replace(/'/g,"\\'")}')">Keep separate</button></div></div>`).join("");
+}
+window.confirmMapping=key=>{const row=[...document.querySelectorAll(".mappingReviewItem")].find(x=>x.dataset.mapkey===key),pid=row?.querySelector(".mappingTarget")?.value,name=row?.querySelector("b")?.textContent;if(!pid||!name)return;const p=db.products.find(x=>x.id===pid);if(!p)return;if(!confirm(`Merge "${name}" with "${p.name}"?\n\nThis will apply to previous and future imports.`))return;saveProductAlias(name,pid);retroactivelyRemapAllImports();renderMappingReview();renderMappingManager();renderAll()};
+window.keepMappingSeparate=key=>{const row=[...document.querySelectorAll(".mappingReviewItem")].find(x=>x.dataset.mapkey===key),name=row?.querySelector("b")?.textContent;if(!name)return;const id="P"+Date.now()+Math.random().toString(36).slice(2,5);db.products.push({id,name,type:"flower",cost:0,retail:0,branches:["BM Bangrak","Lamai"]});saveProductAlias(name,id);retroactivelyRemapAllImports();renderMappingReview();renderMappingManager();renderCatalogue()};
+function retroactivelyRemapAllImports(){ensureSundayArchive();db.sundayImports.forEach(r=>(r.rows||[]).forEach(rr=>{const pm=canonicalProductMatch(rr.product);rr.productId=pm.product?.id||null}));db.weeks.forEach(w=>{if(!/Excel/i.test(String(w.source||"")))return;(w.rows||[]).forEach(rr=>{const pm=canonicalProductMatch(rr.sourceProductName||"");if(pm.product)rr.productId=pm.product.id})});refreshStoredReconciliations();save()}
+function renderMappingManager(){ensureProductAliases();const box=document.getElementById("mappingManager");if(!box)return;const entries=Object.entries(db.productAliases||{});box.innerHTML=entries.length?entries.map(([k,pid])=>{const p=db.products.find(x=>x.id===pid);return `<span class="mappingAliasTag">${k} → <b>${p?.name||"Missing"}</b></span>`}).join(""):'<div class="small">No confirmed product aliases yet.</div>'}
 
 async function openFileDb(){
   return new Promise((resolve,reject)=>{
@@ -1322,6 +1407,53 @@ async function downloadArchivedSource(id,archiveName){
   }catch(e){alert("Could not open the archived source file.");}
 }
 
+
+async function deleteArchivedSourceFile(id){
+  try{
+    const idb=await openFileDb();
+    await new Promise((resolve,reject)=>{
+      const tx=idb.transaction("sourceFiles","readwrite");
+      tx.objectStore("sourceFiles").delete(id);
+      tx.oncomplete=()=>resolve();
+      tx.onerror=()=>reject(tx.error);
+    });
+    idb.close();
+  }catch(e){}
+}
+
+function refreshStoredReconciliations(){
+  ensureSundayArchive();
+  const ordered=[...db.sundayImports].sort((a,b)=>(a.date||"").localeCompare(b.date||"")||(a.branch||"").localeCompare(b.branch||""));
+  ordered.forEach(r=>{
+    r.reconciliation=reconcileExcelReport(r);
+    const w=db.weeks.find(w=>w.sourceArchiveId===r.id || (w.branch===r.branch&&w.date===r.date&&/Excel/i.test(w.source||"")));
+    if(w){
+      w.sourceArchiveId=r.id;
+      w.importAudit=w.importAudit||{};
+      w.importAudit.reconciliation=r.reconciliation;
+    }
+  });
+  save();
+  return ordered.map(r=>r.reconciliation);
+}
+
+window.deleteSundayReport=async id=>{
+  ensureSundayArchive();
+  const r=db.sundayImports.find(x=>x.id===id);
+  if(!r) return;
+  const ok=confirm(`Delete this Sunday report?\n\n${r.branch} • ${r.date}\n${r.archiveName}\n\nThis removes the active report, its linked weekly record and the locally archived source file from this device.`);
+  if(!ok) return;
+  db.sundayImports=db.sundayImports.filter(x=>x.id!==id);
+  db.weeks=db.weeks.filter(w=>w.sourceArchiveId!==id && !(w.branch===r.branch&&w.date===r.date&&/Excel/i.test(w.source||"")));
+  await deleteArchivedSourceFile(id);
+  cleanupDataIntegrity();
+  const recs=refreshStoredReconciliations();
+  renderArchive();
+  renderExcelReconciliation(recs.slice(-4));
+  renderAll();
+  alert("Sunday report deleted.");
+};
+
 function renderArchive(){
   ensureSundayArchive();
   const box=document.getElementById("archiveList");
@@ -1335,8 +1467,27 @@ function renderArchive(){
         <div class="archiveMeta">${r.branch||"Unknown branch"} • ${r.rows?.length||0} products • imported ${new Date(r.importedAt).toLocaleString()}</div>
         <div style="margin-top:5px">${r.reconciliation?`<span class="reconStatus ${reconStatusLabel(r.reconciliation)[0]}">${reconStatusLabel(r.reconciliation)[1]}</span>`:""}</div>
       </div>
-      <button class="btn alt" onclick="downloadArchivedSource('${r.id}','${r.archiveName.replace(/'/g,"\\'")}')">Source file</button>
+      <div class="archiveActions">
+        <button class="btn alt" onclick="downloadArchivedSource('${r.id}','${r.archiveName.replace(/'/g,"\\'")}')">Source</button>
+        <button class="btn dangerBtn" onclick="deleteSundayReport('${r.id}')">Delete</button>
+      </div>
     </div>`).join("");
+}
+
+
+let detectedWorkbookBlocks=[];
+async function preflightSelectedXlsxFiles(){
+ detectedWorkbookBlocks=[];const panel=document.getElementById("detectedBlocksPanel"),list=document.getElementById("detectedBlocksList");
+ if(!selectedXlsxFiles.length){panel.style.display="none";list.innerHTML="";return}
+ const ok=await loadSheetJS();if(!ok)return;
+ let n=0;
+ for(const file of selectedXlsxFiles){
+  try{const reps=parseSundayWorkbook(await file.arrayBuffer(),file.name);reps.forEach(rep=>detectedWorkbookBlocks.push({id:`B${n++}`,file,rep,selected:true}))}
+  catch(err){detectedWorkbookBlocks.push({id:`B${n++}`,file,rep:null,selected:false,error:err.message})}
+ }
+ panel.style.display="block";
+ list.innerHTML=detectedWorkbookBlocks.map(b=>b.rep?`<div class="detectedBlock"><input type="checkbox" data-blockid="${b.id}" checked><div><b>${b.rep.branch||"Unknown"} · ${b.rep.date}</b><div class="detectedBlockMeta">${b.file.name} • ${b.rep.sheetName} • ${b.rep.rows.length} products</div></div><span class="reconStatus ok">${b.rep.rows.length} rows</span></div>`:`<div class="detectedBlock"><input type="checkbox" disabled><div><b>${b.file.name}</b><div class="detectedBlockMeta">${b.error}</div></div><span class="reconStatus bad">Unreadable</span></div>`).join("");
+ list.querySelectorAll("[data-blockid]").forEach(cb=>cb.onchange=()=>{const b=detectedWorkbookBlocks.find(x=>x.id===cb.dataset.blockid);if(b)b.selected=cb.checked});
 }
 
 document.getElementById("xlsxFiles").onchange=e=>{
@@ -1350,6 +1501,8 @@ document.getElementById("xlsxFiles").onchange=e=>{
   box.className="selectionCard ready";
   box.innerHTML=`<b>✓ ${selectedXlsxFiles.length} Excel file${selectedXlsxFiles.length===1?"":"s"} selected</b>`+
     selectedXlsxFiles.map(f=>`<div class="selectionFile">${f.name}</div>`).join("");
+
+  preflightSelectedXlsxFiles();
 };
 
 document.getElementById("clearXlsxSelection").onclick=()=>{
@@ -1361,88 +1514,29 @@ document.getElementById("clearXlsxSelection").onclick=()=>{
   document.getElementById("xlsxResults").innerHTML="";
 };
 
+
 document.getElementById("importXlsx").onclick=async()=>{
-  if(!selectedXlsxFiles.length) return alert("Choose one or more Excel files first.");
-  const ok=await loadSheetJS();
-  if(!ok) return alert("The Excel reader could not load. Check the internet connection and try again.");
-  ensureSundayArchive();
-  const results=document.getElementById("xlsxResults");
-  results.innerHTML="";
-  const reconReports=[];
-  for(const file of selectedXlsxFiles){
-    try{
-      const buf=await file.arrayBuffer();
-      const rep=parseSundayWorkbook(buf,file.name);
-      const mathErrors=validateWorkbookMath(rep);
-      const reconciliation=reconcileExcelReport(rep);
-      const id="X"+Date.now()+Math.random().toString(36).slice(2,7);
-      const stored=await storeOriginalWorkbook(id,file,rep.archiveName);
-      const record={...rep,id,importedAt:new Date().toISOString(),sourceStored:stored,mathErrors,reconciliation};
-      const sameDateArchives=db.sundayImports.filter(x=>x.branch===rep.branch && x.date===rep.date);
-      if(sameDateArchives.length){
-        const replace=confirm(`${rep.branch} already has a Sunday report for ${rep.date}.\n\nReplace the existing active report with this Excel file?`);
-        if(!replace){
-          results.insertAdjacentHTML("beforeend",`<div class="xlsxResult warn"><b>${rep.archiveName}</b><br><span class="small">Import cancelled because an active report already exists for this branch/date.</span></div>`);
-          continue;
-        }
-        db.sundayImports=db.sundayImports.filter(x=>!(x.branch===rep.branch && x.date===rep.date));
-        db.weeks=db.weeks.filter(w=>!(w.branch===rep.branch && w.date===rep.date));
-      }
-      db.sundayImports.push(record);
-      reconReports.push(reconciliation);
-
-      // Also create/update a weekly report record from actual spreadsheet values.
-      if(rep.branch){
-        const weeklyRows=rep.rows.map(rr=>{
-          const pm=canonicalProductMatch(rr.product);
-    const p=pm.product;
-          return {
-            productId:p?.id||null,
-            sourceProductName:rr.product,
-            opening:rr.oldStock,
-            delivered:rr.newDeliver||0,
-            takeout:rr.takeOut||0,
-            closing:rr.inStock,
-            reportedSold:rr.sold,
-            sellPrice:rr.sellPrice,
-            cost:rr.cost,
-            historyKnown:rr.oldStock!=null,
-            source:"Excel"
-          };
-        });
-        db.weeks=db.weeks.filter(w=>!(w.branch===rep.branch && w.date===rep.date));
-        const weekRecord={
-          id:"W"+Date.now()+Math.random().toString(36).slice(2,5),
-          branch:rep.branch,date:rep.date,source:"Excel Sunday import",
-          sourceArchiveId:id,rows:weeklyRows,
-          totals:{
-            sales:rep.rows.reduce((s,r)=>s+(r.totalSales||0),0),
-            cost:rep.rows.reduce((s,r)=>s+(r.totalCost||0),0),
-            profit:rep.rows.reduce((s,r)=>s+(r.totalProfit||0),0),
-            bm:rep.rows.reduce((s,r)=>s+(r.bmShare||0),0),
-            alix:rep.rows.reduce((s,r)=>s+(r.alixShare||0),0),
-            pin:rep.rows.reduce((s,r)=>s+(r.pinShare||0),0)
-          },
-          importAudit:{type:"xlsx",archiveName:rep.archiveName,mathErrors,reconciliation}
-        };
-        db.weeks.push(weekRecord);
-      }
-
-      save();
-      results.insertAdjacentHTML("beforeend",`
-        <div class="xlsxResult ${mathErrors.length?"warn":"ok"}">
-          <b>${rep.archiveName}</b><br>
-          <span class="small">${rep.branch||"Branch not detected"} • Check date ${rep.date} • ${rep.rows.length} product rows • ${stored?"original archived":"parsed data archived"}</span>
-          ${mathErrors.length?`<div class="small" style="margin-top:4px">Spreadsheet self-check found ${mathErrors.length} formula/data mismatch${mathErrors.length===1?"":"es"} for review.</div>`:`<div class="small" style="margin-top:4px">Spreadsheet self-check: no arithmetic discrepancies detected.</div>`}<div class="small" style="margin-top:4px"><b>Independent reconciliation:</b> ${reconciliation.status==="ok"?"Fully reconciled":reconciliation.status==="data"?"Delivery records need checking":reconciliation.status==="bad"?"Stock/arithmetic discrepancy found":"Baseline or incomplete history"}</div>
-        </div>`);
-    }catch(err){
-      results.insertAdjacentHTML("beforeend",`<div class="xlsxResult bad"><b>${file.name}</b><br><span class="small">${err.message}</span></div>`);
-    }
-  }
-  cleanupDataIntegrity();
-  renderArchive();
-  renderExcelReconciliation(reconReports);
-  renderAll();
+ if(!selectedXlsxFiles.length)return alert("Choose one or more Excel files first.");
+ const ok=await loadSheetJS();if(!ok)return alert("The Excel reader could not load.");
+ if(!detectedWorkbookBlocks.length)await preflightSelectedXlsxFiles();
+ const chosen=detectedWorkbookBlocks.filter(b=>b.selected&&b.rep);if(!chosen.length)return alert("No weekly report blocks selected.");
+ ensureSundayArchive();const results=document.getElementById("xlsxResults");results.innerHTML="";const reconReports=[];
+ for(const block of chosen){
+  const file=block.file,rep=block.rep;
+  try{
+   const mathErrors=validateWorkbookMath(rep),reconciliation=reconcileExcelReport(rep),id="X"+Date.now()+Math.random().toString(36).slice(2,7),stored=await storeOriginalWorkbook(id,file,rep.archiveName);
+   const record={...rep,id,importedAt:new Date().toISOString(),sourceStored:stored,mathErrors,reconciliation};
+   const same=db.sundayImports.filter(x=>x.branch===rep.branch&&x.date===rep.date);
+   if(same.length&&!confirm(`${rep.branch} already has a Sunday report for ${rep.date}.\n\nReplace it?`))continue;
+   db.sundayImports=db.sundayImports.filter(x=>!(x.branch===rep.branch&&x.date===rep.date));db.weeks=db.weeks.filter(w=>!(w.branch===rep.branch&&w.date===rep.date));
+   db.sundayImports.push(record);reconReports.push(reconciliation);
+   const weeklyRows=rep.rows.map(rr=>{const pm=canonicalProductMatch(rr.product),p=pm.product;return {productId:p?.id||null,sourceProductName:rr.product,opening:rr.oldStock,delivered:rr.newDeliver||0,takeout:rr.takeOut||0,closing:rr.inStock,reportedSold:rr.sold,sellPrice:rr.sellPrice,cost:rr.cost,historyKnown:rr.oldStock!=null,source:"Excel"}});
+   db.weeks.push({id:"W"+Date.now()+Math.random().toString(36).slice(2,5),branch:rep.branch,date:rep.date,source:"Excel Sunday import",sourceArchiveId:id,rows:weeklyRows,totals:{sales:rep.rows.reduce((s,r)=>s+(r.totalSales||0),0),cost:rep.rows.reduce((s,r)=>s+(r.totalCost||0),0),profit:rep.rows.reduce((s,r)=>s+(r.totalProfit||0),0),bm:rep.rows.reduce((s,r)=>s+(r.bmShare||0),0),alix:rep.rows.reduce((s,r)=>s+(r.alixShare||0),0),pin:rep.rows.reduce((s,r)=>s+(r.pinShare||0),0)},importAudit:{type:"xlsx",archiveName:rep.archiveName,mathErrors,reconciliation}});
+   save();
+   results.insertAdjacentHTML("beforeend",`<div class="xlsxResult ${mathErrors.length?"warn":"ok"}"><b>${rep.archiveName}</b><br><span class="small">${rep.branch} • ${rep.date} • ${rep.rows.length} product rows</span></div>`);
+  }catch(err){results.insertAdjacentHTML("beforeend",`<div class="xlsxResult bad"><b>${file.name}</b><br><span class="small">${err.message}</span></div>`)}
+ }
+ cleanupDataIntegrity();refreshStoredReconciliations();retroactivelyRemapAllImports();renderArchive();renderExcelReconciliation(reconReports);renderMappingReview();renderMappingManager();renderAll();
 };
 
 document.getElementById("exportMaster").onclick=async()=>{
@@ -1739,9 +1833,9 @@ document.getElementById("importData").onchange=e=>{
  const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{Object.assign(db,JSON.parse(r.result));save();alert("Backup imported.")}catch{alert("Invalid backup file.")}};r.readAsText(f)
 }
 document.getElementById("resetData").onclick=()=>{if(confirm("Delete all local Magic Dragon Pin data on this browser?")){localStorage.removeItem("mdpin-db");location.reload()}}
-cleanupDataIntegrity();renderImport();renderArchive();renderAll();
+cleanupDataIntegrity();refreshStoredReconciliations();renderImport();renderArchive();renderAll();
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=080", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=090", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;

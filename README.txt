@@ -1,14 +1,9 @@
-MAGIC DRAGON PIN v0.8.0 — COMPACT STOCK CHECK
+MAGIC DRAGON PIN v0.9.0
 
-Major UI/workflow refinement:
-- Weekly Stock Check is now a compact browsable list instead of large vertical cards/table.
-- Product rows show name, small opening/delivery or stock/sold summary, closing-stock field, status and chevron.
-- Tap a row to reveal opening, deliveries, take-out, expected stock, sold, sales and Pay Pin.
-- Pending-only filter is the default, with All and product search controls.
-- Completed rows can disappear from Pending view, greatly shortening the working list.
-- Negative calculated sales remain prominently flagged for investigation.
-- Existing Sunday Excel reconciliation keeps its compact collapsible product view.
-- Corrected placement of the New Delivery product-search control.
-- Removed a redundant delivery-search block that had accidentally appeared in Historical Source Data.
-- OCR remains Emergency Backup Only.
-- Existing duplicate/conflict and data-integrity protections retained.
+- Detects multiple weekly reports pasted vertically in one worksheet.
+- Shows detected weekly blocks before import with checkboxes.
+- Imports each selected block as its own branch/date record.
+- Product Mapping Review lets Pin merge a shop product name with the canonical Magic Dragon product or keep it separate.
+- Confirmed aliases are remembered and applied to previous and future imports.
+- Settings includes a Product Mappings summary.
+- Existing report delete, compact reconciliation, duplicate protection and OCR emergency backup retained.
