@@ -1,23 +1,20 @@
-MAGIC DRAGON PIN v0.4.1 — CORRECTED DEPLOYMENT BUILD
+MAGIC DRAGON PIN v0.4.2 — SUNDAY IMPORT REFINEMENT
 
-IMPORTANT FIX
-The previous v0.4.0 deployment ZIP accidentally omitted:
-- sw.js
-- manifest.webmanifest
+Changes for the next iPhone test:
+- Unknown historical opening stock is no longer treated as zero.
+- Reconciliation stays GREY until a genuine previous-week closing balance exists.
+- Only real independent history can produce a green Verified result.
+- First saved Sunday import can become the baseline for the following week.
+- OCR image preprocessing added: upscale, grayscale and contrast/threshold enhancement before recognition.
+- OCR product matching relaxed slightly to better handle distorted product names.
+- Sunday review table becomes stacked mobile cards on iPhone so fields are not pushed off-screen.
+- Summary now separates Verified / OCR checks / Errors / No history.
+- v0.4.2 visible at top.
+- Existing Refresh App behavior retained.
 
-That meant the new cache/update behavior could not work as intended.
-
-v0.4.1 includes:
-- visible v0.4.1 badge at the top of the app
-- Refresh App button
-- complete service worker
-- complete PWA manifest
-- cache version magic-dragon-pin-v0.4.1
-- network-first loading for page navigation so GitHub Pages updates are fetched
-- automatic deletion of older Magic Dragon caches
-- service-worker registration with updateViaCache:none
-- Sunday Screenshot Import test workflow retained
-
-DEPLOYMENT
-Upload the individual files from this ZIP to the ROOT of the GitHub repository, replacing files with the same names.
-Do not upload the ZIP itself as the app file.
+TEST AIM
+1. Confirm v0.4.2 is live.
+2. Re-run the SAME Sunday screenshot.
+3. Compare OCR confidence/text with v0.4.1.
+4. Confirm reconciliation shows grey 'No history yet' instead of false green where no prior baseline exists.
+5. Check that all review fields are readable without horizontal scrolling on iPhone.
