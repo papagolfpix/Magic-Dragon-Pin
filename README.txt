@@ -1,26 +1,14 @@
-MAGIC DRAGON PIN v0.7.0 — STREAMLINED REVIEW + DELIVERY ENTRY
+MAGIC DRAGON PIN v0.8.0 — COMPACT STOCK CHECK
 
-RECONCILIATION UI
-- Product rows are collapsed by default.
-- Each collapsed row shows product name plus a small summary:
-  current stock / sold / delivered when available.
-- Status badge and chevron remain visible.
-- Tap a product row to reveal underlying reconciliation details.
-- Summary counters now count ROWS, not individual warning messages:
-  Rows checked
-  Verified rows
-  Stock/math error rows
-  Delivery issue rows
-  Waiting for prior week
-  Mapping review rows
-- Delivery comparisons are deferred until there is a genuine consecutive prior Sunday report.
-
-DELIVERY ENTRY
-- New product search field.
-- Mobile delivery rows are displayed as compact cards.
-- Each row shows product, quantity, cost, retail, total and remove control in a readable iPhone layout.
-- Delivery records remain the independent source used to reconcile Sunday shop files.
-
-OTHER
-- OCR remains collapsed at the very bottom as Emergency Backup Only.
-- Existing Excel import, archive, conflict handling and data-integrity cleanup retained.
+Major UI/workflow refinement:
+- Weekly Stock Check is now a compact browsable list instead of large vertical cards/table.
+- Product rows show name, small opening/delivery or stock/sold summary, closing-stock field, status and chevron.
+- Tap a row to reveal opening, deliveries, take-out, expected stock, sold, sales and Pay Pin.
+- Pending-only filter is the default, with All and product search controls.
+- Completed rows can disappear from Pending view, greatly shortening the working list.
+- Negative calculated sales remain prominently flagged for investigation.
+- Existing Sunday Excel reconciliation keeps its compact collapsible product view.
+- Corrected placement of the New Delivery product-search control.
+- Removed a redundant delivery-search block that had accidentally appeared in Historical Source Data.
+- OCR remains Emergency Backup Only.
+- Existing duplicate/conflict and data-integrity protections retained.
