@@ -1,4 +1,4 @@
-MAGIC DRAGON PIN v0.9.11 — DOCKET DELETE / AUDIT PATCH
+MAGIC DRAGON PIN v0.9.12 — DOCKET DELETE / AUDIT PATCH
 
 Changes:
 - Saved delivery dockets can be deleted from the expanded Delivery Docket archive.
@@ -7,10 +7,10 @@ Changes:
 - Deleting a delivery from History uses the same audited deletion path.
 - New Delivery line cards are now neutral white; catalogue/status colours no longer leak into delivery entry.
 - Existing v0.9.10 canonical product cleanup, alphabetical list, price repair, blank quantity, responsive cards, Yaowaret issuer and sticky navigation remain.
-- Service worker/cache bumped to v0.9.11.
+- Service worker/cache bumped to v0.9.12.
 
 TEST:
-1. Refresh App and confirm v0.9.11.
+1. Refresh App and confirm v0.9.12.
 2. Open Delivery Docket and expand a test docket.
 3. Tap Delete Docket; cancel the first prompt and confirm nothing changes.
 4. Repeat and accept both prompts. Confirm the docket disappears.

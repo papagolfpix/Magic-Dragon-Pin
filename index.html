@@ -437,7 +437,7 @@ html,body{max-width:100%;overflow-x:hidden}
 }
 
 
-/* v0.9.11 docket deletion + neutral delivery-entry cards */
+/* v0.9.12 docket deletion + neutral delivery-entry cards */
 .docketActions{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:10px}
 #deliveryLines tr,#deliveryLines tr.kanja,#deliveryLines tr.preroll,#deliveryLines tr.edible{background:#fff!important}
 #deliveryLines tr td,#deliveryLines tr.kanja td,#deliveryLines tr.preroll td,#deliveryLines tr.edible td{background:#fff!important}
@@ -549,7 +549,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div class="mark"><img src="Magic-Dragon-logo.jpeg" alt="Magic Dragon logo"></div>
     <div><h1>Magic Dragon • Pin</h1><p>Stock, delivery dockets, weekly reconciliation & payment splits</p>
 <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:6px">
-<span class="app-version">v0.9.11</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
+<span class="app-version">v0.9.12</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
 </div></div>
   </div>
 
@@ -981,7 +981,7 @@ window.deleteDocket=id=>{
    lines:(d.lines||[]).map(l=>({...l})), deletedSnapshot:JSON.parse(JSON.stringify(d))
  });
  db.deliveries=db.deliveries.filter(x=>x.id!==id);
- save(); renderDocketArchive(); renderDashboard(); renderHistory(); renderAudit();
+ save(); renderDocketArchive(); renderMetrics(); renderHistory(); renderAudit();
 };
 
 window.printDocket=id=>{
@@ -1091,7 +1091,7 @@ window.deleteRecord=(kind,id)=>{
  if(kind==="Delivery")return deleteDocket(id);
  if(!confirm(`Delete this ${kind.toLowerCase()} record?`))return;
  db.weeks=db.weeks.filter(x=>x.id!==id);
- save(); renderHistory(); renderDashboard(); renderAudit();
+ save(); renderHistory(); renderMetrics(); renderAudit();
 }
 
 
@@ -2427,7 +2427,7 @@ document.getElementById("saveMasterProducts").onclick=applyMasterProductSetup;
 document.getElementById("resetData").onclick=()=>{if(confirm("Delete all local Magic Dragon Pin data on this browser?")){localStorage.removeItem("mdpin-db");location.reload()}}
 cleanupDataIntegrity();refreshStoredReconciliations();renderImport();renderArchive();renderAll();
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0911", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0912", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;
