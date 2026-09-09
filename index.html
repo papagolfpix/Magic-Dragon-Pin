@@ -538,7 +538,7 @@ html,body{max-width:100%;overflow-x:hidden}
 .catalogueName{font-weight:700}
 @media(max-width:650px){.masterSetupHead{display:none}.masterSetupRow{grid-template-columns:1fr;gap:6px;padding:10px}.masterSetupRow .masterNameInput{font-size:16px}.catalogueName{min-width:180px!important}}
 
-/* v0.9.14 stock-only reconciliation preview */
+/* v0.9.15 stock-only reconciliation preview */
 .stockFlowBlock{margin-top:10px;border-top:1px solid #e5e7eb}
 .stockFlowBlock>summary{list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto 18px;gap:8px;align-items:center;padding:11px 0;cursor:pointer}
 .stockFlowBlock>summary::-webkit-details-marker{display:none}
@@ -564,7 +564,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div class="mark"><img src="Magic-Dragon-logo.jpeg" alt="Magic Dragon logo"></div>
     <div><h1>Magic Dragon • Pin</h1><p>Stock, delivery dockets, weekly reconciliation & payment splits</p>
 <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:6px">
-<span class="app-version">v0.9.14</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
+<span class="app-version">v0.9.15</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
 </div></div>
   </div>
 
@@ -1515,22 +1515,63 @@ function validateWorkbookMath(rep){
 }
 
 
-function getPreviousSundayReport(branch,date){
+function canonicalBranchName(value){
+  const raw=cleanProductDisplayName(value);
+  const n=raw.toLowerCase();
+  if(n.includes("lamai")) return "Lamai";
+  if(n.includes("bangrak") || n.includes("k.paul") || n.includes("k.pual") || n.includes("mini mart")) return "BM Bangrak";
+  return raw;
+}
+
+function rebuildSundayReportChain(){
   ensureSundayArchive();
+  const groups=new Map();
+  db.sundayImports.forEach(r=>{
+    r.branch=canonicalBranchName(r.branch);
+    r.chainPreviousId=null;
+    r.chainPreviousDate=null;
+    r.chainGapDays=null;
+    const key=canonicalBranchName(r.branch);
+    if(!groups.has(key)) groups.set(key,[]);
+    groups.get(key).push(r);
+  });
+  groups.forEach(rows=>{
+    rows.sort((a,b)=>String(a.date||"").localeCompare(String(b.date||"")));
+    for(let i=1;i<rows.length;i++){
+      const prev=rows[i-1], cur=rows[i];
+      const gap=daysBetween(prev.date,cur.date);
+      cur.chainGapDays=gap;
+      if(gap!=null && gap>=5 && gap<=9){
+        cur.chainPreviousId=prev.id;
+        cur.chainPreviousDate=prev.date;
+      }
+    }
+  });
+}
+
+function getPreviousSundayReport(branch,date,currentId=null){
+  ensureSundayArchive();
+  const branchKey=canonicalBranchName(branch);
+  const current=currentId ? db.sundayImports.find(r=>r.id===currentId) : db.sundayImports.find(r=>canonicalBranchName(r.branch)===branchKey && r.date===date);
+  if(current?.chainPreviousId){
+    const linked=db.sundayImports.find(r=>r.id===current.chainPreviousId);
+    if(linked) return linked;
+  }
   const prev=[...db.sundayImports]
-    .filter(r=>r.branch===branch && r.date<date)
-    .sort((a,b)=>a.date.localeCompare(b.date))
+    .filter(r=>canonicalBranchName(r.branch)===branchKey && r.date<date && (!currentId || r.id!==currentId))
+    .sort((a,b)=>String(a.date||"").localeCompare(String(b.date||"")))
     .at(-1) || null;
   if(!prev) return null;
   const gap=daysBetween(prev.date,date);
   return gap!=null && gap>=5 && gap<=9 ? prev : null;
 }
 
-function getNearestEarlierSundayReport(branch,date){
+function getNearestEarlierSundayReport(branch,date,currentId=null){
   ensureSundayArchive();
+  const branchKey=canonicalBranchName(branch);
   return [...db.sundayImports]
-    .filter(r=>r.branch===branch && r.date<date)
-    .sort((a,b)=>a.date.localeCompare(b.date))
+    .filter(r=>canonicalBranchName(r.branch)===branchKey && r.date<date && (!currentId || r.id!==currentId))
+    .sort((a,b)=>String(a.date||"").localeCompare(String(b.date||"")))
     .at(-1) || null;
 }
 
@@ -1571,8 +1612,8 @@ function previousRowForProduct(report,currentName,currentProduct){
 }
 
 function reconcileExcelReport(rep){
-  const previous=getPreviousSundayReport(rep.branch,rep.date);
-  const nearestEarlier=getNearestEarlierSundayReport(rep.branch,rep.date);
+  const previous=getPreviousSundayReport(rep.branch,rep.date,rep.id||null);
+  const nearestEarlier=getNearestEarlierSundayReport(rep.branch,rep.date,rep.id||null);
   const previousGap=nearestEarlier?daysBetween(nearestEarlier.date,rep.date):null;
   const periodStart=previous?.date || rep.oldDate || null;
   let verified=0, stockErrorRows=0, deliveryIssueRows=0, historyPendingRows=0, mappingRows=0;
@@ -1681,6 +1722,8 @@ function reconStatusLabel(r){
   if(r.status==="ok") return ["ok","Fully reconciled"];
   if(r.status==="bad") return ["bad","Arithmetic / stock error"];
   if(r.status==="data") return ["data","Delivery data check"];
+  if(r.previousDate && r.mappingRows>0) return ["unknown","Mapping review"];
+  if(r.previousDate) return ["unknown","Incomplete product history"];
   return ["unknown","Baseline / incomplete history"];
 }
 
@@ -2093,6 +2136,7 @@ async function deleteArchivedSourceFile(id){
 
 function refreshStoredReconciliations(doSave=true){
   ensureSundayArchive();
+  rebuildSundayReportChain();
   const ordered=[...db.sundayImports].sort((a,b)=>(a.date||"").localeCompare(b.date||"")||(a.branch||"").localeCompare(b.branch||""));
   ordered.forEach(r=>{
     r.reconciliation=reconcileExcelReport(r);
@@ -2135,7 +2179,7 @@ function renderArchive(){
       <div>
         <div class="archiveName">${r.archiveName}</div>
         <div class="archiveMeta">${r.branch||"Unknown branch"} • ${r.rows?.length||0} products • imported ${new Date(r.importedAt).toLocaleString()}</div>
-        <div style="margin-top:5px">${r.reconciliation?`<span class="reconStatus ${reconStatusLabel(r.reconciliation)[0]}">${reconStatusLabel(r.reconciliation)[1]}</span>`:""}</div>
+        <div style="margin-top:5px">${r.reconciliation?`<span class="reconStatus ${reconStatusLabel(r.reconciliation)[0]}">${reconStatusLabel(r.reconciliation)[1]}</span>${r.reconciliation.previousDate?` <span class="small">Previous Sunday: ${r.reconciliation.previousDate}</span>`:""}`:""}</div>
       </div>
       <div class="archiveActions">
         <button class="btn alt" onclick="downloadArchivedSource('${r.id}','${r.archiveName.replace(/'/g,"\\'")}')">Source</button>
@@ -2515,7 +2559,7 @@ document.getElementById("saveMasterProducts").onclick=applyMasterProductSetup;
 document.getElementById("resetData").onclick=()=>{if(confirm("Delete all local Magic Dragon Pin data on this browser?")){localStorage.removeItem("mdpin-db");location.reload()}}
 cleanupDataIntegrity();refreshStoredReconciliations();renderImport();renderArchive();renderAll();
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0914", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0915", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;
