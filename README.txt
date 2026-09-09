@@ -1,16 +1,24 @@
-MAGIC DRAGON PIN v0.4.3 — CORRECTED SUNDAY IMPORT BUILD
+MAGIC DRAGON PIN v0.4.4 — MULTI-PASS OCR TEST BUILD
 
-This package corrects the packaging error found in the previous v0.4.2 ZIP.
+CHANGES
+- Five OCR passes per screenshot:
+  1. Original colour
+  2. Grayscale contrast
+  3. Light threshold
+  4. Dark threshold
+  5. Green-channel contrast
+- OCR results are compared instead of trusting a single pass.
+- Agreement across passes boosts confidence.
+- Conflicting reads remain highlighted for review.
+- OCR images are enlarged more aggressively for small spreadsheet text.
+- Sunday Import mobile layout rebuilt as full-width two-column cards.
+- Product/OCR text spans full width; numeric/status fields use available screen width.
+- Grey "No history yet" reconciliation behavior retained.
+- Visible version v0.4.4.
+- Refresh App retained.
 
-Included and VERIFIED in index.html:
-- Visible v0.4.3 badge
-- Unknown opening stock shown as Unknown / grey, never as zero
-- Grey "No history yet" reconciliation state
-- Mobile stacked Sunday review cards on iPhone
-- OCR image preprocessing before recognition
-- Existing Refresh App control retained
+EXPECTED TEST
+Use the same Sunday screenshot as before so OCR confidence and layout can be compared directly with v0.4.3.
 
-IMPORTANT
-Upload index.html from this ZIP and confirm on GitHub that the source line says:
-<span class="app-version">v0.4.3</span>
-before checking the live site.
+NOTE
+This build deliberately takes longer to process screenshots in exchange for better OCR quality.
