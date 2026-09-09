@@ -436,6 +436,13 @@ html,body{max-width:100%;overflow-x:hidden}
   #deliveryLines td:last-child .btn{width:auto!important;min-width:48px!important;padding:8px 14px!important}
 }
 
+
+/* v0.9.11 docket deletion + neutral delivery-entry cards */
+.docketActions{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:10px}
+#deliveryLines tr,#deliveryLines tr.kanja,#deliveryLines tr.preroll,#deliveryLines tr.edible{background:#fff!important}
+#deliveryLines tr td,#deliveryLines tr.kanja td,#deliveryLines tr.preroll td,#deliveryLines tr.edible td{background:#fff!important}
+@media(max-width:650px){.docketActions .btn{flex:1;min-width:130px}}
+
 /* v0.8 compact weekly stock-check browser */
 .compactNotice{padding:10px 12px;margin:8px 0}
 .weekTools{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:7px;align-items:center;margin:10px 0 5px}
@@ -542,7 +549,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div class="mark"><img src="Magic-Dragon-logo.jpeg" alt="Magic Dragon logo"></div>
     <div><h1>Magic Dragon • Pin</h1><p>Stock, delivery dockets, weekly reconciliation & payment splits</p>
 <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:6px">
-<span class="app-version">v0.9.10</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
+<span class="app-version">v0.9.11</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
 </div></div>
   </div>
 
@@ -735,6 +742,11 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
       <div class="notice">Audit keeps the source figures intact. It flags negative calculated sales, closing stock above available stock, and delivery records that have not yet been covered by a saved weekly check.</div>
       <div id="auditSummary" class="grid" style="margin:12px 0"></div>
       <div id="auditList"></div>
+      <div style="margin-top:18px;padding-top:14px;border-top:1px solid #e5e7eb">
+        <h3 style="margin:0 0 6px">Delivery docket change log</h3>
+        <div class="small" style="margin-bottom:8px">Deleted dockets are removed from live calculations but retained here as an audit snapshot.</div>
+        <div id="docketAuditLog"></div>
+      </div>
     </div>
   </section>
 
@@ -802,6 +814,7 @@ const LAMAI_NAMES = new Set(["Tropicana Cookies","Rose Gold Pave 1g","Black Cher
 "Colombiana Pre-Roll","Runtz Layer Cake Pre-Roll","Super Boof Pre-Roll","Strawberry Apple Pre-Roll","Miami Pre-Roll","King Juice Pre-Roll","Night Move Pre-Roll","Mochi Pre-Roll","Black Cherry Punch Pre-Roll","Black Berry Oreoz Pre-Roll","Tropicana Cherry Pre-Roll","King's Tars Pre-Roll","Super Lemon Haze Pre-Roll","Tropicana Cookies Pre-Roll","Permanent Marker Pre-Roll"]);
 
 const db = JSON.parse(localStorage.getItem("mdpin-db")||"null") || {products:BASE_PRODUCTS,deliveries:[],weeks:[],stock:{"BM Bangrak":{},"Lamai":{}}};
+if(!Array.isArray(db.docketAudit)) db.docketAudit=[];
 function save(){localStorage.setItem("mdpin-db",JSON.stringify(db));renderAll()}
 function baht(n){return "฿"+Number(n||0).toLocaleString("en-US",{maximumFractionDigits:2})}
 function today(){return new Date().toISOString().slice(0,10)}
@@ -906,7 +919,7 @@ function renderDelivery(){
    const p=resolvedProductById(l.productId);
    if(!p)return `<tr><td colspan="6">Unknown product record</td></tr>`;
    const prices=validatedProductPrices(p)||{cost:0,retail:0};
-   return `<tr class="${escapeHtmlAttr(p.type||"")}"><td data-label="Product">${escapeHtml(p.name)}</td><td data-label="Qty">${l.qty}</td><td data-label="Cost">${baht(prices.cost)}</td><td data-label="Retail">${baht(prices.retail)}</td><td data-label="Cost total">${baht(l.qty*prices.cost)}</td><td data-label=""><button class="btn alt" onclick="removeDel(${i})">×</button></td></tr>`;
+   return `<tr><td data-label="Product">${escapeHtml(p.name)}</td><td data-label="Qty">${l.qty}</td><td data-label="Cost">${baht(prices.cost)}</td><td data-label="Retail">${baht(prices.retail)}</td><td data-label="Cost total">${baht(l.qty*prices.cost)}</td><td data-label=""><button class="btn alt" onclick="removeDel(${i})">×</button></td></tr>`;
  }).join("");
  const t=currentDelivery.reduce((sum,l)=>{const p=resolvedProductById(l.productId),prices=validatedProductPrices(p);return sum+(prices?Number(l.qty||0)*prices.cost:0)},0);
  document.getElementById("deliveryTotal").textContent=baht(t);
@@ -953,10 +966,24 @@ function renderDocketArchive(openId){
  const box=document.getElementById("docketArchive"); if(!box)return;
  const items=[...db.deliveries].sort((a,b)=>(b.date||"").localeCompare(a.date||"")||String(b.id).localeCompare(String(a.id)));
  if(!items.length){box.innerHTML=`<div class="notice">No delivery dockets yet.<div style="margin-top:10px"><button class="btn" onclick='switchTab("delivery")'>Create New Delivery</button></div></div>`;return;}
- box.innerHTML=items.map(d=>`<details class="docketArchiveItem" ${d.id===openId?"open":""} data-docket-id="${d.id}"><summary><span>${escapeHtml(d.date||"No date")} — ${escapeHtml(d.branch||"No branch")}</span></summary><div class="docketArchiveBody">${docketMarkup(d)}<div style="text-align:right;margin-top:10px"><button class="btn" onclick='printDocket("${d.id}")'>Print / Save PDF</button></div></div></details>`).join("");
+ box.innerHTML=items.map(d=>`<details class="docketArchiveItem" ${d.id===openId?"open":""} data-docket-id="${d.id}"><summary><span>${escapeHtml(d.date||"No date")} — ${escapeHtml(d.branch||"No branch")}</span></summary><div class="docketArchiveBody">${docketMarkup(d)}<div class="docketActions"><button class="btn danger" onclick='deleteDocket("${d.id}")'>Delete Docket</button><button class="btn" onclick='printDocket("${d.id}")'>Print / Save PDF</button></div></div></details>`).join("");
  box.querySelectorAll("details").forEach(el=>el.addEventListener("toggle",()=>{if(!el.open)return;box.querySelectorAll("details[open]").forEach(other=>{if(other!==el)other.open=false})}));
 }
 function renderDocket(d){ renderDocketArchive(d?.id); }
+window.deleteDocket=id=>{
+ const d=db.deliveries.find(x=>x.id===id); if(!d)return;
+ const label=`${d.date||"No date"} — ${d.branch||"No branch"}`;
+ if(!confirm(`Delete delivery docket ${label}?\n\nThis will remove its quantities from live reconciliation and totals.`))return;
+ if(!confirm(`Confirm deletion of ${label}.\n\nA read-only audit snapshot will be kept.`))return;
+ db.docketAudit.push({
+   id:"DA"+Date.now(), action:"deleted", at:new Date().toISOString(), docketId:d.id,
+   date:d.date||"", branch:d.branch||"", note:d.note||"",
+   lines:(d.lines||[]).map(l=>({...l})), deletedSnapshot:JSON.parse(JSON.stringify(d))
+ });
+ db.deliveries=db.deliveries.filter(x=>x.id!==id);
+ save(); renderDocketArchive(); renderDashboard(); renderHistory(); renderAudit();
+};
+
 window.printDocket=id=>{
  const d=db.deliveries.find(x=>x.id===id);if(!d)return;
  document.getElementById("dockBranch").textContent=d.branch||"—"; document.getElementById("dockDate").textContent=(d.date||"—")+(d.note?` · ${d.note}`:"");
@@ -1061,9 +1088,10 @@ function renderHistory(){
 }
 window.showDock=id=>{switchTab("docket");renderDocketArchive(id)}
 window.deleteRecord=(kind,id)=>{
+ if(kind==="Delivery")return deleteDocket(id);
  if(!confirm(`Delete this ${kind.toLowerCase()} record?`))return;
- if(kind==="Delivery")db.deliveries=db.deliveries.filter(x=>x.id!==id);else db.weeks=db.weeks.filter(x=>x.id!==id);
- save();
+ db.weeks=db.weeks.filter(x=>x.id!==id);
+ save(); renderHistory(); renderDashboard(); renderAudit();
 }
 
 
@@ -1114,6 +1142,16 @@ function renderAudit(){
   ["Checks reviewed",a.checked],["Issues found",a.issues.length],["Pending deliveries",a.pending],["Saved weeks",db.weeks.length]
  ].map(x=>`<div class="card metric"><div class="k">${x[0]}</div><div class="v">${x[1]}</div></div>`).join("");
  document.getElementById("auditList").innerHTML=rows.length?rows.map(i=>`<div class="auditrow"><span class="status bad">Review</span> <b>${i.product}</b> · ${i.branch}<div class="small">${i.date}</div><div>${i.msg}</div></div>`).join(""):`<div class="notice"><b>No matching discrepancies.</b> The saved records currently reconcile under the checks available in this build.</div>`;
+ const log=document.getElementById("docketAuditLog");
+ if(log){
+   const entries=[...(db.docketAudit||[])].sort((a,b)=>String(b.at||"").localeCompare(String(a.at||"")));
+   log.innerHTML=entries.length?entries.map(e=>{
+     const snap=e.deletedSnapshot||{};
+     const count=(snap.lines||e.lines||[]).length;
+     const when=e.at?new Date(e.at).toLocaleString():"";
+     return `<div class="auditrow"><span class="status bad">Deleted</span> <b>${escapeHtml(e.date||snap.date||"No date")} — ${escapeHtml(e.branch||snap.branch||"No branch")}</b><div class="small">${escapeHtml(when)} · ${count} line${count===1?"":"s"} · Original docket ID ${escapeHtml(e.docketId||snap.id||"—")}</div></div>`;
+   }).join(""):`<div class="small">No delivery docket changes recorded yet.</div>`;
+ }
 }
 
 
@@ -2389,7 +2427,7 @@ document.getElementById("saveMasterProducts").onclick=applyMasterProductSetup;
 document.getElementById("resetData").onclick=()=>{if(confirm("Delete all local Magic Dragon Pin data on this browser?")){localStorage.removeItem("mdpin-db");location.reload()}}
 cleanupDataIntegrity();refreshStoredReconciliations();renderImport();renderArchive();renderAll();
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0910", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0911", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;
