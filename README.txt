@@ -1,4 +1,4 @@
-MAGIC DRAGON PIN v0.9.1 — REAL-WORKBOOK MULTI-WEEK FIX
+MAGIC DRAGON PIN v0.9.2 — REAL-WORKBOOK MULTI-WEEK FIX
 
 ROBUST MULTI-WEEK IMPORT
 - Multi-week detection rebuilt against the actual uploaded file:
@@ -24,3 +24,6 @@ OTHER
 - Simple numeric formula fallback added for formula-like numeric strings.
 - Minor mobile overflow protection added to Historical Data and Settings.
 - Existing Sunday report delete, compact reconciliation, duplicate protection and OCR emergency backup retained.
+
+
+v0.9.2: Adds one-time Master Product Setup. Every unique shop spreadsheet name can be assigned to Pin's exact master name; aliases are saved, duplicates can be consolidated, historical Excel rows are remapped, and delivery dropdowns use the master catalogue. Product names are also editable in Settings. Fixes misplaced delivery search markup.
