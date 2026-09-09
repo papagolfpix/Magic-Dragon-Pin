@@ -437,7 +437,7 @@ html,body{max-width:100%;overflow-x:hidden}
 }
 
 
-/* v0.9.12 docket deletion + neutral delivery-entry cards */
+/* v0.9.13 repair missing King's Tars prices */
 .docketActions{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:10px}
 #deliveryLines tr,#deliveryLines tr.kanja,#deliveryLines tr.preroll,#deliveryLines tr.edible{background:#fff!important}
 #deliveryLines tr td,#deliveryLines tr.kanja td,#deliveryLines tr.preroll td,#deliveryLines tr.edible td{background:#fff!important}
@@ -549,7 +549,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div class="mark"><img src="Magic-Dragon-logo.jpeg" alt="Magic Dragon logo"></div>
     <div><h1>Magic Dragon • Pin</h1><p>Stock, delivery dockets, weekly reconciliation & payment splits</p>
 <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:6px">
-<span class="app-version">v0.9.12</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
+<span class="app-version">v0.9.13</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
 </div></div>
   </div>
 
@@ -807,7 +807,8 @@ const BASE_PRODUCTS = [
  ["Colombiana","kanja",60,150],["Tropicana Cherry","kanja",60,150],["Super Boof","kanja",60,150],["Miami","kanja",60,150],["Runtz Layer Cake","kanja",60,150],["Black Berry Oreoz","kanja",60,150],["Vanila Frosting","kanja",60,150],["Black Cherry Punch","kanja",60,150],["Night Move","kanja",60,150],["Mimosa","kanja",60,150],["King Juice","kanja",60,150],["Mochi","kanja",60,150],["Strawberry Apple","kanja",60,150],["Super Lemon Haze","kanja",60,150],["Permanent Marker","kanja",60,150],["Tropicana Cookies","kanja",60,150],["Cali Mousse 1g","kanja",350,550],
  ["Colombiana 5g","5g",300,600],["Tropicana Cherry 5g","5g",300,600],["Runtz Layer Cake 5g","5g",300,600],["Black Berry Oreoz 5g","5g",300,600],["Rose Gold Pave 5g","5g",300,600],["Super Boof 5g","5g",300,600],["Vanila Frosting 5g","5g",300,600],["Black Cherry Punch 5g","5g",300,600],["Night Move 5g","5g",300,600],["Miami 5g","5g",300,600],["Mimosa 5g","5g",300,600],["King Juice 5g","5g",300,600],["Mochi 5g","5g",300,600],["Strawberry Apple 5g","5g",300,600],["Super Lemon Haze 5g","5g",300,600],["Permanent Marker 5g","5g",300,600],["Tropicana Cookies 5g","5g",300,600],
  ["Colombiana Pre-Roll","preroll",75,150],["Tropicana Cherry Pre-Roll","preroll",75,150],["Super Boof Pre-Roll","preroll",75,150],["Runtz Layer Cake Pre-Roll","preroll",75,150],["Black Berry Oreoz Pre-Roll","preroll",75,150],["Vanila Frosting Pre-Roll","preroll",75,150],["Black Cherry Punch Pre-Roll","preroll",75,150],["Night Move Pre-Roll","preroll",75,150],["Miami Pre-Roll","preroll",75,150],["Mimosa Pre-Roll","preroll",75,150],["King Juice Pre-Roll","preroll",75,150],["Mochi Pre-Roll","preroll",75,150],["Strawberry Apple Pre-Roll","preroll",75,150],["Super Lemon Haze Pre-Roll","preroll",75,150],["Permanent Marker Pre-Roll","preroll",75,150],["Tropicana Cookies Pre-Roll","preroll",75,150],
- ["Gummy 4 Leaf","edible",100,200]
+ ["Gummy 4 Leaf","edible",100,200],
+ ["King's Tars 1g","kanja",60,150],["King's Tars Pre-Roll","preroll",75,150]
 ].map((p,i)=>({id:"P"+String(i+1).padStart(3,"0"),name:p[0],type:p[1],cost:p[2],retail:p[3]}));
 
 const LAMAI_NAMES = new Set(["Tropicana Cookies","Rose Gold Pave 1g","Black Cherry Punch","Black Berry Oreoz","Super Boof","Permanent Marker","Strawberry Apple","Miami","King Juice","Night Move","Mochi","King's Tars 1g","Super Lemon Haze",
@@ -2427,7 +2428,7 @@ document.getElementById("saveMasterProducts").onclick=applyMasterProductSetup;
 document.getElementById("resetData").onclick=()=>{if(confirm("Delete all local Magic Dragon Pin data on this browser?")){localStorage.removeItem("mdpin-db");location.reload()}}
 cleanupDataIntegrity();refreshStoredReconciliations();renderImport();renderArchive();renderAll();
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0912", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0913", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;
