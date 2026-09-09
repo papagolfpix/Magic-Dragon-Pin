@@ -1,24 +1,45 @@
-MAGIC DRAGON PIN v0.4.4 — MULTI-PASS OCR TEST BUILD
+MAGIC DRAGON PIN v0.5.0 — EXCEL SUNDAY IMPORT
 
-CHANGES
-- Five OCR passes per screenshot:
-  1. Original colour
-  2. Grayscale contrast
-  3. Light threshold
-  4. Dark threshold
-  5. Green-channel contrast
-- OCR results are compared instead of trusting a single pass.
-- Agreement across passes boosts confidence.
-- Conflicting reads remain highlighted for review.
-- OCR images are enlarged more aggressively for small spreadsheet text.
-- Sunday Import mobile layout rebuilt as full-width two-column cards.
-- Product/OCR text spans full width; numeric/status fields use available screen width.
-- Grey "No history yet" reconciliation behavior retained.
-- Visible version v0.4.4.
-- Refresh App retained.
+PRIMARY WORKFLOW
+- Import one or multiple .xlsx/.xls Sunday reports at once.
+- No branch selection required for Excel imports.
+- App detects BM Bangrak / Lamai from workbook content or file name.
+- App detects Check Date from the worksheet.
+- Known BM template columns are read directly from spreadsheet cells.
+- Spreadsheet arithmetic is self-checked during import.
+- Imported report is archived under a chronological logical name:
+  YYYY-MM-DD_BM-Bangrak_Sunday-Stock.xlsx
+  YYYY-MM-DD_Lamai_Sunday-Stock.xlsx
+- Original workbook is stored internally in IndexedDB where supported.
+- Parsed report is stored in app data and creates/updates the matching weekly record.
+- Duplicate branch/date imports replace the earlier version instead of creating duplicate weeks.
+- Sunday Report Archive lists imported files chronologically.
+- "Source file" can download the internally archived original using the generated chronological name.
+- "Export Master Workbook" creates one consolidated Excel workbook containing:
+  * Index sheet
+  * One normalized worksheet for every imported Sunday report
+- Screenshot multi-pass OCR remains as fallback.
 
-EXPECTED TEST
-Use the same Sunday screenshot as before so OCR confidence and layout can be compared directly with v0.4.3.
+TESTED FORMAT
+Built specifically against the supplied example:
+2026 BM stock control copy 1.xlsx
+Worksheet: Cannabis
+Known columns:
+B Product
+C Old stock
+D New Deliver
+E Take out
+F Total
+G Instock
+H Sold
+I Sell Price
+J Cost
+L Total Sales
+M Total Cost
+N Total Profit
+O BM
+P Alix
+Q Pin
 
-NOTE
-This build deliberately takes longer to process screenshots in exchange for better OCR quality.
+IMPORTANT
+Excel reading/export uses SheetJS loaded on demand, so internet is required at import/export time in this build.
