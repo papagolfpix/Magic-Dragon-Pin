@@ -1,33 +1,29 @@
-MAGIC DRAGON PIN v0.9.21 — PROGRESSIVE DISCLOSURE CLEANUP
+MAGIC DRAGON PIN v0.9.23 — CATALOGUE INTEGRITY REPAIR
 
-Focused cosmetic build. No reconciliation, payment, import, delivery or archive logic is intentionally changed.
+This release is focused on product identity and pricing integrity before the guided Sunday workflow is built.
 
-What is new:
-- Stock Flow Check product rows are compact and collapsible.
-- Review items are listed before fully reconciled items.
-- Collapsed stock rows show product, Prev / Del / Close values and status.
-- Full stock-flow figures and explanation remain one tap away.
-- Settings is reorganized into uniform collapsible sections: Business rules, Catalogue integrity, Master Product Setup, Product mappings, Product catalogue, and Backup & local data.
-- Main 3 x 3 navigation button dimensions are unchanged, but label font is larger and slightly heavier.
-- Mobile spacing in these areas is tightened without changing underlying data behaviour.
+DEPLOYMENT
+1. Replace the seven files in the GitHub repository root with the seven files from this ZIP.
+2. Commit the changes and wait for GitHub Pages to publish.
+3. Open the app and tap Refresh App.
+4. Confirm the header shows v0.9.23.
 
-Test:
-1. Refresh App and confirm v0.9.21.
-2. Open Sunday Import -> 6 Sep Lamai -> Stock flow check.
-3. Confirm product rows are compact; tap several rows open/closed and verify all prior detail remains available.
-4. Confirm review items appear before OK items and the stock-flow summary count is unchanged.
-5. Open Settings. Confirm each major section is a collapsed row with a chevron and opens correctly.
-6. Check Master Product Setup, Product Catalogue and Backup controls still work/display when their section is opened.
-7. Check the nine sticky navigation buttons are the same size as before, with easier-to-read labels.
+KEY FIXES
+- Repairs confirmed legacy spelling variants across existing saved data and future Excel imports.
+- Corrects Columbiana -> Colombiana across 1g/5g/pre-roll families.
+- Corrects Runtz Layer Cane/Cank -> Runtz Layer Cake.
+- Corrects Super Haze Lemon -> Super Lemon Haze.
+- Corrects Night Move Pre-oll -> Night Move Pre-Roll.
+- Normalizes redundant 1g suffixes only when an exact standard-flower product exists.
+- Adds/repairs Rose Gold Pave 1g at cost 60 / retail 150.
+- Uses spreadsheet cost/retail as a strong contextual signal when an ambiguous shop name could refer to a different size/form. Example: Lamai's plain 'Tropicana Cherry' row at cost 75 resolves to Tropicana Cherry Pre-Roll, while cost 60 resolves to the flower.
+- Existing confirmed aliases remain authoritative unless the spreadsheet price signature proves a different size/form of the same product family.
+- Unknown/fuzzy product names still do not auto-map or inherit prices.
 
-Deployment: replace all seven files in the GitHub Pages repository root.
-
-
-v0.9.21 UI cleanup:
-- Removed the obsolete manual/OCR product cards from the normal Sunday Import view.
-- Manual/OCR reconciliation remains available inside the Emergency Backup section.
-- Data Integrity diagnostics are collapsed by default.
-- Sunday Report Archive remains the primary reconciliation workflow.
-
-
-v0.9.21: Sticky 3x3 navigation retained at the top while scrolling. Sunday Import was compacted; explanatory workflow text now lives behind a contextual information button.
+TESTED
+- Both supplied Excel workbooks were audited.
+- 72 distinct workbook product-name/price cases resolve to the correct catalogue product and price.
+- Workbook arithmetic checks passed with zero row-level total/sold/sales errors.
+- Existing saved typo/duplicate migration and delivery-reference reassignment were tested.
+- All 54 base catalogue products have positive cost/retail prices and unique normalized identities.
+- JavaScript syntax check passed.
