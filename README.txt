@@ -1,29 +1,34 @@
-MAGIC DRAGON PIN v0.9.2 — REAL-WORKBOOK MULTI-WEEK FIX
+MAGIC DRAGON PIN v0.9.3 — MASTER NAME SAVE / VISUAL CONFIRMATION FIX
 
-ROBUST MULTI-WEEK IMPORT
-- Multi-week detection rebuilt against the actual uploaded file:
-  Lamai 20260823.xlsx
-- Uses the report title marker "Old Stock from" + "Check Date" rather than assuming all table headings are on one row.
-- Real regression-test expectation:
-  23/08/2026 — 28 products
-  30/08/2026 — 28 products
-  06/09/2026 — 28 products
-- BM single-week regression file also tested:
-  one report — 42 product rows.
-- Pre-import screen now states "3 weekly reports detected" and dynamically updates:
-  Import 3 Selected Reports / Import 2 Selected Reports etc.
-- Each selected block remains an independent branch/date report with normal duplicate protection.
+Deploy all files in this folder to the GitHub repository root.
 
-PRODUCT MAPPING
-- Added "Unsure — Check Later".
-- Deferred mappings are not merged and do not create a separate product.
-- Settings shows a Check Later queue with Review Now.
-- Merge and Keep Separate behavior retained.
+WHAT CHANGED IN v0.9.3
+- Fixes Master Product Setup so saved corrections immediately become the main displayed product names.
+- The shop's original wording is retained only as an alias/reference under Pin's saved master name.
+- Multiple shop spellings mapped to the same master product are grouped under Pin's canonical product identity after save.
+- Rows whose names were actually changed in the latest save are highlighted green and show “Saved just now”.
+- Save confirmation reports how many corrected product names were applied.
+- Renaming a saved master product now reuses the existing product identity rather than accidentally creating a duplicate product.
+- Delivery, weekly-history and stock references are reassigned when products are merged.
+- Existing localStorage data and prior imports are preserved.
+- Service worker/cache version bumped to v0.9.3.
 
-OTHER
-- Simple numeric formula fallback added for formula-like numeric strings.
-- Minor mobile overflow protection added to Historical Data and Settings.
-- Existing Sunday report delete, compact reconciliation, duplicate protection and OCR emergency backup retained.
+QUICK TEST
+1. Deploy all 7 files and open the live GitHub Pages app.
+2. Tap Refresh App and confirm the header says v0.9.3.
+3. Open Settings > Master Product Setup.
+4. Change one or more Pin product names and press Save Pin's Master Product List.
+5. Confirm the corrected names now appear as the bold/main names.
+6. Confirm the old shop spellings appear underneath as “Received as” aliases where they differ.
+7. Confirm only the products changed in that save are highlighted green with “Saved just now”.
+8. Go to New Delivery and confirm its product selector uses the corrected master names.
+9. Close/reopen Safari and confirm the corrected names remain saved.
 
-
-v0.9.2: Adds one-time Master Product Setup. Every unique shop spreadsheet name can be assigned to Pin's exact master name; aliases are saved, duplicates can be consolidated, historical Excel rows are remapped, and delivery dropdowns use the master catalogue. Product names are also editable in Settings. Fixes misplaced delivery search markup.
+FILES
+- index.html
+- sw.js
+- manifest.webmanifest
+- Magic-Dragon-logo.jpeg
+- icon-192.png
+- icon-512.png
+- README.txt
