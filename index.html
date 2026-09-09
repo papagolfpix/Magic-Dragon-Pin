@@ -63,7 +63,7 @@ tr.kanja td{background:var(--green)}tr.preroll td{background:var(--pink)}tr.edib
  .card{border:0;box-shadow:none;padding:0}.docket{border:0;padding:0}.printOnly{display:block}
 }
 
-/* v0.6.0 compact iPhone tables */
+/* v0.6.1 compact iPhone tables */
 .tablewrap table{table-layout:fixed}
 .tablewrap th,.tablewrap td{
   white-space:normal;
@@ -131,7 +131,7 @@ tr.kanja td{background:var(--green)}tr.preroll td{background:var(--pink)}tr.edib
 }
 
 
-/* v0.6.0 Sunday Import mobile layout */
+/* v0.6.1 Sunday Import mobile layout */
 @media(max-width:650px){
   .tablewrap{overflow:visible!important}
   .importReview{display:block!important;min-width:0!important;width:100%!important;border-collapse:separate!important;border-spacing:0!important}
@@ -227,7 +227,7 @@ tr.kanja td{background:var(--green)}tr.preroll td{background:var(--pink)}tr.edib
 .selectionFile{font-weight:800;overflow-wrap:anywhere;margin-top:4px}
 
 
-/* v0.6.0 header refinement */
+/* v0.6.1 header refinement */
 .hero{
   padding:8px 10px!important;
   gap:12px!important;
@@ -337,7 +337,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div class="mark"><img src="Magic-Dragon-logo.jpeg" alt="Magic Dragon logo"></div>
     <div><h1>Magic Dragon • Pin</h1><p>Stock, delivery dockets, weekly reconciliation & payment splits</p>
 <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:6px">
-<span class="app-version">v0.6.0</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
+<span class="app-version">v0.6.1</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
 </div></div>
   </div>
 
@@ -363,7 +363,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <h2>Quick actions</h2>
     <div class="actionbar">
       <button class="btn gold" onclick="switchTab('delivery')">+ New Delivery</button>
-      <button class="btn" onclick="switchTab('import')">Upload Sunday Screenshots</button>
+      <button class="btn" onclick="switchTab('import')">Upload Sunday Report</button>
       <button class="btn alt" onclick="switchTab('weekly')">Manual Stock Check</button>
       <button class="btn alt" onclick="switchTab('audit')">Check Discrepancies</button>
       <button class="btn alt" onclick="switchTab('history')">View History</button>
@@ -420,25 +420,18 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
           <div id="excelReconReports"></div>
         </div>
       </div>
-      <details class="ocrFallback">
-        <summary>Screenshot OCR — Backup Method</summary>
-        <div class="ocrFallbackBody">
-          <div class="small" style="margin-bottom:10px">Use this only when the shop sends screenshots instead of an Excel file. Set the branch/date, select one or more screenshots, then run the slower multi-pass OCR.</div>
-          <div id="ocrManualMeta" class="importGrid" style="margin-top:8px">
-            <div class="field"><label>Branch</label><select id="impBranch"><option>BM Bangrak</option><option>Lamai</option></select></div>
-            <div class="field"><label>Sunday check date</label><input id="impDate" type="date"></div>
-          </div>
-          <label class="btn gold" style="display:inline-block">Choose screenshots<input id="impFiles" type="file" accept="image/*" multiple hidden></label>
-          <button class="btn" id="runOCR">Run Multi-Pass OCR</button>
-          <button class="btn alt" id="clearImport">Clear OCR</button>
-          <div id="shotPreview" class="shotPreview"></div>
-          <div id="ocrProgress" class="importStatus">No screenshots selected.</div>
-        </div>
-      </details>
       
+      
+      
+      <div class="card" style="margin-top:14px">
+        <h3 style="margin-top:0">Data Integrity</h3>
+        <div class="small">The app automatically keeps one active Sunday report per branch/date, supersedes lower-quality OCR/manual data when Excel exists, removes duplicate test records, and ignores non-consecutive weeks for reconciliation.</div>
+        <div id="cleanupStatus" class="importStatus" style="margin-top:10px">Data integrity check pending.</div>
+      </div>
+
       <div class="card archiveCard" style="margin-top:14px">
         <h3 style="margin-top:0">Sunday Report Archive</h3>
-        <div class="small">Imported reports are listed chronologically with their reconciliation status. The parsed data and original workbook are retained on this device for audit purposes.</div>
+        <div class="small">Active reports are listed chronologically with reconciliation status. Re-importing the same branch/date prompts before replacement, and only one active record is used for calculations.</div>
         <div id="archiveList" style="margin-top:10px"></div>
       </div>
 
@@ -455,6 +448,21 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
       </div>
       <div class="small" style="margin-top:8px">Green = verified. Amber = OCR needs a look but maths agrees. Red = reconciliation error. Purple = likely missing/incorrect delivery or other recorded movement. Grey = insufficient historical data to reconcile. Always check red/purple rows before confirming.</div>
     </div>
+<details class="ocrFallback">
+        <summary>Screenshot OCR — Emergency Backup Only</summary>
+        <div class="ocrFallbackBody">
+          <div class="small" style="margin-bottom:10px">Use this only when the shop sends screenshots instead of an Excel file. Set the branch/date, select one or more screenshots, then run the slower multi-pass OCR.</div>
+          <div id="ocrManualMeta" class="importGrid" style="margin-top:8px">
+            <div class="field"><label>Branch</label><select id="impBranch"><option>BM Bangrak</option><option>Lamai</option></select></div>
+            <div class="field"><label>Sunday check date</label><input id="impDate" type="date"></div>
+          </div>
+          <label class="btn gold" style="display:inline-block">Choose screenshots<input id="impFiles" type="file" accept="image/*" multiple hidden></label>
+          <button class="btn" id="runOCR">Run Multi-Pass OCR</button>
+          <button class="btn alt" id="clearImport">Clear OCR</button>
+          <div id="shotPreview" class="shotPreview"></div>
+          <div id="ocrProgress" class="importStatus">No screenshots selected.</div>
+        </div>
+      </details>
   </section>
 
   <section id="weekly" class="section">
@@ -822,18 +830,95 @@ function numOrNull(v){
   const n=Number(v); return Number.isFinite(n)?n:null;
 }
 
+
+function daysBetween(a,b){
+  if(!a||!b) return null;
+  const da=new Date(a+"T00:00:00"), dbb=new Date(b+"T00:00:00");
+  return Math.round((dbb-da)/86400000);
+}
+
+function normalizeProductKey(s){
+  return norm(String(s||"")
+    .replace(/pre[\s\-]?roll/gi,"preroll")
+    .replace(/\b1\s*g(?:\.|ram)?\b/gi,"1g")
+    .replace(/\b5\s*g(?:\.|ram)?\b/gi,"5g")
+    .replace(/[’']/g,""));
+}
+
+function canonicalProductMatch(name){
+  const n=normalizeProductKey(name);
+  let exact=db.products.find(p=>normalizeProductKey(p.name)===n);
+  if(exact) return {product:exact,score:1};
+  let best=null,bestScore=0;
+  db.products.forEach(p=>{
+    const s=similarity(n,normalizeProductKey(p.name));
+    if(s>bestScore){bestScore=s;best=p}
+  });
+  return {product:bestScore>=0.58?best:null,score:bestScore};
+}
+
+function isExcelSourceRecord(r){
+  return /excel/i.test(String(r?.source||"")) || r?.importAudit?.type==="xlsx";
+}
+
+function cleanupDataIntegrity(){
+  if(!db.weeks) db.weeks=[];
+  ensureSundayArchive();
+
+  let removedWeeks=0, removedArchives=0, supersededLowerQuality=0;
+
+  const grouped=new Map();
+  db.weeks.forEach((w,idx)=>{
+    const key=`${w.branch||""}|${w.date||""}`;
+    if(!grouped.has(key)) grouped.set(key,[]);
+    grouped.get(key).push({w,idx});
+  });
+  const keepWeekIds=new Set();
+  for(const entries of grouped.values()){
+    entries.sort((a,b)=>{
+      const ae=isExcelSourceRecord(a.w)?1:0, be=isExcelSourceRecord(b.w)?1:0;
+      if(ae!==be) return be-ae;
+      return b.idx-a.idx;
+    });
+    keepWeekIds.add(entries[0].w.id);
+    if(entries.length>1){
+      removedWeeks += entries.length-1;
+      supersededLowerQuality += entries.slice(1).filter(e=>!isExcelSourceRecord(e.w)&&isExcelSourceRecord(entries[0].w)).length;
+    }
+  }
+  db.weeks=db.weeks.filter(w=>keepWeekIds.has(w.id));
+
+  const ag=new Map();
+  db.sundayImports.forEach((r,idx)=>{
+    const key=`${r.branch||""}|${r.date||""}`;
+    if(!ag.has(key)) ag.set(key,[]);
+    ag.get(key).push({r,idx});
+  });
+  const keepArchiveIds=new Set();
+  for(const entries of ag.values()){
+    entries.sort((a,b)=>{
+      const at=new Date(a.r.importedAt||0).getTime(), bt=new Date(b.r.importedAt||0).getTime();
+      return bt-at || b.idx-a.idx;
+    });
+    keepArchiveIds.add(entries[0].r.id);
+    removedArchives += Math.max(0,entries.length-1);
+  }
+  db.sundayImports=db.sundayImports.filter(r=>keepArchiveIds.has(r.id));
+
+  save();
+  const box=document.getElementById("cleanupStatus");
+  if(box){
+    box.innerHTML=`<b>Data cleaned.</b> ${removedWeeks} duplicate/superseded weekly record${removedWeeks===1?"":"s"} removed, ${removedArchives} duplicate archive record${removedArchives===1?"":"s"} removed${supersededLowerQuality?`, including ${supersededLowerQuality} lower-quality OCR/manual record${supersededLowerQuality===1?"":"s"}`:""}.`;
+  }
+  return {removedWeeks,removedArchives,supersededLowerQuality};
+}
+
 function ensureSundayArchive(){
   if(!db.sundayImports) db.sundayImports=[];
 }
 
 function mapProductByName(name){
-  const n=norm(name);
-  let best=null,bestScore=0;
-  db.products.forEach(p=>{
-    const s=similarity(n,norm(p.name));
-    if(s>bestScore){bestScore=s;best=p}
-  });
-  return bestScore>=0.62?best:null;
+  return canonicalProductMatch(name).product;
 }
 
 function validateWorkbookMath(rep){
@@ -852,6 +937,17 @@ function validateWorkbookMath(rep){
 
 
 function getPreviousSundayReport(branch,date){
+  ensureSundayArchive();
+  const prev=[...db.sundayImports]
+    .filter(r=>r.branch===branch && r.date<date)
+    .sort((a,b)=>a.date.localeCompare(b.date))
+    .at(-1) || null;
+  if(!prev) return null;
+  const gap=daysBetween(prev.date,date);
+  return gap!=null && gap>=5 && gap<=9 ? prev : null;
+}
+
+function getNearestEarlierSundayReport(branch,date){
   ensureSundayArchive();
   return [...db.sundayImports]
     .filter(r=>r.branch===branch && r.date<date)
@@ -883,12 +979,15 @@ function appDeliveryQty(branch,startDate,endDate,productId){
 
 function reconcileExcelReport(rep){
   const previous=getPreviousSundayReport(rep.branch,rep.date);
+  const nearestEarlier=getNearestEarlierSundayReport(rep.branch,rep.date);
+  const previousGap=nearestEarlier?daysBetween(nearestEarlier.date,rep.date):null;
   const periodStart=previous?.date || rep.oldDate || null;
   let verified=0, issues=0, unknown=0, dataIssues=0, mappingIssues=0;
   const details=[];
 
   rep.rows.forEach(rr=>{
-    const p=mapProductByName(rr.product);
+    const pm=canonicalProductMatch(rr.product);
+    const p=pm.product;
     const prev=rowByProductName(previous,rr.product);
     const rowIssues=[];
     let rowVerified=true;
@@ -917,7 +1016,7 @@ function reconcileExcelReport(rep){
         rowVerified=false; unknown++;
       }
     }else{
-      rowIssues.push({type:"unknown",msg:"Baseline report — no earlier imported Sunday report exists yet."});
+      rowIssues.push({type:"unknown",msg: nearestEarlier && previousGap>9 ? `Earlier report exists (${nearestEarlier.date}) but there is a ${previousGap}-day gap, so it is not valid for week-to-week reconciliation.` : "Baseline report — no earlier imported Sunday report exists yet."});
       rowVerified=false; unknown++;
     }
 
@@ -933,7 +1032,7 @@ function reconcileExcelReport(rep){
         rowVerified=false; dataIssues++;
       }
     }else if(!p){
-      rowIssues.push({type:"warn",msg:"Product could not be confidently matched to the Magic Dragon catalogue."});
+      rowIssues.push({type:"warn",msg:`Product name needs catalogue mapping review${pm.score?` (match score ${Math.round(pm.score*100)}%)`:""}.`});
       rowVerified=false; mappingIssues++;
     }else{
       rowIssues.push({type:"unknown",msg:"Delivery comparison needs a known start date."});
@@ -1099,15 +1198,24 @@ document.getElementById("importXlsx").onclick=async()=>{
       const id="X"+Date.now()+Math.random().toString(36).slice(2,7);
       const stored=await storeOriginalWorkbook(id,file,rep.archiveName);
       const record={...rep,id,importedAt:new Date().toISOString(),sourceStored:stored,mathErrors,reconciliation};
-      const duplicate=db.sundayImports.findIndex(x=>x.branch===rep.branch && x.date===rep.date);
-      if(duplicate>=0) db.sundayImports.splice(duplicate,1);
+      const sameDateArchives=db.sundayImports.filter(x=>x.branch===rep.branch && x.date===rep.date);
+      if(sameDateArchives.length){
+        const replace=confirm(`${rep.branch} already has a Sunday report for ${rep.date}.\n\nReplace the existing active report with this Excel file?`);
+        if(!replace){
+          results.insertAdjacentHTML("beforeend",`<div class="xlsxResult warn"><b>${rep.archiveName}</b><br><span class="small">Import cancelled because an active report already exists for this branch/date.</span></div>`);
+          continue;
+        }
+        db.sundayImports=db.sundayImports.filter(x=>!(x.branch===rep.branch && x.date===rep.date));
+        db.weeks=db.weeks.filter(w=>!(w.branch===rep.branch && w.date===rep.date));
+      }
       db.sundayImports.push(record);
       reconReports.push(reconciliation);
 
       // Also create/update a weekly report record from actual spreadsheet values.
       if(rep.branch){
         const weeklyRows=rep.rows.map(rr=>{
-          const p=mapProductByName(rr.product);
+          const pm=canonicalProductMatch(rr.product);
+    const p=pm.product;
           return {
             productId:p?.id||null,
             sourceProductName:rr.product,
@@ -1122,7 +1230,7 @@ document.getElementById("importXlsx").onclick=async()=>{
             source:"Excel"
           };
         });
-        const existing=db.weeks.findIndex(w=>w.branch===rep.branch && w.date===rep.date);
+        db.weeks=db.weeks.filter(w=>!(w.branch===rep.branch && w.date===rep.date));
         const weekRecord={
           id:"W"+Date.now()+Math.random().toString(36).slice(2,5),
           branch:rep.branch,date:rep.date,source:"Excel Sunday import",
@@ -1137,7 +1245,6 @@ document.getElementById("importXlsx").onclick=async()=>{
           },
           importAudit:{type:"xlsx",archiveName:rep.archiveName,mathErrors,reconciliation}
         };
-        if(existing>=0) db.weeks.splice(existing,1);
         db.weeks.push(weekRecord);
       }
 
@@ -1152,6 +1259,7 @@ document.getElementById("importXlsx").onclick=async()=>{
       results.insertAdjacentHTML("beforeend",`<div class="xlsxResult bad"><b>${file.name}</b><br><span class="small">${err.message}</span></div>`);
     }
   }
+  cleanupDataIntegrity();
   renderArchive();
   renderExcelReconciliation(reconReports);
   renderAll();
@@ -1439,7 +1547,7 @@ document.getElementById("importData").onchange=e=>{
  const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{Object.assign(db,JSON.parse(r.result));save();alert("Backup imported.")}catch{alert("Invalid backup file.")}};r.readAsText(f)
 }
 document.getElementById("resetData").onclick=()=>{if(confirm("Delete all local Magic Dragon Pin data on this browser?")){localStorage.removeItem("mdpin-db");location.reload()}}
-renderImport();renderArchive();renderAll();
+cleanupDataIntegrity();renderImport();renderArchive();renderAll();
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
   window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=041", {updateViaCache:"none"}).catch(()=>{}));
 }
