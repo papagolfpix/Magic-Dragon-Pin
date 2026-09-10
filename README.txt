@@ -1,19 +1,18 @@
-MAGIC DRAGON PIN v0.9.59 — FINAL NIGHT SHELL PATCH
-
-Focused update only.
+MAGIC DRAGON PIN v0.9.60 — DOCKET PDF + COMPACT DASHBOARD
 
 WHAT CHANGED
-- Rebuilt the normal app shell around a hard-clipped content viewport below the branded header.
-- Active pages scroll inside that clipped viewport; they cannot paint into the header region.
-- Menu button keeps its existing width and is now approximately square, with the version badge aligned above it.
-- Sunday Workflow remains a dedicated fullscreen workflow.
-- No business, reconciliation, invoice, correction, records, or product logic changed in this release.
+- Delivery dockets now create a real PDF file directly, using the same iPhone share/download approach as invoices.
+- Removed dependence on the browser print-preview path that could produce a blank docket.
+- Post-delivery history remains optional when creating the docket PDF.
+- Dashboard controls, metrics and alerts are substantially more compact.
+- Static branch/split information is moved behind a small Business setup disclosure instead of occupying the main dashboard.
+- No reconciliation, pricing, split, invoice, correction, or import logic changed.
 
-ACCEPTANCE TEST
-1. Open Dashboard on iPhone Safari.
-2. Scroll rapidly to the top and bottom several times.
-3. Confirm no Dashboard content appears inside/behind the black header rectangle.
-4. Open Menu and confirm the version/Menu stack remains aligned.
+TEST
+1. Open Dashboard and confirm it is visibly more compact.
+2. Open Delivery Docket, select a saved docket, tap Create / Share PDF.
+3. On iPhone confirm the share sheet receives one populated PDF file (not a blank print preview).
+4. Open/save the PDF and confirm product rows, quantities, cost/retail, total, branch and date are present.
 
 DEPLOYMENT
-Replace all 7 files in the GitHub Pages repository root, commit, wait for Pages deployment, then reopen/reload and confirm v0.9.59 in the header.
+Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.60 in the header.
