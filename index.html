@@ -651,7 +651,7 @@ html,body{max-width:100%;overflow-x:hidden}
 .importWizardButton{width:100%;margin:0 0 10px}
 @media(max-width:650px){.wizardProgress{grid-template-columns:repeat(4,1fr)}.wizardStep{font-size:10px;padding:7px 2px}}
 
-/* v0.9.28 reconciliation evidence + zero-stock handling UI */
+/* v0.9.29 reconciliation evidence + zero-stock handling UI */
 .wizardIssue>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:start}
 .wizardIssue>summary::-webkit-details-marker{display:none}
 .wizardIssueTitle{font-weight:850;color:#991b1b;line-height:1.2}
@@ -664,7 +664,7 @@ html,body{max-width:100%;overflow-x:hidden}
 .wizardEvidenceCell .v{font-size:16px;font-weight:900;color:#172033;margin-top:2px}
 .wizardEvidenceNote{font-size:12px;color:#7f1d1d;margin-top:9px;line-height:1.35}
 @media(max-width:430px){.wizardEvidence{grid-template-columns:1fr 1fr}.wizardEvidenceCell{padding:7px}.wizardEvidenceCell .v{font-size:15px}}
-/* v0.9.28 focused Sunday workflow shell + financial stage */
+/* v0.9.29 focused Sunday workflow shell + financial stage */
 body.workflowMode .brand,body.workflowMode .tabs,body.workflowMode .navSpacer{display:none!important}
 body.workflowMode .app{padding-bottom:92px}
 .workflowTop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
@@ -680,7 +680,7 @@ body.workflowMode .workflowBar{display:block}
 .financeSummary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.financeCell{border:1px solid #d7dde7;border-radius:10px;padding:9px;background:#fff}.financeCell .k{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#667085;font-weight:800}.financeCell .v{font-size:18px;font-weight:900;margin-top:2px}.financeTotal{margin-top:12px;padding:14px;border-radius:12px;background:#ecfdf3;color:#166534}.financeTotal .big{font-size:25px;font-weight:950;margin-top:3px}.financeDetails{margin-top:8px}.financeDetails summary{cursor:pointer;font-weight:800;color:#344054}.financeIssue{padding:10px;border:1px solid #fecaca;background:#fff1f2;border-radius:10px;margin:8px 0;color:#991b1b}.financeIssue .small{color:#7f1d1d}
 @media(max-width:430px){.workflowNavBtn{font-size:14px}.financeSummary{grid-template-columns:1fr 1fr}}
 
-/* v0.9.28 dashboard workflow shortcuts + docket editing */
+/* v0.9.29 dashboard workflow shortcuts + docket editing */
 .dashboardSundayWrap{display:none!important}
 .homeQuick{margin:0 0 12px;padding:10px;border:1px solid #dbe3ec;border-radius:14px;background:#fff}
 .homeQuickTitle{font-weight:900;font-size:17px;margin:0 0 8px}
@@ -690,7 +690,7 @@ body.workflowMode .workflowBar{display:block}
 .docketActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 @media(max-width:560px){.homeQuick{margin-top:0}.homeQuickTitle{font-size:16px}.homeQuickGrid .btn{font-size:15px;padding:10px 8px}.docketActions .btn{flex:1 1 45%}}
 
-/* v0.9.28 viewport-fit workflow shell */
+/* v0.9.29 viewport-fit workflow shell */
 body.workflowMode{overflow:hidden;height:100dvh}
 body.workflowMode .hero,body.workflowMode .tabs,body.workflowMode .navSpacer{display:none!important}
 body.workflowMode .app{
@@ -745,6 +745,27 @@ body.workflowMode .workflowBar{padding-top:7px}
  body.workflowMode .financeCell .v{font-size:16px}
 }
 
+
+/* v0.9.29 verified weekly invoice stage */
+.invoiceCard{border:1px solid #d7dde7;border-radius:14px;background:#fff;padding:14px;margin-top:8px}
+.invoiceHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border-bottom:1px solid #e5e7eb;padding-bottom:10px;margin-bottom:10px}
+.invoiceTitle{font-size:20px;font-weight:950;line-height:1.1;color:#172033}.invoiceMeta{text-align:right;font-size:11px;color:#667085;line-height:1.45}
+.invoiceFrom{font-size:12px;color:#475467;margin:7px 0 10px}.invoiceFrom b{color:#172033}
+.invoiceBranches{display:grid;gap:8px}.invoiceBranch{border:1px solid #e1e6ee;border-radius:11px;padding:10px}.invoiceBranchName{font-weight:900;margin-bottom:7px}
+.invoiceNums{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}.invoiceNum{background:#f8fafc;border-radius:8px;padding:7px}.invoiceNum .k{font-size:9px;text-transform:uppercase;letter-spacing:.05em;color:#667085;font-weight:800}.invoiceNum .v{font-size:15px;font-weight:900;color:#172033;margin-top:1px}
+.invoiceTotal{margin-top:10px;background:#172033;color:#fff;border-radius:12px;padding:12px}.invoiceTotal .k{font-size:11px;text-transform:uppercase;letter-spacing:.05em;opacity:.8;font-weight:800}.invoiceTotal .v{font-size:27px;font-weight:950;margin-top:2px}
+.invoiceExplain{font-size:11px;color:#667085;line-height:1.4;margin-top:9px}.invoiceState{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 0}.invoiceSaved{font-size:11px;font-weight:850;color:#166534;background:#dcfce7;padding:6px 8px;border-radius:999px}.invoiceDraft{font-size:11px;font-weight:850;color:#92400e;background:#fef3c7;padding:6px 8px;border-radius:999px}
+.invoiceActionRow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.invoiceActionRow .btn{width:100%;min-height:43px}
+@media(max-width:430px){.invoiceCard{padding:11px}.invoiceTitle{font-size:18px}.invoiceTotal .v{font-size:24px}.invoiceNums{gap:5px}.invoiceNum{padding:6px}.invoiceNum .v{font-size:14px}}
+@media(max-height:720px){body.workflowMode .invoiceCard{padding:9px;margin-top:5px}body.workflowMode .invoiceHead{padding-bottom:7px;margin-bottom:7px}body.workflowMode .invoiceFrom{margin:5px 0 7px}body.workflowMode .invoiceBranch{padding:7px}body.workflowMode .invoiceNums{gap:4px}body.workflowMode .invoiceNum{padding:5px}body.workflowMode .invoiceTotal{padding:8px 10px;margin-top:7px}body.workflowMode .invoiceTotal .v{font-size:21px}body.workflowMode .invoiceExplain{margin-top:6px}}
+@media print{
+ body.invoicePrintMode{overflow:visible!important;height:auto!important;background:#fff!important}
+ body.invoicePrintMode .app,body.invoicePrintMode .workflowBar,body.invoicePrintMode #runtimeError{display:none!important}
+ body.invoicePrintMode #invoicePrintSheet{display:block!important;position:static!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+ body.invoicePrintMode #invoicePrintSheet .invoiceCard{border:none!important;margin:0!important;padding:0!important}
+}
+#invoicePrintSheet{display:none}
+
 </style>
 </head>
 <body>
@@ -757,7 +778,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div class="mark"><img src="Magic-Dragon-logo.jpeg" alt="Magic Dragon logo"></div>
     <div><h1>Magic Dragon • Pin</h1><p>Stock, delivery dockets, weekly reconciliation & payment splits</p>
 <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:6px">
-<span class="app-version">v0.9.28</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
+<span class="app-version">v0.9.29</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
 </div></div>
   </div>
 
@@ -799,6 +820,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
       <div id="wizardContent"></div>
     </div>
   </section>
+  <div id="invoicePrintSheet"></div>
   <div class="workflowBar noPrint" id="workflowBar"><div class="workflowBarInner"><button class="workflowNavBtn" id="wizardPrev" type="button">‹ Previous</button><div class="workflowDots" id="wizardDots"></div><button class="workflowNavBtn next" id="wizardNext" type="button">Next ›</button></div></div>
 
   <section id="delivery" class="section">
@@ -1078,6 +1100,7 @@ const LAMAI_NAMES = new Set(["Tropicana Cookies","Rose Gold Pave 1g","Black Cher
 
 const db = JSON.parse(localStorage.getItem("mdpin-db")||"null") || {products:BASE_PRODUCTS,deliveries:[],weeks:[],stock:{"BM Bangrak":{},"Lamai":{}}};
 if(!Array.isArray(db.docketAudit)) db.docketAudit=[];
+if(!Array.isArray(db.invoices)) db.invoices=[];
 function save(){localStorage.setItem("mdpin-db",JSON.stringify(db));renderAll()}
 function baht(n){return "฿"+Number(n||0).toLocaleString("en-US",{maximumFractionDigits:2})}
 function today(){return new Date().toISOString().slice(0,10)}
@@ -3010,12 +3033,28 @@ function financialReconcileReport(rep){
   });
   return {status:issues.length?"review":"ok",issues,totals,stock};
 }
+function invoiceFinancialSummary(financial){
+  const branches=financial.filter(x=>x.result.status==="ok").map(x=>({branch:x.report.branch,...x.result.totals}));
+  const combined={sales:0,cost:0,profit:0,bm:0,alix:0,pinProfit:0,payPin:0};
+  branches.forEach(b=>Object.keys(combined).forEach(k=>combined[k]+=Number(b[k]||0)));
+  return {branches,combined};
+}
+function invoiceSignature(date,summary){
+  return JSON.stringify({date,branches:summary.branches.map(b=>[b.branch,+b.sales.toFixed(2),+b.cost.toFixed(2),+b.pinProfit.toFixed(2),+b.payPin.toFixed(2)])});
+}
+function getValidSundayInvoice(date,financial){
+  const summary=invoiceFinancialSummary(financial),sig=invoiceSignature(date,summary);
+  const inv=[...(db.invoices||[])].reverse().find(x=>x&&x.reportDate===date&&x.status!=="void");
+  return inv&&inv.signature===sig?inv:null;
+}
 function currentWizardState(){
   const items=latestWizardReports();
   const stockGreen=items.length>0&&items.every(x=>x.rec.status==="ok");
   const financial=items.map(x=>({report:x.report,result:financialReconcileReport(x.report)}));
   const financialGreen=stockGreen&&financial.length>0&&financial.every(x=>x.result.status==="ok");
-  return {items,stockGreen,financial,financialGreen};
+  const latestDate=items[0]?.report?.date||null;
+  const invoice=financialGreen&&latestDate?getValidSundayInvoice(latestDate,financial):null;
+  return {items,stockGreen,financial,financialGreen,invoice,invoiceSaved:!!invoice};
 }
 function renderWizardChrome(state){
   const prog=document.getElementById("wizardProgress"),dots=document.getElementById("wizardDots"),prev=document.getElementById("wizardPrev"),next=document.getElementById("wizardNext");
@@ -3026,7 +3065,7 @@ function renderWizardChrome(state){
   if(sundayWizardStep===1)canNext=state.items.length>0;
   else if(sundayWizardStep===2)canNext=state.stockGreen;
   else if(sundayWizardStep===3)canNext=state.financialGreen;
-  else if(sundayWizardStep===4)canNext=false;
+  else if(sundayWizardStep===4)canNext=state.invoiceSaved;
   if(next){next.disabled=!canNext||sundayWizardStep>=5;next.textContent=sundayWizardStep>=5?'Complete': 'Next ›';next.onclick=()=>{if(canNext&&sundayWizardStep<5){sundayWizardStep++;renderSundayWizard();window.scrollTo({top:0,behavior:"smooth"})}}}
 }
 function renderStockWizard(items){
@@ -3067,6 +3106,46 @@ function renderFinancialWizard(financial){
   const total=allGreen?`<div class="financeTotal"><b>✓ Financial reconciliation complete</b><div class="wizardMinimal" style="color:#166534;margin-top:3px">Both shops combined</div><div class="big">Pay Pin ${baht(combined.payPin)}</div><div class="wizardMinimal" style="color:#166534">Sales ${baht(combined.sales)} · Cost recovery ${baht(combined.cost)} · Pin profit ${baht(combined.pinProfit)}</div></div>`:`<div class="wizardLocked">Next stays locked until every financial exception above is resolved.</div>`;
   return html+total;
 }
+
+function sundayInvoiceNumber(date){return "MD-"+String(date||today()).replace(/-/g,"");}
+function invoiceDateLabel(date){
+  try{return new Date(String(date)+"T12:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})}catch(e){return date||""}
+}
+function buildInvoiceCard(state,printMode=false){
+  const date=state.items[0]?.report?.date||today(),summary=invoiceFinancialSummary(state.financial),saved=state.invoice;
+  const number=saved?.number||sundayInvoiceNumber(date);
+  const branches=summary.branches.map(b=>`<div class="invoiceBranch"><div class="invoiceBranchName">${escapeHtml(b.branch)}</div><div class="invoiceNums"><div class="invoiceNum"><div class="k">Sales</div><div class="v">${baht(b.sales)}</div></div><div class="invoiceNum"><div class="k">Cost recovery</div><div class="v">${baht(b.cost)}</div></div><div class="invoiceNum"><div class="k">Pin profit share</div><div class="v">${baht(b.pinProfit)}</div></div><div class="invoiceNum"><div class="k">Amount due</div><div class="v">${baht(b.payPin)}</div></div></div></div>`).join("");
+  return `<div class="invoiceCard"><div class="invoiceHead"><div><div class="invoiceTitle">Weekly Settlement Invoice</div><div class="wizardMinimal">Week ending ${escapeHtml(invoiceDateLabel(date))}</div></div><div class="invoiceMeta"><b>${escapeHtml(number)}</b><br>${saved?"Saved "+escapeHtml(invoiceDateLabel(saved.createdDate)):"Draft"}</div></div><div class="invoiceFrom"><b>Issued by Yaowaret</b><br>BM Bangrak + Lamai weekly settlement</div><div class="invoiceBranches">${branches}</div><div class="invoiceTotal"><div class="k">Total payable to Pin</div><div class="v">${baht(summary.combined.payPin)}</div></div><div class="invoiceExplain">This amount is the verified product cost recovery plus Pin’s profit share for the week. Normal profit split: BM 40% · Alix 30% · Pin 30%. Edibles: BM 40% · Alix 20% · Pin 40%.</div>${printMode?"":`<div class="invoiceState"><span class="${saved?'invoiceSaved':'invoiceDraft'}">${saved?'✓ INVOICE SAVED':'DRAFT — NOT SAVED'}</span><span class="wizardMinimal">Sales ${baht(summary.combined.sales)}</span></div>`}</div>`;
+}
+function saveSundayInvoice(){
+  const state=currentWizardState();
+  if(!state.financialGreen||!state.items.length)return alert("Financial reconciliation must be complete before saving the invoice.");
+  const date=state.items[0].report.date,summary=invoiceFinancialSummary(state.financial),sig=invoiceSignature(date,summary),number=sundayInvoiceNumber(date);
+  if(!Array.isArray(db.invoices))db.invoices=[];
+  const existing=db.invoices.find(x=>x.reportDate===date&&x.status!=="void");
+  const record={id:existing?.id||("INV"+Date.now()),number,reportDate:date,createdDate:today(),createdAt:new Date().toISOString(),status:"unpaid",signature:sig,branches:summary.branches.map(b=>({branch:b.branch,sales:b.sales,cost:b.cost,profit:b.profit,bm:b.bm,alix:b.alix,pinProfit:b.pinProfit,payPin:b.payPin})),totals:summary.combined};
+  if(existing)Object.assign(existing,record); else db.invoices.push(record);
+  localStorage.setItem("mdpin-db",JSON.stringify(db));
+  renderSundayWizard();
+}
+function printSundayInvoice(){
+  const state=currentWizardState();
+  if(!state.invoiceSaved)return alert("Save the verified invoice first.");
+  const sheet=document.getElementById("invoicePrintSheet");if(!sheet)return;
+  sheet.innerHTML=buildInvoiceCard(state,true);
+  document.body.classList.add("invoicePrintMode");
+  const clean=()=>{document.body.classList.remove("invoicePrintMode");sheet.innerHTML="";};
+  window.addEventListener("afterprint",clean,{once:true});
+  setTimeout(()=>window.print(),50);
+  setTimeout(()=>{if(document.body.classList.contains("invoicePrintMode"))clean()},30000);
+}
+function renderInvoiceWizard(state){
+  if(!state.financialGreen)return '<div class="wizardLocked">Financial reconciliation must be complete before an invoice can be produced.</div>';
+  const card=buildInvoiceCard(state,false);
+  const actions=state.invoiceSaved?`<div class="invoiceActionRow"><button class="btn alt" type="button" onclick="printSundayInvoice()">Print / Save PDF</button><button class="btn" type="button" onclick="saveSundayInvoice()">Refresh Invoice</button></div><div class="wizardGood" style="margin-top:9px">✓ Invoice saved. Tap Next to record payment.</div>`:`<div class="invoiceActionRow"><button class="btn gold" style="grid-column:1/-1" type="button" onclick="saveSundayInvoice()">Save Verified Invoice</button></div><div class="wizardLocked" style="margin-top:9px">Next stays locked until the verified invoice is saved.</div>`;
+  return card+actions;
+}
+
 function renderSundayWizard(){
   document.body.classList.add("workflowMode");
   const box=document.getElementById("wizardContent"),period=document.getElementById("wizardPeriod");if(!box)return;
@@ -3077,7 +3156,7 @@ function renderSundayWizard(){
   if(sundayWizardStep===1){box.innerHTML=`<div class="wizardGood">✓ ${items.length} Sunday report${items.length===1?'':'s'} imported for ${escapeHtml(latest)}.</div><div class="wizardActions"><button class="btn alt" onclick="wizardAction('import')">Review imported reports</button></div>`;}
   else if(sundayWizardStep===2){box.innerHTML=renderStockWizard(items);}
   else if(sundayWizardStep===3){box.innerHTML=renderFinancialWizard(state.financial);}
-  else if(sundayWizardStep===4){box.innerHTML='<div class="wizardGood">✓ Financial reconciliation is complete.</div><div class="wizardLocked" style="margin-top:10px"><b>Invoice is the next build stage.</b><br>The verified figures are ready; invoice generation has not been enabled yet.</div>';}
+  else if(sundayWizardStep===4){box.innerHTML=renderInvoiceWizard(state);}
   else{box.innerHTML='<div class="wizardLocked">Payment recording will follow the invoice stage.</div>';}
   renderWizardChrome(state);
 }
