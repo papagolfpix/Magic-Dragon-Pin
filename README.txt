@@ -1,4 +1,4 @@
-MAGIC DRAGON PIN v0.9.23 — CATALOGUE INTEGRITY REPAIR
+MAGIC DRAGON PIN v0.9.24 — CATALOGUE INTEGRITY REPAIR
 
 This release is focused on product identity and pricing integrity before the guided Sunday workflow is built.
 
@@ -6,7 +6,7 @@ DEPLOYMENT
 1. Replace the seven files in the GitHub repository root with the seven files from this ZIP.
 2. Commit the changes and wait for GitHub Pages to publish.
 3. Open the app and tap Refresh App.
-4. Confirm the header shows v0.9.23.
+4. Confirm the header shows v0.9.24.
 
 KEY FIXES
 - Repairs confirmed legacy spelling variants across existing saved data and future Excel imports.
