@@ -651,7 +651,21 @@ html,body{max-width:100%;overflow-x:hidden}
 .importWizardButton{width:100%;margin:0 0 10px}
 @media(max-width:650px){.wizardProgress{grid-template-columns:repeat(4,1fr)}.wizardStep{font-size:10px;padding:7px 2px}}
 
-/* v0.9.25 dashboard workflow shortcuts + docket editing */
+/* v0.9.26 reconciliation evidence + zero-stock handling UI */
+.wizardIssue>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:start}
+.wizardIssue>summary::-webkit-details-marker{display:none}
+.wizardIssueTitle{font-weight:850;color:#991b1b;line-height:1.2}
+.wizardIssueReason{font-size:12px;color:#7f1d1d;margin-top:4px;line-height:1.35}
+.wizardIssueChevron{color:#991b1b;font-weight:900;font-size:17px;transition:transform .15s ease}
+.wizardIssue[open] .wizardIssueChevron{transform:rotate(180deg)}
+.wizardEvidence{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+.wizardEvidenceCell{background:#fff;border:1px solid #fecaca;border-radius:9px;padding:8px}
+.wizardEvidenceCell .k{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#7f1d1d;font-weight:800}
+.wizardEvidenceCell .v{font-size:16px;font-weight:900;color:#172033;margin-top:2px}
+.wizardEvidenceNote{font-size:12px;color:#7f1d1d;margin-top:9px;line-height:1.35}
+@media(max-width:430px){.wizardEvidence{grid-template-columns:1fr 1fr}.wizardEvidenceCell{padding:7px}.wizardEvidenceCell .v{font-size:15px}}
+
+/* v0.9.26 dashboard workflow shortcuts + docket editing */
 .dashboardSundayWrap{display:none!important}
 .homeQuick{margin:0 0 12px;padding:10px;border:1px solid #dbe3ec;border-radius:14px;background:#fff}
 .homeQuickTitle{font-weight:900;font-size:17px;margin:0 0 8px}
@@ -672,7 +686,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div class="mark"><img src="Magic-Dragon-logo.jpeg" alt="Magic Dragon logo"></div>
     <div><h1>Magic Dragon • Pin</h1><p>Stock, delivery dockets, weekly reconciliation & payment splits</p>
 <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:6px">
-<span class="app-version">v0.9.25</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
+<span class="app-version">v0.9.26</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
 </div></div>
   </div>
 
@@ -1161,6 +1175,14 @@ function resetDeliveryEditor(){
  renderDelivery();
 }
 document.getElementById("cancelEditDelivery").onclick=()=>{resetDeliveryEditor();switchTab("docket")};
+function refreshReconciliationViews(){
+  try{
+    const recs=refreshStoredReconciliations();
+    renderArchive();
+    renderExcelReconciliation(recs.slice(-4));
+    renderSundayWizard();
+  }catch(e){console.warn("Could not refresh reconciliation views",e)}
+}
 document.getElementById("saveDelivery").onclick=()=>{
  if(!currentDelivery.length)return alert("Add at least one product.");
  const lines=[];
@@ -1177,13 +1199,13 @@ document.getElementById("saveDelivery").onclick=()=>{
    d.branch=branch; d.date=date; d.note=note; d.lines=lines; d.editedAt=new Date().toISOString();
    const savedId=d.id;
    save();
-   try{refreshStoredReconciliations()}catch(e){}
+   refreshReconciliationViews();
    resetDeliveryEditor(); renderDocketArchive(savedId); renderMetrics(); renderHistory(); renderAudit();
    switchTab("docket");
    return;
  }
  const d={id:"D"+Date.now(),branch,date,note,lines};
- db.deliveries.push(d); resetDeliveryEditor(); save(); renderDocket(d); renderMetrics(); renderHistory(); renderAudit(); switchTab("docket");
+ db.deliveries.push(d); resetDeliveryEditor(); save(); refreshReconciliationViews(); renderDocket(d); renderMetrics(); renderHistory(); renderAudit(); switchTab("docket");
 }
 
 function docketMarkup(d){
@@ -1232,7 +1254,7 @@ window.deleteDocket=id=>{
    lines:(d.lines||[]).map(l=>({...l})), deletedSnapshot:JSON.parse(JSON.stringify(d))
  });
  db.deliveries=db.deliveries.filter(x=>x.id!==id);
- save(); renderDocketArchive(); renderMetrics(); renderHistory(); renderAudit();
+ save(); refreshReconciliationViews(); renderDocketArchive(); renderMetrics(); renderHistory(); renderAudit();
 };
 
 window.printDocket=id=>{
@@ -1930,15 +1952,18 @@ function reconcileExcelReport(rep){
     }
 
     // Previous Sunday closing -> this Sunday opening.
+    // In the shop Excel sheets, a blank stock quantity in an existing product row means zero.
+    // Treat it as zero only when the product row itself exists; an absent product row remains unknown.
     if(previous){
-      if(prev && prev.inStock!=null && rr.oldStock!=null){
-        if(Math.abs(prev.inStock-rr.oldStock)>0.001){
-          rowIssues.push({type:"bad",msg:`Opening stock differs from previous Sunday: previous closing ${prev.inStock}, this sheet opening ${rr.oldStock}.`});
+      if(prev){
+        const prevCloseForOpening=Number(prev.inStock ?? 0);
+        const currentOpeningForCheck=Number(rr.oldStock ?? 0);
+        if(Math.abs(prevCloseForOpening-currentOpeningForCheck)>0.001){
+          rowIssues.push({type:"bad",msg:`Opening stock differs from previous Sunday: previous closing ${prevCloseForOpening}, this sheet opening ${currentOpeningForCheck}.`});
           rowVerified=false; rowHasStockError=true;
         }
-      }else if(rr.oldStock!=null && Math.abs(Number(rr.oldStock)||0)<0.001){
-        // A product absent from the previous Sunday but explicitly opening at zero is a valid new line.
-        // Treat its previous close as zero rather than incorrectly marking the whole report incomplete.
+      }else if(Math.abs(Number(rr.oldStock ?? 0))<0.001){
+        // A genuinely new product line opening at zero is valid.
       }else{
         rowIssues.push({type:"unknown",msg:"This product is not on the previous Sunday report and its opening stock is not zero. Review its product mapping/history."});
         rowVerified=false; rowHasHistoryPending=true;
@@ -1965,10 +1990,10 @@ function reconcileExcelReport(rep){
       rowVerified=false; rowHasMapping=true;
     }
 
-    const previousClose=prev?.inStock!=null?Number(prev.inStock):(previous && rr.oldStock!=null && Math.abs(Number(rr.oldStock)||0)<0.001 ? 0 : null);
-    const sheetOpening=rr.oldStock!=null?Number(rr.oldStock):null;
-    const sheetClosing=rr.inStock!=null?Number(rr.inStock):null;
-    const sheetSold=rr.sold!=null?Number(rr.sold):null;
+    const previousClose=prev?Number(prev.inStock ?? 0):(previous && Math.abs(Number(rr.oldStock ?? 0))<0.001 ? 0 : null);
+    const sheetOpening=previous?Number(rr.oldStock ?? 0):(rr.oldStock!=null?Number(rr.oldStock):null);
+    const sheetClosing=Number(rr.inStock ?? 0);
+    const sheetSold=Number(rr.sold ?? 0);
     const takeOut=Number(rr.takeOut)||0;
     const openingDifference=(previousClose!=null&&sheetOpening!=null)?sheetOpening-previousClose:null;
     const deliveryDifference=(appQty!=null)?shopQty-appQty:null;
@@ -1998,7 +2023,8 @@ function reconcileExcelReport(rep){
       delivered:rr.newDeliver,
       sellPrice:rr.sellPrice,
       issues:rowIssues,
-      flags:{rowHasStockError,rowHasDeliveryIssue,rowHasHistoryPending,rowHasMapping}
+      flags:{rowHasStockError,rowHasDeliveryIssue,rowHasHistoryPending,rowHasMapping},
+      flow:flowRows[flowRows.length-1]
     });
   });
 
@@ -2896,9 +2922,23 @@ function renderSundayWizard(){
     if(rec.status!=="ok") allGreen=false;
     if(rec.status==="ok") return `<div class="wizardBranch"><div class="wizardBranchHead"><b>${escapeHtml(r.branch)}</b><span class="reconStatus ok">RECONCILED</span></div><div class="wizardBranchBody"><div class="wizardGood">✓ All ${rec.totalRows} products reconcile with the prior week.</div></div></div>`;
     const visible=issues.slice(0,12).map(d=>{
-      let reason=(d.issues||[])[0]?.msg||"Review this product.";
-      let action=d.flags?.rowHasDeliveryIssue?['delivery','Open Delivery Dockets']:d.flags?.rowHasMapping?['mapping','Fix Product Mapping']:d.flags?.rowHasStockError?['weekly','Review Stock Data']:['import','Review Sunday Report'];
-      return `<div class="wizardIssue"><b>${escapeHtml(d.product)}</b><div class="wizardMinimal" style="margin-top:3px;color:#7f1d1d">${escapeHtml(reason)}</div><div class="wizardActions"><button class="btn" onclick="wizardAction('${action[0]}')">${action[1]}</button></div></div>`;
+      const reason=(d.issues||[])[0]?.msg||"Review this product.";
+      const action=d.flags?.rowHasDeliveryIssue?['delivery','Open Delivery Dockets']:d.flags?.rowHasMapping?['mapping','Fix Product Mapping']:d.flags?.rowHasStockError?['import','Open Sunday Report']:['import','Open Sunday Report'];
+      const f=d.flow||{};
+      const evidence=[
+        ['Prior close',f.previousClose],
+        ['This opening',f.sheetOpening],
+        ['Saved delivery',f.ledgerDeliveries],
+        ['Shop delivery',f.shopDeliveries],
+        ['Shop sold',f.sheetSold],
+        ['This close',f.sheetClosing]
+      ].map(([k,v])=>`<div class="wizardEvidenceCell"><div class="k">${k}</div><div class="v">${v==null?'—':escapeHtml(String(v))}</div></div>`).join('');
+      let hint='Compare the figures below. The highlighted reason tells you which source needs correcting.';
+      if(d.flags?.rowHasDeliveryIssue) hint='The shop delivery quantity and Pin’s saved docket quantity differ. Open Delivery Dockets and correct the source docket if needed.';
+      else if(d.flags?.rowHasStockError) hint='The opening stock should equal the prior Sunday closing stock. Open the Sunday report and verify the shop figures.';
+      else if(d.flags?.rowHasMapping) hint='This shop product name is not linked confidently to Pin’s master product. Fix the mapping once, then return here.';
+      else if(d.flags?.rowHasHistoryPending) hint='The app cannot prove the prior-week stock chain for this product. Open the Sunday report to check its prior-week row.';
+      return `<details class="wizardIssue"><summary><div><div class="wizardIssueTitle">${escapeHtml(d.product)}</div><div class="wizardIssueReason">${escapeHtml(reason)}</div></div><span class="wizardIssueChevron">⌄</span></summary><div class="wizardEvidence">${evidence}</div><div class="wizardEvidenceNote">${escapeHtml(hint)}</div><div class="wizardActions"><button class="btn" onclick="event.preventDefault();event.stopPropagation();wizardAction('${action[0]}')">${action[1]}</button></div></details>`;
     }).join("");
     return `<div class="wizardBranch"><div class="wizardBranchHead"><b>${escapeHtml(r.branch)}</b><span class="reconStatus bad">ACTION REQUIRED</span></div><div class="wizardBranchBody">${visible}${issues.length>12?`<div class="wizardMinimal">+ ${issues.length-12} more items. Resolve the first issues, then return here.</div>`:""}</div></div>`;
   }).join("");

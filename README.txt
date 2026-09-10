@@ -1,18 +1,9 @@
-MAGIC DRAGON PIN v0.9.25 — DELIVERY DOCKET EDITING
+MAGIC DRAGON PIN v0.9.26 — RECONCILIATION TROUBLESHOOTING
 
-This release adds audited editing of saved delivery dockets and moves Dashboard Quick actions directly below the 3×3 navigation.
+Changes:
+- Fixes stale Sunday Import reconciliation after delivery docket edits/additions/deletions.
+- Treats blank stock cells as zero when the product row exists in the shop Excel report.
+- Sunday Wizard red exceptions now expand to show prior close, current opening, saved/shop deliveries, sold and current close.
+- Direct action button remains inside each exception.
 
-DEPLOYMENT
-1. Upload/replace all 7 files in the GitHub Pages repository root.
-2. Commit the changes and wait for GitHub Pages to publish.
-3. Open the live app on iPhone.
-4. Tap Refresh App if the old version is cached.
-5. Confirm the header shows v0.9.25.
-
-TEST
-- Delivery Docket > open a saved docket > Edit Docket.
-- Remove the incorrect line and add the correct product/quantity.
-- Save Docket Changes.
-- Re-open the docket and confirm the change.
-- Return to Sunday Wizard and confirm reconciliation recalculates.
-- Audit should retain an Edited snapshot of the original docket.
+Deploy all 7 files to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.26.
