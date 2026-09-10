@@ -651,7 +651,7 @@ html,body{max-width:100%;overflow-x:hidden}
 .importWizardButton{width:100%;margin:0 0 10px}
 @media(max-width:650px){.wizardProgress{grid-template-columns:repeat(4,1fr)}.wizardStep{font-size:10px;padding:7px 2px}}
 
-/* v0.9.31 reconciliation evidence + zero-stock handling UI */
+/* v0.9.32 reconciliation evidence + zero-stock handling UI */
 .wizardIssue>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:start}
 .wizardIssue>summary::-webkit-details-marker{display:none}
 .wizardIssueTitle{font-weight:850;color:#991b1b;line-height:1.2}
@@ -664,7 +664,7 @@ html,body{max-width:100%;overflow-x:hidden}
 .wizardEvidenceCell .v{font-size:16px;font-weight:900;color:#172033;margin-top:2px}
 .wizardEvidenceNote{font-size:12px;color:#7f1d1d;margin-top:9px;line-height:1.35}
 @media(max-width:430px){.wizardEvidence{grid-template-columns:1fr 1fr}.wizardEvidenceCell{padding:7px}.wizardEvidenceCell .v{font-size:15px}}
-/* v0.9.31 focused Sunday workflow shell + financial stage */
+/* v0.9.32 focused Sunday workflow shell + financial stage */
 body.workflowMode .brand,body.workflowMode .tabs,body.workflowMode .navSpacer{display:none!important}
 body.workflowMode .app{padding-bottom:92px}
 .workflowTop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
@@ -680,7 +680,7 @@ body.workflowMode .workflowBar{display:block}
 .financeSummary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.financeCell{border:1px solid #d7dde7;border-radius:10px;padding:9px;background:#fff}.financeCell .k{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#667085;font-weight:800}.financeCell .v{font-size:18px;font-weight:900;margin-top:2px}.financeTotal{margin-top:12px;padding:14px;border-radius:12px;background:#ecfdf3;color:#166534}.financeTotal .big{font-size:25px;font-weight:950;margin-top:3px}.financeDetails{margin-top:8px}.financeDetails summary{cursor:pointer;font-weight:800;color:#344054}.financeIssue{padding:10px;border:1px solid #fecaca;background:#fff1f2;border-radius:10px;margin:8px 0;color:#991b1b}.financeIssue .small{color:#7f1d1d}
 @media(max-width:430px){.workflowNavBtn{font-size:14px}.financeSummary{grid-template-columns:1fr 1fr}}
 
-/* v0.9.31 dashboard workflow shortcuts + docket editing */
+/* v0.9.32 dashboard workflow shortcuts + docket editing */
 .dashboardSundayWrap{display:none!important}
 .homeQuick{margin:0 0 12px;padding:10px;border:1px solid #dbe3ec;border-radius:14px;background:#fff}
 .homeQuickTitle{font-weight:900;font-size:17px;margin:0 0 8px}
@@ -690,7 +690,7 @@ body.workflowMode .workflowBar{display:block}
 .docketActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 @media(max-width:560px){.homeQuick{margin-top:0}.homeQuickTitle{font-size:16px}.homeQuickGrid .btn{font-size:15px;padding:10px 8px}.docketActions .btn{flex:1 1 45%}}
 
-/* v0.9.31 viewport-fit workflow shell */
+/* v0.9.32 viewport-fit workflow shell */
 body.workflowMode{overflow:hidden;height:100dvh}
 body.workflowMode .hero,body.workflowMode .tabs,body.workflowMode .navSpacer{display:none!important}
 body.workflowMode .app{
@@ -746,7 +746,7 @@ body.workflowMode .workflowBar{padding-top:7px}
 }
 
 
-/* v0.9.31 verified weekly invoice stage */
+/* v0.9.32 verified weekly invoice stage */
 .invoiceCard{border:1px solid #d7dde7;border-radius:14px;background:#fff;padding:14px;margin-top:8px}
 .invoiceHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border-bottom:1px solid #e5e7eb;padding-bottom:10px;margin-bottom:10px}
 .invoiceTitle{font-size:20px;font-weight:950;line-height:1.1;color:#172033}.invoiceMeta{text-align:right;font-size:11px;color:#667085;line-height:1.45}
@@ -768,7 +768,7 @@ body.workflowMode .workflowBar{padding-top:7px}
 }
 #invoicePrintSheet{display:none}
 
-/* v0.9.31 compact invoice confirmation + payment stage */
+/* v0.9.32 compact invoice confirmation + payment stage */
 .invoiceScreenBranch{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center;border:1px solid #e1e6ee;border-radius:10px;padding:9px 10px;margin-top:7px}
 .invoiceScreenBranch .name{font-weight:900;color:#172033}.invoiceScreenBranch .mini{font-size:10px;color:#667085;text-align:right}.invoiceScreenBranch .amt{font-size:16px;font-weight:950;color:#172033;text-align:right}
 .invoiceScreenDetails{margin-top:7px}.invoiceScreenDetails summary{cursor:pointer;font-weight:800;color:#475467;font-size:12px}.invoiceScreenDetails .invoiceExplain{margin-top:7px}
@@ -781,6 +781,10 @@ body.workflowMode .compactInvoice .invoiceState{margin:7px 0 0}
 .invoiceConfirmActions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}.invoiceConfirmActions .btn{width:100%;min-height:40px;padding:8px 9px;font-size:13px}.invoiceConfirmActions .primary{grid-column:1/-1}
 .invoiceNote{margin-top:8px}.invoiceNote label{display:block;font-size:11px;font-weight:850;color:#475467;margin-bottom:5px}.invoiceNote textarea{width:100%;box-sizing:border-box;border:1px solid #cfd6e1;border-radius:10px;padding:9px 10px;font:inherit;min-height:58px;resize:vertical;background:#fff}.invoiceNoteSaved{font-size:11px;color:#475467;line-height:1.4;margin-top:7px;padding:8px 9px;background:#f8fafc;border-radius:9px}.pdfHint{font-size:11px;color:#667085;line-height:1.35;margin-top:7px}
 .paymentCard{border:1px solid #d7dde7;border-radius:14px;background:#fff;padding:12px}.paymentTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.paymentAmount{font-size:28px;font-weight:950;color:#172033;margin-top:2px}.paymentStatusBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 10px}.paymentStatusBtn{border:1px solid #d7dde7;background:#fff;border-radius:11px;padding:10px;font-weight:900;color:#475467}.paymentStatusBtn.activeUnpaid{background:#fff7ed;border-color:#fdba74;color:#9a3412}.paymentStatusBtn.activePaid{background:#ecfdf3;border-color:#86efac;color:#166534}.paymentFields{display:grid;gap:9px}.paymentFields label{font-size:11px;font-weight:800;color:#475467}.paymentFields input,.paymentFields textarea{width:100%;box-sizing:border-box;border:1px solid #cfd6e1;border-radius:10px;padding:10px;font:inherit;background:#fff}.paymentFields textarea{min-height:68px;resize:vertical}.paymentSaved{margin-top:9px;padding:9px 10px;border-radius:10px;background:#ecfdf3;color:#166534;font-weight:800}.paymentHint{font-size:11px;color:#667085;margin-top:8px}.paymentSave{width:100%;margin-top:10px}
+
+/* v0.9.32 human-friendly Records hub */
+.recordsHead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}.recordsTools{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:8px;margin-bottom:10px;position:sticky;top:var(--sticky-nav-h,0);z-index:5;background:#f5f7fb;padding:5px 0}.recordsTools input,.recordsTools select{width:100%;box-sizing:border-box;border:1px solid #d7dde7;border-radius:11px;padding:10px 11px;font:inherit;background:#fff;color:#172033}.recordGroup{border:1px solid #d7dde7;border-radius:14px;background:#fff;margin:8px 0;overflow:hidden}.recordGroup>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;cursor:pointer}.recordGroup>summary::-webkit-details-marker{display:none}.recordGroupTitle{font-weight:900;font-size:16px}.recordCount{font-size:12px;font-weight:850;color:#475467;background:#f2f4f7;border-radius:999px;padding:5px 8px}.recordGroupBody{border-top:1px solid #e5e7eb;padding:0 12px}.recordItem{border-bottom:1px solid #e5e7eb}.recordItem:last-child{border-bottom:0}.recordItem>summary{list-style:none;display:grid;grid-template-columns:88px minmax(0,1fr) auto;align-items:center;gap:9px;padding:11px 0;cursor:pointer}.recordItem>summary::-webkit-details-marker{display:none}.recordDate{font-weight:900;color:#172033}.recordMain{min-width:0}.recordName{font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.recordMeta{font-size:11px;color:#667085;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.recordStatus{font-size:10px;font-weight:900;border-radius:999px;padding:5px 7px;background:#eef2f6;color:#475467;white-space:nowrap}.recordStatus.paid,.recordStatus.ok{background:#dcfce7;color:#166534}.recordStatus.unpaid{background:#fff7ed;color:#9a3412}.recordBody{padding:0 0 12px}.recordActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.recordActions .btn{padding:8px 10px;min-height:36px;font-size:12px}.recordMiniGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.recordMini{background:#f8fafc;border-radius:9px;padding:8px}.recordMini .k{font-size:9px;text-transform:uppercase;color:#667085;font-weight:800}.recordMini .v{font-size:15px;font-weight:900;margin-top:2px}.recordsEmpty{padding:18px;text-align:center;color:#667085}.recordChevron{color:#667085;font-weight:900}
+@media(max-width:430px){.recordsTools{grid-template-columns:1fr 132px}.recordItem>summary{grid-template-columns:78px minmax(0,1fr) auto}.recordGroup>summary{padding:12px}.recordGroupBody{padding:0 10px}}
 @media(max-width:430px){.invoiceScreenBranch{grid-template-columns:minmax(0,1fr) auto;}.invoiceScreenBranch .mini{display:none}.invoiceScreenBranch .amt{font-size:15px}.paymentCard{padding:10px}.paymentAmount{font-size:25px}}
 
 </style>
@@ -795,7 +799,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div class="mark"><img src="Magic-Dragon-logo.jpeg" alt="Magic Dragon logo"></div>
     <div><h1>Magic Dragon • Pin</h1><p>Stock, delivery dockets, weekly reconciliation & payment splits</p>
 <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:6px">
-<span class="app-version">v0.9.31</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
+<span class="app-version">v0.9.32</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
 </div></div>
   </div>
 
@@ -805,7 +809,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <button class="tab" data-tab="import">Sunday Import</button>
     <button class="tab" data-tab="weekly">Weekly Check</button>
     <button class="tab" data-tab="docket">Delivery Docket</button>
-    <button class="tab" data-tab="history">History</button><button class="tab" data-tab="audit">Audit</button><button class="tab" data-tab="historical">Historical Data</button>
+    <button class="tab" data-tab="history">Records</button><button class="tab" data-tab="audit">Audit</button><button class="tab" data-tab="historical">Historical Data</button>
     <button class="tab" data-tab="settings">Settings</button>
   </div>
   <div id="navSpacer" class="navSpacer noPrint" aria-hidden="true"></div>
@@ -822,8 +826,8 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div class="grid" id="metrics"></div>
     <h2>Branch snapshot</h2>
     <div class="grid">
-      <div class="card"><h3>BM Bangrak</h3><div class="small">Larger range: 1g, 5g, pre-rolls and edibles.</div></div>
-      <div class="card"><h3>Lamai</h3><div class="small">Branch-specific subset with independent stock ledger.</div></div>
+      <div class="card"><h3>The Grocery by BM</h3><div class="small">Larger range: 1g, 5g, pre-rolls and edibles.</div></div>
+      <div class="card"><h3>BM Lamai</h3><div class="small">Branch-specific subset with independent stock ledger.</div></div>
       <div class="card"><h3>Normal profit split</h3><div><b>BM 40% • Alix 30% • Pin 30%</b></div></div>
       <div class="card"><h3>Edible profit split</h3><div><b>BM 40% • Alix 20% • Pin 40%</b></div></div>
     </div>
@@ -992,7 +996,8 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
 
   <section id="history" class="section">
     <div class="card">
-      <h2 style="margin-top:0">Saved history</h2>
+      <div class="recordsHead"><div><h2 style="margin:0">Records</h2><div class="small">Everything saved in one place. Choose a type, then tap a date.</div></div></div>
+      <div class="recordsTools"><input id="recordsSearch" type="search" placeholder="Search date, shop or record…" autocomplete="off"><select id="recordsType"><option value="all">All records</option><option value="delivery">Delivery dockets</option><option value="sunday">Sunday reports</option><option value="invoice">Invoices</option><option value="payment">Payments</option><option value="weekly">Stock / weekly checks</option></select></div>
       <div id="historyList"></div>
     </div>
   </section>
@@ -1463,13 +1468,43 @@ document.getElementById("saveWeek").onclick=()=>{
  const totals=calcWeek(), w={id:"W"+Date.now(),branch:tb.dataset.branch,date:tb.dataset.date,rows,totals};db.weeks.push(w);save();alert("Weekly check saved.");
 }
 
-function renderHistory(){
- const box=document.getElementById("historyList"), items=[
-  ...db.deliveries.map(d=>({kind:"Delivery",date:d.date,branch:d.branch,obj:d})),
-  ...db.weeks.map(w=>({kind:"Weekly",date:w.date,branch:w.branch,obj:w}))
- ].sort((a,b)=>b.date.localeCompare(a.date));
- box.innerHTML=items.length?items.map(x=>`<div style="padding:11px 0;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;gap:10px"><div><b>${x.kind}</b> · ${x.branch}<div class="small">${x.date}${x.obj.note?` · ${x.obj.note}`:""}</div></div><div style="display:flex;gap:6px;align-items:center">${x.kind==="Delivery"?`<button class="btn alt" onclick='showDock("${x.obj.id}")'>Docket</button>`:`<b>${baht(x.obj.totals?.sales||0)}</b>`}<button class="btn alt" onclick='deleteRecord("${x.kind}","${x.obj.id}")'>Delete</button></div></div>`).join(""):`<div class="small">No saved records yet.</div>`;
+function displayBranchName(branch){
+ const b=String(branch||"");
+ if(/lamai/i.test(b)) return "BM Lamai";
+ if(/bangrak|k\.\s*pual|k\.\s*paul|mini mart/i.test(b)) return "The Grocery by BM";
+ return b||"—";
 }
+function recordDateLabel(d){
+ if(!d)return "No date";
+ try{return new Date(String(d)+"T12:00:00").toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"})}catch(e){return d}
+}
+function renderHistory(){
+ const box=document.getElementById("historyList"); if(!box)return;
+ const q=(document.getElementById("recordsSearch")?.value||"").trim().toLowerCase();
+ const type=document.getElementById("recordsType")?.value||"all";
+ const groups=[];
+ const deliveries=[...(db.deliveries||[])].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))).map(d=>({type:"delivery",date:d.date,title:displayBranchName(d.branch),meta:d.note||"Delivery docket",status:"Docket",obj:d}));
+ const sundays=[...(db.sundayImports||[])].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))).map(r=>{const st=r.reconciliation?reconStatusLabel(r.reconciliation):["unknown","Not checked"];return {type:"sunday",date:r.date,title:displayBranchName(r.branch),meta:`${r.rows?.length||0} products`,status:st[1],statusClass:st[0]==="ok"?"ok":"",obj:r}});
+ const invoices=[...(db.invoices||[])].filter(i=>i.status!=="void").sort((a,b)=>String(b.reportDate||"").localeCompare(String(a.reportDate||""))).map(i=>({type:"invoice",date:i.reportDate,title:i.number||"Invoice",meta:"The Grocery by BM + BM Lamai",status:i.payment?.status==="paid"?"PAID":"UNPAID",statusClass:i.payment?.status==="paid"?"paid":"unpaid",obj:i}));
+ const payments=invoices.filter(x=>x.obj.payment).map(x=>({type:"payment",date:x.obj.payment?.date||x.date,title:x.obj.number||"Payment",meta:x.obj.payment?.note||"Payment record",status:String(x.obj.payment?.status||"unpaid").toUpperCase(),statusClass:x.obj.payment?.status==="paid"?"paid":"unpaid",obj:x.obj}));
+ const weekly=[...(db.weeks||[])].filter(w=>!/Excel/i.test(String(w.source||""))).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))).map(w=>({type:"weekly",date:w.date,title:displayBranchName(w.branch),meta:"Stock / weekly check",status:"Saved",obj:w}));
+ const defs=[['delivery','Delivery dockets',deliveries],['sunday','Sunday reports',sundays],['invoice','Invoices',invoices],['payment','Payments',payments],['weekly','Stock / weekly checks',weekly]];
+ defs.forEach(([key,label,items])=>{if(type!=="all"&&type!==key)return;const filtered=items.filter(x=>!q||`${x.date} ${x.title} ${x.meta} ${x.status}`.toLowerCase().includes(q));if(filtered.length)groups.push({key,label,items:filtered})});
+ if(!groups.length){box.innerHTML='<div class="recordsEmpty">No matching records. Try another type or clear the search.</div>';return;}
+ box.innerHTML=groups.map((g,gi)=>`<details class="recordGroup" ${groups.length===1||gi===0?'open':''}><summary><span class="recordGroupTitle">${g.label}</span><span class="recordCount">${g.items.length}</span></summary><div class="recordGroupBody">${g.items.map(x=>recordItemHtml(x)).join('')}</div></details>`).join('');
+ box.querySelectorAll('.recordGroup').forEach(el=>el.addEventListener('toggle',()=>{if(!el.open)return;box.querySelectorAll('.recordGroup[open]').forEach(o=>{if(o!==el)o.open=false})}));
+}
+function recordItemHtml(x){
+ const o=x.obj||{}; let body='';
+ if(x.type==='delivery') body=`${docketMarkup(o)}<div class="recordActions"><button class="btn gold" onclick='editDocket("${o.id}")'>Edit</button><button class="btn" onclick='printDocket("${o.id}")'>Print / PDF</button></div>`;
+ else if(x.type==='sunday'){const rec=o.reconciliation;const st=rec?reconStatusLabel(rec):['unknown','Not checked'];body=`<div class="recordMiniGrid"><div class="recordMini"><div class="k">Products</div><div class="v">${o.rows?.length||0}</div></div><div class="recordMini"><div class="k">Status</div><div class="v">${escapeHtml(st[1])}</div></div></div><div class="recordActions"><button class="btn" onclick='openRecordSunday("${o.id}")'>Open report</button></div>`;}
+ else if(x.type==='invoice'||x.type==='payment'){const t=o.totals||{};body=`<div class="recordMiniGrid"><div class="recordMini"><div class="k">Sales</div><div class="v">${baht(t.sales||0)}</div></div><div class="recordMini"><div class="k">Pay Pin</div><div class="v">${baht(t.payPin||0)}</div></div></div>${o.shopNote?`<div class="invoiceNoteSaved"><b>Note to shop:</b> ${escapeHtml(o.shopNote)}</div>`:''}${o.payment?`<div class="invoiceNoteSaved"><b>Payment:</b> ${escapeHtml(String(o.payment.status||'').toUpperCase())}${o.payment.date?` · ${escapeHtml(recordDateLabel(o.payment.date))}`:''}${o.payment.note?` · ${escapeHtml(o.payment.note)}`:''}</div>`:''}<div class="recordActions"><button class="btn" onclick='openRecordInvoice("${o.id}")'>Open invoice</button></div>`;}
+ else body=`<div class="recordMiniGrid"><div class="recordMini"><div class="k">Sales</div><div class="v">${baht(o.totals?.sales||0)}</div></div><div class="recordMini"><div class="k">Status</div><div class="v">Saved</div></div></div>`;
+ return `<details class="recordItem"><summary><span class="recordDate">${escapeHtml(recordDateLabel(x.date))}</span><span class="recordMain"><div class="recordName">${escapeHtml(x.title)}</div><div class="recordMeta">${escapeHtml(x.meta)}</div></span><span class="recordStatus ${x.statusClass||''}">${escapeHtml(x.status)}</span></summary><div class="recordBody">${body}</div></details>`;
+}
+window.openRecordSunday=id=>{switchTab('import');renderArchive();setTimeout(()=>{const el=[...document.querySelectorAll('.archiveReport')].find(d=>d.innerText.includes(db.sundayImports.find(r=>r.id===id)?.date||'___')&&d.innerText.includes(db.sundayImports.find(r=>r.id===id)?.branch||'___'));if(el){el.open=true;el.scrollIntoView({behavior:'smooth',block:'start'})}},80)};
+window.openRecordInvoice=id=>{const inv=(db.invoices||[]).find(i=>i.id===id);if(!inv)return;openSundayWizard();wizardStep=3;renderSundayWizard();};
+
 window.showDock=id=>{switchTab("docket");renderDocketArchive(id)}
 window.deleteRecord=(kind,id)=>{
  if(kind==="Delivery")return deleteDocket(id);
@@ -3133,10 +3168,10 @@ function buildInvoiceCard(state,printMode=false){
   const date=state.items[0]?.report?.date||today(),summary=invoiceFinancialSummary(state.financial),saved=state.invoice;
   const number=saved?.number||sundayInvoiceNumber(date);
   if(printMode){
-    const branches=summary.branches.map(b=>`<div class="invoiceBranch"><div class="invoiceBranchName">${escapeHtml(b.branch)}</div><div class="invoiceNums"><div class="invoiceNum"><div class="k">Sales</div><div class="v">${baht(b.sales)}</div></div><div class="invoiceNum"><div class="k">Cost recovery</div><div class="v">${baht(b.cost)}</div></div><div class="invoiceNum"><div class="k">Pin profit share</div><div class="v">${baht(b.pinProfit)}</div></div><div class="invoiceNum"><div class="k">Amount due</div><div class="v">${baht(b.payPin)}</div></div></div></div>`).join("");
-    return `<div class="invoiceCard"><div class="invoiceHead"><div><div class="invoiceTitle">Weekly Settlement Invoice</div><div class="wizardMinimal">Week ending ${escapeHtml(invoiceDateLabel(date))}</div></div><div class="invoiceMeta"><b>${escapeHtml(number)}</b><br>${saved?"Saved "+escapeHtml(invoiceDateLabel(saved.createdDate)):"Draft"}</div></div><div class="invoiceFrom"><b>Issued by Yaowaret</b><br>BM Bangrak + Lamai weekly settlement</div><div class="invoiceBranches">${branches}</div><div class="invoiceTotal"><div class="k">Total payable to Pin</div><div class="v">${baht(summary.combined.payPin)}</div></div><div class="invoiceExplain">Verified product cost recovery plus Pin’s profit share. Normal profit split: BM 40% · Alix 30% · Pin 30%. Edibles: BM 40% · Alix 20% · Pin 40%.</div></div>`;
+    const branches=summary.branches.map(b=>`<div class="invoiceBranch"><div class="invoiceBranchName">${escapeHtml(displayBranchName(b.branch))}</div><div class="invoiceNums"><div class="invoiceNum"><div class="k">Sales</div><div class="v">${baht(b.sales)}</div></div><div class="invoiceNum"><div class="k">Cost recovery</div><div class="v">${baht(b.cost)}</div></div><div class="invoiceNum"><div class="k">Pin profit share</div><div class="v">${baht(b.pinProfit)}</div></div><div class="invoiceNum"><div class="k">Amount due</div><div class="v">${baht(b.payPin)}</div></div></div></div>`).join("");
+    return `<div class="invoiceCard"><div class="invoiceHead"><div><div class="invoiceTitle">Weekly Settlement Invoice</div><div class="wizardMinimal">Week ending ${escapeHtml(invoiceDateLabel(date))}</div></div><div class="invoiceMeta"><b>${escapeHtml(number)}</b><br>${saved?"Saved "+escapeHtml(invoiceDateLabel(saved.createdDate)):"Draft"}</div></div><div class="invoiceFrom"><b>Issued by Yaowaret</b><br>The Grocery by BM + BM Lamai weekly settlement</div><div class="invoiceBranches">${branches}</div><div class="invoiceTotal"><div class="k">Total payable to Pin</div><div class="v">${baht(summary.combined.payPin)}</div></div><div class="invoiceExplain">Verified product cost recovery plus Pin’s profit share. Normal profit split: BM 40% · Alix 30% · Pin 30%. Edibles: BM 40% · Alix 20% · Pin 40%.</div></div>`;
   }
-  const branches=summary.branches.map(b=>`<div class="invoiceScreenBranch"><div class="name">${escapeHtml(b.branch)}</div><div class="mini">Sales ${baht(b.sales)}</div><div class="amt">Due ${baht(b.payPin)}</div></div>`).join("");
+  const branches=summary.branches.map(b=>`<div class="invoiceScreenBranch"><div class="name">${escapeHtml(displayBranchName(b.branch))}</div><div class="mini">Sales ${baht(b.sales)}</div><div class="amt">Due ${baht(b.payPin)}</div></div>`).join("");
   const breakdown=summary.branches.map(b=>`<div class="invoiceNum"><div class="k">${escapeHtml(b.branch)} cost + Pin profit</div><div class="v">${baht(b.cost)} + ${baht(b.pinProfit)}</div></div>`).join("");
   const savedNote=saved?.shopNote?`<div class="invoiceNoteSaved"><b>Note to shop:</b> ${escapeHtml(saved.shopNote)}</div>`:"";
   return `<div class="invoiceCard compactInvoice"><div class="invoiceHead"><div><div class="invoiceTitle">Weekly Settlement Invoice</div><div class="wizardMinimal">Week ending ${escapeHtml(invoiceDateLabel(date))}</div></div><div class="invoiceMeta"><b>${escapeHtml(number)}</b><br>${saved?"Saved":"Draft"}</div></div><div class="invoiceFrom"><b>Issued by Yaowaret</b></div>${branches}<div class="invoiceTotal"><div class="k">Total payable to Pin</div><div class="v">${baht(summary.combined.payPin)}</div></div><details class="invoiceScreenDetails"><summary>View invoice breakdown</summary><div class="invoiceNums" style="margin-top:7px">${breakdown}</div><div class="invoiceExplain">Normal profit split: BM 40% · Alix 30% · Pin 30%. Edibles: BM 40% · Alix 20% · Pin 40%.</div></details>${savedNote}<div class="invoiceState"><span class="${saved?'invoiceSaved':'invoiceDraft'}">${saved?'✓ INVOICE SAVED':'DRAFT — NOT SAVED'}</span><span class="wizardMinimal">Sales ${baht(summary.combined.sales)}</span></div></div>`;
@@ -3178,7 +3213,7 @@ function buildSundayInvoicePdfBytes(invoice){
   add("Week ending "+invoiceDateLabel(invoice.reportDate),11,50,false);
   add("Issued by Yaowaret",11,50,true);rule();
   (invoice.branches||[]).forEach(b=>{
-    add(b.branch,14,50,true);
+    add(displayBranchName(b.branch),14,50,true);
     add("Sales: "+pdfMoney(b.sales)+"    Cost recovery: "+pdfMoney(b.cost),10,62,false);
     add("Pin profit share: "+pdfMoney(b.pinProfit)+"    Amount due: "+pdfMoney(b.payPin),10,62,false);
     y-=4;
@@ -3285,6 +3320,9 @@ function renderSundayWizard(){
   else{box.innerHTML=renderPaymentWizard(state);}
   renderWizardChrome(state);
 }
+
+document.getElementById("recordsSearch")?.addEventListener("input",renderHistory);
+document.getElementById("recordsType")?.addEventListener("change",renderHistory);
 function switchTab(id){document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===id));document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===id));if(id!=="sundayWizard")document.body.classList.remove("workflowMode");if(id==="weekly"&&!document.querySelector("#weekRows tr"))loadWeek();if(id==="sundayWizard")renderSundayWizard()}
 document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>switchTab(t.dataset.tab));
 
