@@ -1,4 +1,4 @@
-MAGIC DRAGON PIN v0.9.37 — INVOICE REVISION + CARRY-FORWARD WORKFLOW
+MAGIC DRAGON PIN v0.9.38 — SOURCE-EDIT ALERT FIX
 
 New in this build:
 - saved invoice versions remain immutable
@@ -11,4 +11,4 @@ New in this build:
 - pending adjustments can also be marked handled separately
 - one-time application is tracked to prevent accidental double carry-forward
 
-Deploy all 7 files to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.37.
+Deploy all 7 files to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.38.
