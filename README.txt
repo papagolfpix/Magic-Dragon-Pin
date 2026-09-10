@@ -1,4 +1,4 @@
-MAGIC DRAGON PIN v0.9.53 — UNIFIED DOCUMENT VIEWERS
+MAGIC DRAGON PIN v0.9.54 — UNIFIED DOCUMENT VIEWERS
 
 This release standardises how saved documents open across Records and their own pages.
 
@@ -18,4 +18,7 @@ TEST ON IPHONE
 4. Confirm no document expands inside the Records list and pushes later records down the screen.
 
 DEPLOY
-Replace all 7 files in the GitHub Pages repository root, commit, wait for Pages deployment, then reopen/reload and confirm v0.9.53 in the black header.
+Replace all 7 files in the GitHub Pages repository root, commit, wait for Pages deployment, then reopen/reload and confirm v0.9.54 in the black header.
+
+
+v0.9.54 focused patch: header-only viewport isolation for iOS Safari. No workflow, record, docket, invoice, or financial logic changes.
