@@ -1,4 +1,5 @@
-MAGIC DRAGON PIN v0.9.47 — MOBILE LAYOUT STABILITY FIX
+MAGIC DRAGON PIN v0.9.48 — FOCUSED MOBILE SHELL / DOCKET FIX
+
 
 WHAT CHANGED
 - Black Magic Dragon header is physically fixed on normal screens.
@@ -36,7 +37,7 @@ SPACE-SAVING DIRECTION
 The delivery workspace now prioritizes the active controls and current lines. Help, optional notes and navigation are progressively disclosed rather than permanently consuming screen space.
 
 DEPLOYMENT
-Deploy all 7 files in this ZIP to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.47.
+Deploy all 7 files in this ZIP to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.48.
 
 Files:
 Magic-Dragon-logo.jpeg
