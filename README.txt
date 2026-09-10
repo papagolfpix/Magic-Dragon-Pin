@@ -1,4 +1,4 @@
-MAGIC DRAGON PIN v0.9.56 — SEAMLESS HEADER BRANDING
+MAGIC DRAGON PIN v0.9.57 — CORRECT SEAMLESS HEADER ARTWORK
 
 Focused visual update only.
 
@@ -9,4 +9,4 @@ WHAT CHANGED
 - Existing header isolation, 5-second Menu behavior, workflows, financial logic, records, dockets and invoices are unchanged.
 
 DEPLOYMENT
-Replace all 7 files in the GitHub Pages repository root, commit, wait for Pages deployment, then reopen/reload and confirm v0.9.56 in the header.
+Replace all 7 files in the GitHub Pages repository root, commit, wait for Pages deployment, then reopen/reload and confirm v0.9.57 in the header.
