@@ -1,4 +1,11 @@
-MAGIC DRAGON PIN v0.9.45 — IPHONE MENU + DELIVERY SCROLL FIX
+MAGIC DRAGON PIN v0.9.46 — MENU + DOCKET VIEWER + PUBLIC NAMES
+
+WHAT CHANGED
+- Menu opens below the fixed black header instead of covering it.
+- Delivery Docket viewer uses fixed selector/header and fixed action controls with only the opened docket content scrolling between them.
+- User-facing docket and Sunday-report labels use The Grocery by BM and BM Lamai while legacy internal branch keys remain stable.
+- Newly generated Sunday archive filenames use the customer-facing branch names.
+- Existing compact delivery editor, correction handling, paid-invoice rules and iPhone input fixes remain intact.
 
 WHAT CHANGED
 - Fixed Menu stacking so the full 3×3 menu opens below and above the sticky header layer.
@@ -20,7 +27,7 @@ SPACE-SAVING DIRECTION
 The delivery workspace now prioritizes the active controls and current lines. Help, optional notes and navigation are progressively disclosed rather than permanently consuming screen space.
 
 DEPLOYMENT
-Deploy all 7 files in this ZIP to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.45.
+Deploy all 7 files in this ZIP to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.46.
 
 Files:
 Magic-Dragon-logo.jpeg
