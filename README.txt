@@ -1,15 +1,15 @@
-MAGIC DRAGON PIN v0.9.33 — POLISHED INVOICE PDF
+MAGIC DRAGON PIN v0.9.34 — INVOICE RECORDS & REVISION FOUNDATION
 
-Changes:
-- History is now Records: one human-friendly archive for saved documents.
-- Collapsible categories: Delivery dockets, Sunday reports, Invoices, Payments, Stock / weekly checks.
-- Records are newest-first; tap a date to reveal the record without leaving the archive.
-- Search by date/shop/text and filter by record type.
-- Existing docket edit/print actions are available directly from Records.
-- Correct customer-facing shop names are used in Records/invoice display: The Grocery by BM and BM Lamai.
-- Existing internal legacy branch keys remain unchanged for historical reconciliation compatibility.
+This release makes saved invoices behave like standalone documents rather than reopening the Sunday Workflow.
 
-Deploy all 7 files to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.33.
+Key changes:
+- Records > Invoices now opens a human-readable saved invoice viewer.
+- Saved invoice viewer can create/share the same polished PDF directly.
+- Invoice versions are preserved instead of overwriting an earlier saved invoice when underlying figures change.
+- Earlier invoice versions show a clear warning and link to the newer version.
+- Current saved invoices can be marked SENT / NOT SENT with sent date and note.
+- Dashboard Attention area appears only when a saved invoice has become outdated or an unresolved financial adjustment exists.
+- If a previously sent/paid invoice is revised and the amount changes, a pending adjustment record is created for later resolution/carry-forward handling.
+- Existing invoice, reconciliation, payment and PDF logic remains intact.
 
-
-v0.9.33: Restores polished single-page A4 invoice PDF styling, keeps Note to Shop, corrected branch names, and shares exactly one PDF file with a human-readable filename.
+Deploy all 7 files to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.34.

@@ -651,7 +651,7 @@ html,body{max-width:100%;overflow-x:hidden}
 .importWizardButton{width:100%;margin:0 0 10px}
 @media(max-width:650px){.wizardProgress{grid-template-columns:repeat(4,1fr)}.wizardStep{font-size:10px;padding:7px 2px}}
 
-/* v0.9.33 reconciliation evidence + zero-stock handling UI */
+/* v0.9.34 reconciliation evidence + zero-stock handling UI */
 .wizardIssue>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:start}
 .wizardIssue>summary::-webkit-details-marker{display:none}
 .wizardIssueTitle{font-weight:850;color:#991b1b;line-height:1.2}
@@ -664,7 +664,7 @@ html,body{max-width:100%;overflow-x:hidden}
 .wizardEvidenceCell .v{font-size:16px;font-weight:900;color:#172033;margin-top:2px}
 .wizardEvidenceNote{font-size:12px;color:#7f1d1d;margin-top:9px;line-height:1.35}
 @media(max-width:430px){.wizardEvidence{grid-template-columns:1fr 1fr}.wizardEvidenceCell{padding:7px}.wizardEvidenceCell .v{font-size:15px}}
-/* v0.9.33 focused Sunday workflow shell + financial stage */
+/* v0.9.34 focused Sunday workflow shell + financial stage */
 body.workflowMode .brand,body.workflowMode .tabs,body.workflowMode .navSpacer{display:none!important}
 body.workflowMode .app{padding-bottom:92px}
 .workflowTop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
@@ -680,7 +680,7 @@ body.workflowMode .workflowBar{display:block}
 .financeSummary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.financeCell{border:1px solid #d7dde7;border-radius:10px;padding:9px;background:#fff}.financeCell .k{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#667085;font-weight:800}.financeCell .v{font-size:18px;font-weight:900;margin-top:2px}.financeTotal{margin-top:12px;padding:14px;border-radius:12px;background:#ecfdf3;color:#166534}.financeTotal .big{font-size:25px;font-weight:950;margin-top:3px}.financeDetails{margin-top:8px}.financeDetails summary{cursor:pointer;font-weight:800;color:#344054}.financeIssue{padding:10px;border:1px solid #fecaca;background:#fff1f2;border-radius:10px;margin:8px 0;color:#991b1b}.financeIssue .small{color:#7f1d1d}
 @media(max-width:430px){.workflowNavBtn{font-size:14px}.financeSummary{grid-template-columns:1fr 1fr}}
 
-/* v0.9.33 dashboard workflow shortcuts + docket editing */
+/* v0.9.34 dashboard workflow shortcuts + docket editing */
 .dashboardSundayWrap{display:none!important}
 .homeQuick{margin:0 0 12px;padding:10px;border:1px solid #dbe3ec;border-radius:14px;background:#fff}
 .homeQuickTitle{font-weight:900;font-size:17px;margin:0 0 8px}
@@ -690,7 +690,7 @@ body.workflowMode .workflowBar{display:block}
 .docketActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 @media(max-width:560px){.homeQuick{margin-top:0}.homeQuickTitle{font-size:16px}.homeQuickGrid .btn{font-size:15px;padding:10px 8px}.docketActions .btn{flex:1 1 45%}}
 
-/* v0.9.33 viewport-fit workflow shell */
+/* v0.9.34 viewport-fit workflow shell */
 body.workflowMode{overflow:hidden;height:100dvh}
 body.workflowMode .hero,body.workflowMode .tabs,body.workflowMode .navSpacer{display:none!important}
 body.workflowMode .app{
@@ -746,7 +746,7 @@ body.workflowMode .workflowBar{padding-top:7px}
 }
 
 
-/* v0.9.33 verified weekly invoice stage */
+/* v0.9.34 verified weekly invoice stage */
 .invoiceCard{border:1px solid #d7dde7;border-radius:14px;background:#fff;padding:14px;margin-top:8px}
 .invoiceHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border-bottom:1px solid #e5e7eb;padding-bottom:10px;margin-bottom:10px}
 .invoiceTitle{font-size:20px;font-weight:950;line-height:1.1;color:#172033}.invoiceMeta{text-align:right;font-size:11px;color:#667085;line-height:1.45}
@@ -768,7 +768,7 @@ body.workflowMode .workflowBar{padding-top:7px}
 }
 #invoicePrintSheet{display:none}
 
-/* v0.9.33 compact invoice confirmation + payment stage */
+/* v0.9.34 compact invoice confirmation + payment stage */
 .invoiceScreenBranch{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:center;border:1px solid #e1e6ee;border-radius:10px;padding:9px 10px;margin-top:7px}
 .invoiceScreenBranch .name{font-weight:900;color:#172033}.invoiceScreenBranch .mini{font-size:10px;color:#667085;text-align:right}.invoiceScreenBranch .amt{font-size:16px;font-weight:950;color:#172033;text-align:right}
 .invoiceScreenDetails{margin-top:7px}.invoiceScreenDetails summary{cursor:pointer;font-weight:800;color:#475467;font-size:12px}.invoiceScreenDetails .invoiceExplain{margin-top:7px}
@@ -782,9 +782,11 @@ body.workflowMode .compactInvoice .invoiceState{margin:7px 0 0}
 .invoiceNote{margin-top:8px}.invoiceNote label{display:block;font-size:11px;font-weight:850;color:#475467;margin-bottom:5px}.invoiceNote textarea{width:100%;box-sizing:border-box;border:1px solid #cfd6e1;border-radius:10px;padding:9px 10px;font:inherit;min-height:58px;resize:vertical;background:#fff}.invoiceNoteSaved{font-size:11px;color:#475467;line-height:1.4;margin-top:7px;padding:8px 9px;background:#f8fafc;border-radius:9px}.pdfHint{font-size:11px;color:#667085;line-height:1.35;margin-top:7px}
 .paymentCard{border:1px solid #d7dde7;border-radius:14px;background:#fff;padding:12px}.paymentTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.paymentAmount{font-size:28px;font-weight:950;color:#172033;margin-top:2px}.paymentStatusBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 10px}.paymentStatusBtn{border:1px solid #d7dde7;background:#fff;border-radius:11px;padding:10px;font-weight:900;color:#475467}.paymentStatusBtn.activeUnpaid{background:#fff7ed;border-color:#fdba74;color:#9a3412}.paymentStatusBtn.activePaid{background:#ecfdf3;border-color:#86efac;color:#166534}.paymentFields{display:grid;gap:9px}.paymentFields label{font-size:11px;font-weight:800;color:#475467}.paymentFields input,.paymentFields textarea{width:100%;box-sizing:border-box;border:1px solid #cfd6e1;border-radius:10px;padding:10px;font:inherit;background:#fff}.paymentFields textarea{min-height:68px;resize:vertical}.paymentSaved{margin-top:9px;padding:9px 10px;border-radius:10px;background:#ecfdf3;color:#166534;font-weight:800}.paymentHint{font-size:11px;color:#667085;margin-top:8px}.paymentSave{width:100%;margin-top:10px}
 
-/* v0.9.33 human-friendly Records hub */
+/* v0.9.34 human-friendly Records hub */
 .recordsHead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}.recordsTools{display:grid;grid-template-columns:minmax(0,1fr) 160px;gap:8px;margin-bottom:10px;position:sticky;top:var(--sticky-nav-h,0);z-index:5;background:#f5f7fb;padding:5px 0}.recordsTools input,.recordsTools select{width:100%;box-sizing:border-box;border:1px solid #d7dde7;border-radius:11px;padding:10px 11px;font:inherit;background:#fff;color:#172033}.recordGroup{border:1px solid #d7dde7;border-radius:14px;background:#fff;margin:8px 0;overflow:hidden}.recordGroup>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;cursor:pointer}.recordGroup>summary::-webkit-details-marker{display:none}.recordGroupTitle{font-weight:900;font-size:16px}.recordCount{font-size:12px;font-weight:850;color:#475467;background:#f2f4f7;border-radius:999px;padding:5px 8px}.recordGroupBody{border-top:1px solid #e5e7eb;padding:0 12px}.recordItem{border-bottom:1px solid #e5e7eb}.recordItem:last-child{border-bottom:0}.recordItem>summary{list-style:none;display:grid;grid-template-columns:88px minmax(0,1fr) auto;align-items:center;gap:9px;padding:11px 0;cursor:pointer}.recordItem>summary::-webkit-details-marker{display:none}.recordDate{font-weight:900;color:#172033}.recordMain{min-width:0}.recordName{font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.recordMeta{font-size:11px;color:#667085;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.recordStatus{font-size:10px;font-weight:900;border-radius:999px;padding:5px 7px;background:#eef2f6;color:#475467;white-space:nowrap}.recordStatus.paid,.recordStatus.ok{background:#dcfce7;color:#166534}.recordStatus.unpaid{background:#fff7ed;color:#9a3412}.recordBody{padding:0 0 12px}.recordActions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.recordActions .btn{padding:8px 10px;min-height:36px;font-size:12px}.recordMiniGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.recordMini{background:#f8fafc;border-radius:9px;padding:8px}.recordMini .k{font-size:9px;text-transform:uppercase;color:#667085;font-weight:800}.recordMini .v{font-size:15px;font-weight:900;margin-top:2px}.recordsEmpty{padding:18px;text-align:center;color:#667085}.recordChevron{color:#667085;font-weight:900}
 @media(max-width:430px){.recordsTools{grid-template-columns:1fr 132px}.recordItem>summary{grid-template-columns:78px minmax(0,1fr) auto}.recordGroup>summary{padding:12px}.recordGroupBody{padding:0 10px}}
+/* v0.9.34 standalone invoice records, revisions and attention alerts */
+.dashboardAlerts{margin:10px 0}.dashboardAlert{border:1px solid #f5b5b5;background:#fff1f1;border-radius:13px;padding:11px 12px;margin:7px 0;color:#7f1d1d}.dashboardAlert.info{border-color:#f1d48b;background:#fff9e8;color:#78350f}.dashboardAlertHead{display:flex;align-items:center;justify-content:space-between;gap:8px}.dashboardAlertTitle{font-weight:950}.dashboardAlertText{font-size:12px;line-height:1.4;margin-top:4px}.dashboardAlert .btn{margin-top:8px;min-height:36px;padding:8px 10px;font-size:12px}.invoiceViewerTop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:9px}.invoiceViewerTop h2{margin:0}.invoiceViewerStatus{font-size:11px;font-weight:950;border-radius:999px;padding:6px 8px;background:#dcfce7;color:#166534;white-space:nowrap}.invoiceViewerStatus.warn{background:#fee2e2;color:#991b1b}.invoiceWarning{border:1px solid #fecaca;background:#fff1f2;color:#881337;border-radius:12px;padding:10px 11px;margin:8px 0;font-size:12px;line-height:1.4}.invoiceViewerActions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.invoiceViewerActions .btn{width:100%}.invoiceSentBox{border:1px solid #d7dde7;border-radius:12px;padding:10px;margin-top:10px}.invoiceSentRow{display:flex;align-items:center;justify-content:space-between;gap:10px}.invoiceSentMeta{font-size:12px;color:#667085;margin-top:3px}.invoiceSentControls{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}.invoiceSentControls input{width:100%;box-sizing:border-box;border:1px solid #cfd6e1;border-radius:10px;padding:9px;font:inherit}.adjustmentBadge{display:inline-block;background:#fff7ed;color:#9a3412;border-radius:999px;padding:4px 7px;font-size:10px;font-weight:900;margin-left:5px}.recordStatus.warn{background:#fee2e2;color:#991b1b}
 @media(max-width:430px){.invoiceScreenBranch{grid-template-columns:minmax(0,1fr) auto;}.invoiceScreenBranch .mini{display:none}.invoiceScreenBranch .amt{font-size:15px}.paymentCard{padding:10px}.paymentAmount{font-size:25px}}
 
 </style>
@@ -799,7 +801,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div class="mark"><img src="Magic-Dragon-logo.jpeg" alt="Magic Dragon logo"></div>
     <div><h1>Magic Dragon • Pin</h1><p>Stock, delivery dockets, weekly reconciliation & payment splits</p>
 <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:6px">
-<span class="app-version">v0.9.33</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
+<span class="app-version">v0.9.34</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
 </div></div>
   </div>
 
@@ -823,6 +825,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
       </div>
       <div class="homeQuickHint">Workflow shortcuts will live here as they are added.</div>
     </div>
+    <div id="dashboardAlerts" class="dashboardAlerts" style="display:none"></div>
     <div class="grid" id="metrics"></div>
     <h2>Branch snapshot</h2>
     <div class="grid">
@@ -843,6 +846,11 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
   </section>
   <div id="invoicePrintSheet"></div>
   <div class="workflowBar noPrint" id="workflowBar"><div class="workflowBarInner"><button class="workflowNavBtn" id="wizardPrev" type="button">‹ Previous</button><div class="workflowDots" id="wizardDots"></div><button class="workflowNavBtn next" id="wizardNext" type="button">Next ›</button></div></div>
+
+  <section id="invoiceViewer" class="section">
+    <div class="invoiceViewerTop"><div><h2>Invoice</h2><div class="small">Saved invoice record</div></div><button class="btn" type="button" onclick="switchTab('history')">Back to Records</button></div>
+    <div id="invoiceViewerBody"></div>
+  </section>
 
   <section id="delivery" class="section">
     <div class="card">
@@ -1123,6 +1131,7 @@ const LAMAI_NAMES = new Set(["Tropicana Cookies","Rose Gold Pave 1g","Black Cher
 const db = JSON.parse(localStorage.getItem("mdpin-db")||"null") || {products:BASE_PRODUCTS,deliveries:[],weeks:[],stock:{"BM Bangrak":{},"Lamai":{}}};
 if(!Array.isArray(db.docketAudit)) db.docketAudit=[];
 if(!Array.isArray(db.invoices)) db.invoices=[];
+if(!Array.isArray(db.adjustments)) db.adjustments=[];
 function save(){localStorage.setItem("mdpin-db",JSON.stringify(db));renderAll()}
 function baht(n){return "฿"+Number(n||0).toLocaleString("en-US",{maximumFractionDigits:2})}
 function today(){return new Date().toISOString().slice(0,10)}
@@ -1485,7 +1494,7 @@ function renderHistory(){
  const groups=[];
  const deliveries=[...(db.deliveries||[])].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))).map(d=>({type:"delivery",date:d.date,title:displayBranchName(d.branch),meta:d.note||"Delivery docket",status:"Docket",obj:d}));
  const sundays=[...(db.sundayImports||[])].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))).map(r=>{const st=r.reconciliation?reconStatusLabel(r.reconciliation):["unknown","Not checked"];return {type:"sunday",date:r.date,title:displayBranchName(r.branch),meta:`${r.rows?.length||0} products`,status:st[1],statusClass:st[0]==="ok"?"ok":"",obj:r}});
- const invoices=[...(db.invoices||[])].filter(i=>i.status!=="void").sort((a,b)=>String(b.reportDate||"").localeCompare(String(a.reportDate||""))).map(i=>({type:"invoice",date:i.reportDate,title:i.number||"Invoice",meta:"The Grocery by BM + BM Lamai",status:i.payment?.status==="paid"?"PAID":"UNPAID",statusClass:i.payment?.status==="paid"?"paid":"unpaid",obj:i}));
+ const invoices=[...(db.invoices||[])].filter(i=>i.status!=="void").sort((a,b)=>String(b.reportDate||"").localeCompare(String(a.reportDate||""))||Number(b.version||1)-Number(a.version||1)).map(i=>{const cur=invoiceRecordState(i);return {type:"invoice",date:i.reportDate,title:(i.number||"Invoice")+(Number(i.version||1)>1?` v${Number(i.version||1)}`:""),meta:"The Grocery by BM + BM Lamai",status:cur.label,statusClass:cur.cls,obj:i};});
  const payments=invoices.filter(x=>x.obj.payment).map(x=>({type:"payment",date:x.obj.payment?.date||x.date,title:x.obj.number||"Payment",meta:x.obj.payment?.note||"Payment record",status:String(x.obj.payment?.status||"unpaid").toUpperCase(),statusClass:x.obj.payment?.status==="paid"?"paid":"unpaid",obj:x.obj}));
  const weekly=[...(db.weeks||[])].filter(w=>!/Excel/i.test(String(w.source||""))).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||""))).map(w=>({type:"weekly",date:w.date,title:displayBranchName(w.branch),meta:"Stock / weekly check",status:"Saved",obj:w}));
  const defs=[['delivery','Delivery dockets',deliveries],['sunday','Sunday reports',sundays],['invoice','Invoices',invoices],['payment','Payments',payments],['weekly','Stock / weekly checks',weekly]];
@@ -1498,12 +1507,12 @@ function recordItemHtml(x){
  const o=x.obj||{}; let body='';
  if(x.type==='delivery') body=`${docketMarkup(o)}<div class="recordActions"><button class="btn gold" onclick='editDocket("${o.id}")'>Edit</button><button class="btn" onclick='printDocket("${o.id}")'>Print / PDF</button></div>`;
  else if(x.type==='sunday'){const rec=o.reconciliation;const st=rec?reconStatusLabel(rec):['unknown','Not checked'];body=`<div class="recordMiniGrid"><div class="recordMini"><div class="k">Products</div><div class="v">${o.rows?.length||0}</div></div><div class="recordMini"><div class="k">Status</div><div class="v">${escapeHtml(st[1])}</div></div></div><div class="recordActions"><button class="btn" onclick='openRecordSunday("${o.id}")'>Open report</button></div>`;}
- else if(x.type==='invoice'||x.type==='payment'){const t=o.totals||{};body=`<div class="recordMiniGrid"><div class="recordMini"><div class="k">Sales</div><div class="v">${baht(t.sales||0)}</div></div><div class="recordMini"><div class="k">Pay Pin</div><div class="v">${baht(t.payPin||0)}</div></div></div>${o.shopNote?`<div class="invoiceNoteSaved"><b>Note to shop:</b> ${escapeHtml(o.shopNote)}</div>`:''}${o.payment?`<div class="invoiceNoteSaved"><b>Payment:</b> ${escapeHtml(String(o.payment.status||'').toUpperCase())}${o.payment.date?` · ${escapeHtml(recordDateLabel(o.payment.date))}`:''}${o.payment.note?` · ${escapeHtml(o.payment.note)}`:''}</div>`:''}<div class="recordActions"><button class="btn" onclick='openRecordInvoice("${o.id}")'>Open invoice</button></div>`;}
+ else if(x.type==='invoice'||x.type==='payment'){const t=o.totals||{};body=`<div class="recordMiniGrid"><div class="recordMini"><div class="k">Sales</div><div class="v">${baht(t.sales||0)}</div></div><div class="recordMini"><div class="k">Pay Pin</div><div class="v">${baht(t.payPin||0)}</div></div></div><div class="invoiceNoteSaved"><b>Version:</b> v${Number(o.version||1)} · <b>Customer:</b> ${o.sent?.status==='sent'?'SENT':'NOT SENT'}</div>${o.shopNote?`<div class="invoiceNoteSaved"><b>Note to shop:</b> ${escapeHtml(o.shopNote)}</div>`:''}${o.payment?`<div class="invoiceNoteSaved"><b>Payment:</b> ${escapeHtml(String(o.payment.status||'').toUpperCase())}${o.payment.date?` · ${escapeHtml(recordDateLabel(o.payment.date))}`:''}${o.payment.note?` · ${escapeHtml(o.payment.note)}`:''}</div>`:''}<div class="recordActions"><button class="btn gold" onclick='openRecordInvoice("${o.id}")'>View Invoice</button></div>`;}
  else body=`<div class="recordMiniGrid"><div class="recordMini"><div class="k">Sales</div><div class="v">${baht(o.totals?.sales||0)}</div></div><div class="recordMini"><div class="k">Status</div><div class="v">Saved</div></div></div>`;
  return `<details class="recordItem"><summary><span class="recordDate">${escapeHtml(recordDateLabel(x.date))}</span><span class="recordMain"><div class="recordName">${escapeHtml(x.title)}</div><div class="recordMeta">${escapeHtml(x.meta)}</div></span><span class="recordStatus ${x.statusClass||''}">${escapeHtml(x.status)}</span></summary><div class="recordBody">${body}</div></details>`;
 }
 window.openRecordSunday=id=>{switchTab('import');renderArchive();setTimeout(()=>{const el=[...document.querySelectorAll('.archiveReport')].find(d=>d.innerText.includes(db.sundayImports.find(r=>r.id===id)?.date||'___')&&d.innerText.includes(db.sundayImports.find(r=>r.id===id)?.branch||'___'));if(el){el.open=true;el.scrollIntoView({behavior:'smooth',block:'start'})}},80)};
-window.openRecordInvoice=id=>{const inv=(db.invoices||[]).find(i=>i.id===id);if(!inv)return;openSundayWizard();wizardStep=3;renderSundayWizard();};
+window.openRecordInvoice=id=>openInvoiceRecord(id);
 
 window.showDock=id=>{switchTab("docket");renderDocketArchive(id)}
 window.deleteRecord=(kind,id)=>{
@@ -3096,7 +3105,7 @@ function invoiceSignature(date,summary){
 }
 function getValidSundayInvoice(date,financial){
   const summary=invoiceFinancialSummary(financial),sig=invoiceSignature(date,summary);
-  const inv=[...(db.invoices||[])].reverse().find(x=>x&&x.reportDate===date&&x.status!=="void");
+  const inv=latestInvoiceForDate(date);
   return inv&&inv.signature===sig?inv:null;
 }
 function currentWizardState(){
@@ -3176,22 +3185,55 @@ function buildInvoiceCard(state,printMode=false){
   const savedNote=saved?.shopNote?`<div class="invoiceNoteSaved"><b>Note to shop:</b> ${escapeHtml(saved.shopNote)}</div>`:"";
   return `<div class="invoiceCard compactInvoice"><div class="invoiceHead"><div><div class="invoiceTitle">Weekly Settlement Invoice</div><div class="wizardMinimal">Week ending ${escapeHtml(invoiceDateLabel(date))}</div></div><div class="invoiceMeta"><b>${escapeHtml(number)}</b><br>${saved?"Saved":"Draft"}</div></div><div class="invoiceFrom"><b>Issued by Yaowaret</b></div>${branches}<div class="invoiceTotal"><div class="k">Total payable to Pin</div><div class="v">${baht(summary.combined.payPin)}</div></div><details class="invoiceScreenDetails"><summary>View invoice breakdown</summary><div class="invoiceNums" style="margin-top:7px">${breakdown}</div><div class="invoiceExplain">Normal profit split: BM 40% · Alix 30% · Pin 30%. Edibles: BM 40% · Alix 20% · Pin 40%.</div></details>${savedNote}<div class="invoiceState"><span class="${saved?'invoiceSaved':'invoiceDraft'}">${saved?'✓ INVOICE SAVED':'DRAFT — NOT SAVED'}</span><span class="wizardMinimal">Sales ${baht(summary.combined.sales)}</span></div></div>`;
 }
+function latestInvoiceForDate(date){
+  return [...(db.invoices||[])].filter(x=>x&&x.reportDate===date&&x.status!=="void").sort((a,b)=>Number(b.version||1)-Number(a.version||1)||String(b.createdAt||"").localeCompare(String(a.createdAt||"")))[0]||null;
+}
+function invoiceRecordState(inv){
+  if(!inv)return {label:"UNKNOWN",cls:""};
+  if(inv.supersededBy)return {label:"SUPERSEDED",cls:"warn"};
+  const state=currentWizardStateSafeForInvoice(inv.reportDate);
+  if(state&&state.signature&&inv.signature!==state.signature)return {label:"UPDATE REQUIRED",cls:"warn"};
+  if(inv.payment?.status==="paid")return {label:"PAID",cls:"paid"};
+  return {label:"CURRENT",cls:"ok"};
+}
+function currentWizardStateSafeForInvoice(date){
+  try{
+    const items=latestWizardReports();
+    if(!items.length||items[0]?.report?.date!==date)return null;
+    const stockGreen=items.every(x=>x.rec.status==="ok");
+    const financial=items.map(x=>({report:x.report,result:financialReconcileReport(x.report)}));
+    const financialGreen=stockGreen&&financial.every(x=>x.result.status==="ok");
+    if(!financialGreen)return {signature:null,financialGreen:false};
+    const summary=invoiceFinancialSummary(financial);
+    return {signature:invoiceSignature(date,summary),summary,financialGreen:true};
+  }catch(e){return null;}
+}
+function addRevisionAdjustment(oldInv,newInv){
+  const delta=Number(newInv.totals?.payPin||0)-Number(oldInv.totals?.payPin||0);
+  if(Math.abs(delta)<0.005)return;
+  if(oldInv.sent?.status!=="sent"&&!oldInv.payment)return;
+  if(!Array.isArray(db.adjustments))db.adjustments=[];
+  if(db.adjustments.some(a=>a.oldInvoiceId===oldInv.id&&a.newInvoiceId===newInv.id))return;
+  db.adjustments.push({id:"ADJ"+Date.now(),status:"pending",amount:+delta.toFixed(2),sourceDate:newInv.reportDate,oldInvoiceId:oldInv.id,newInvoiceId:newInv.id,oldNumber:oldInv.number,newNumber:newInv.number,createdAt:new Date().toISOString(),resolution:null});
+}
 function saveSundayInvoice(){
   const state=currentWizardState();
   if(!state.financialGreen||!state.items.length)return alert("Financial reconciliation must be complete before saving the invoice.");
-  const date=state.items[0].report.date,summary=invoiceFinancialSummary(state.financial),sig=invoiceSignature(date,summary),number=sundayInvoiceNumber(date);
+  const date=state.items[0].report.date,summary=invoiceFinancialSummary(state.financial),sig=invoiceSignature(date,summary),baseNumber=sundayInvoiceNumber(date);
   if(!Array.isArray(db.invoices))db.invoices=[];
-  const existing=db.invoices.find(x=>x.reportDate===date&&x.status!=="void");
-  const sameVerifiedInvoice=existing&&existing.signature===sig;
+  const latest=latestInvoiceForDate(date);
+  if(latest&&latest.signature===sig){renderSundayWizard();return;}
   const noteEl=document.getElementById("invoiceShopNote");
-  const shopNote=(noteEl?noteEl.value:(existing?.shopNote||"")).trim();
-  const record={id:existing?.id||("INV"+Date.now()),number,reportDate:date,createdDate:existing?.createdDate||today(),createdAt:existing?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString(),status:sameVerifiedInvoice?(existing.status||"unpaid"):"unpaid",signature:sig,shopNote,branches:summary.branches.map(b=>({branch:b.branch,sales:b.sales,cost:b.cost,profit:b.profit,bm:b.bm,alix:b.alix,pinProfit:b.pinProfit,payPin:b.payPin})),totals:summary.combined};
-  if(sameVerifiedInvoice&&existing.payment)record.payment=existing.payment;
-  if(existing)Object.assign(existing,record); else db.invoices.push(record);
-  if(existing&&!sameVerifiedInvoice)delete existing.payment;
+  const shopNote=(noteEl?noteEl.value:"").trim();
+  const version=latest?Number(latest.version||1)+1:1;
+  const id="INV"+Date.now();
+  const record={id,number:baseNumber,version,reportDate:date,createdDate:today(),createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),status:"unpaid",signature:sig,shopNote,sent:{status:"not_sent",date:null,note:""},branches:summary.branches.map(b=>({branch:b.branch,sales:b.sales,cost:b.cost,profit:b.profit,bm:b.bm,alix:b.alix,pinProfit:b.pinProfit,payPin:b.payPin})),totals:{...summary.combined}};
+  if(latest&&latest.signature!==sig){latest.supersededBy=id;latest.supersededAt=new Date().toISOString();addRevisionAdjustment(latest,record);}
+  db.invoices.push(record);
   localStorage.setItem("mdpin-db",JSON.stringify(db));
-  renderSundayWizard();
+  renderSundayWizard();renderHistory();renderDashboardAlerts();
 }
+
 function pdfEscapeText(v){return String(v??"").replace(/\\/g,"\\\\").replace(/\(/g,"\\(").replace(/\)/g,"\\)").replace(/[\r\n]+/g," ");}
 function pdfAscii(v){
   return String(v??"").normalize?String(v??"").normalize("NFKD").replace(/[^\x20-\x7E]/g," "):String(v??"").replace(/[^\x20-\x7E]/g," ");
@@ -3224,7 +3266,7 @@ function buildSundayInvoicePdfBytes(invoice){
   // Header
   txt('WEEKLY SETTLEMENT INVOICE',pageLeft,785,22,true);
   txt('Week ending '+invoiceDateLabel(invoice.reportDate),pageLeft,762,11,false,.38,.42,.50);
-  txt(invoice.number||'',455,786,10,true,.38,.42,.50);
+  txt((invoice.number||'')+(Number(invoice.version||1)>1?' v'+Number(invoice.version||1):''),455,786,10,true,.38,.42,.50);
   txt('Saved '+invoiceDateLabel(invoice.createdDate||invoice.reportDate),455,769,9,false,.38,.42,.50);
   line(pageLeft,747,pageRight,747);
   txt('Issued by Yaowaret',pageLeft,726,11,true);
@@ -3273,7 +3315,7 @@ function buildSundayInvoicePdfBytes(invoice){
   // Footer kept subtle; no extra attachment or helper document is generated.
   line(pageLeft,53,pageRight,53,.90,.91,.93,.7);
   txt('Verified and saved in Magic Dragon Pin',pageLeft,37,7.5,false,.48,.51,.57);
-  txt((invoice.number||'')+'  •  Page 1 of 1',445,37,7.5,false,.48,.51,.57);
+  txt((invoice.number||'')+(Number(invoice.version||1)>1?' v'+Number(invoice.version||1):'')+'  •  Page 1 of 1',445,37,7.5,false,.48,.51,.57);
 
   const content=c.join('\n');
   const objs=[];
@@ -3291,27 +3333,37 @@ function buildSundayInvoicePdfBytes(invoice){
   pdf+=`trailer\n<< /Size 7 /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`;
   return new TextEncoder().encode(pdf);
 }
-async function createSundayInvoicePDF(){
-  const state=currentWizardState();
-  if(!state.invoiceSaved||!state.invoice)return alert("Save the verified invoice first.");
-  const inv=state.invoice;
+async function shareInvoicePDF(inv){
+  if(!inv)return alert("Invoice record not found.");
   try{
     const bytes=buildSundayInvoicePdfBytes(inv);
     const blob=new Blob([bytes],{type:"application/pdf"});
-    const filename=`Invoice - The Grocery by BM + BM Lamai - ${invoiceDateLabel(inv.reportDate).replace(/\s+/g," ")}.pdf`;
+    const v=Number(inv.version||1)>1?` v${Number(inv.version||1)}`:"";
+    const filename=`Invoice - The Grocery by BM + BM Lamai - ${invoiceDateLabel(inv.reportDate).replace(/\s+/g," ")}${v}.pdf`;
     const file=new File([blob],filename,{type:"application/pdf"});
-    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-      await navigator.share({files:[file]});
-      return;
-    }
-    const url=URL.createObjectURL(blob),a=document.createElement("a");
-    a.href=url;a.download=filename;a.rel="noopener";document.body.appendChild(a);a.click();a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),60000);
-  }catch(err){
-    if(err&&err.name==="AbortError")return;
-    console.error(err);alert("The PDF could not be created. Please try again.");
-  }
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file]});return;}
+    const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;a.rel="noopener";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);
+  }catch(err){if(err&&err.name==="AbortError")return;console.error(err);alert("The PDF could not be created. Please try again.");}
 }
+async function createSundayInvoicePDF(){const state=currentWizardState();if(!state.invoiceSaved||!state.invoice)return alert("Save the verified invoice first.");return shareInvoicePDF(state.invoice);}
+function markInvoiceSent(id,status){
+  const inv=(db.invoices||[]).find(x=>x.id===id);if(!inv)return;
+  const date=document.getElementById("invoiceSentDate")?.value||today();
+  const note=(document.getElementById("invoiceSentNote")?.value||"").trim();
+  inv.sent=status==="sent"?{status:"sent",date,note,savedAt:new Date().toISOString()}:{status:"not_sent",date:null,note:"",savedAt:new Date().toISOString()};
+  localStorage.setItem("mdpin-db",JSON.stringify(db));renderInvoiceRecord(id);renderHistory();renderDashboardAlerts();
+}
+function renderInvoiceRecord(id){
+  const box=document.getElementById("invoiceViewerBody"),inv=(db.invoices||[]).find(x=>x.id===id);if(!box||!inv)return;
+  const st=invoiceRecordState(inv),sent=inv.sent?.status==="sent",latest=latestInvoiceForDate(inv.reportDate),isLatest=latest?.id===inv.id;
+  const warning=inv.supersededBy?`<div class="invoiceWarning"><b>This is an earlier invoice version.</b><br>A newer version is available. The original is kept here for your records.<div class="recordActions"><button class="btn" onclick="openInvoiceRecord('${inv.supersededBy}')">Open newer version</button></div></div>`:st.label==="UPDATE REQUIRED"?`<div class="invoiceWarning"><b>UPDATE REQUIRED</b><br>Underlying delivery/report data changed after this invoice was saved. Keep this original record, then review the Sunday Workflow to create the revised version.<div class="recordActions"><button class="btn gold" onclick="openSundayWizard();sundayWizardStep=4;renderSundayWizard()">Review & create revision</button></div></div>`:"";
+  const branches=(inv.branches||[]).map(b=>`<div class="invoiceBranch"><div class="invoiceBranchName">${escapeHtml(displayBranchName(b.branch))}</div><div class="invoiceNums"><div class="invoiceNum"><div class="k">Sales</div><div class="v">${baht(b.sales)}</div></div><div class="invoiceNum"><div class="k">Cost recovery</div><div class="v">${baht(b.cost)}</div></div><div class="invoiceNum"><div class="k">Pin profit share</div><div class="v">${baht(b.pinProfit)}</div></div><div class="invoiceNum"><div class="k">Amount due</div><div class="v">${baht(b.payPin)}</div></div></div></div>`).join("");
+  const pending=(db.adjustments||[]).filter(a=>a.status==="pending"&&(a.oldInvoiceId===inv.id||a.newInvoiceId===inv.id));
+  box.innerHTML=`${warning}<div class="invoiceCard"><div class="invoiceHead"><div><div class="invoiceTitle">Weekly Settlement Invoice</div><div class="wizardMinimal">Week ending ${escapeHtml(invoiceDateLabel(inv.reportDate))}</div></div><div class="invoiceMeta"><b>${escapeHtml(inv.number||"")} v${Number(inv.version||1)}</b><br>${escapeHtml(invoiceDateLabel(inv.createdDate||inv.reportDate))}</div></div><div class="invoiceFrom"><b>Issued by Yaowaret</b><br>The Grocery by BM + BM Lamai weekly settlement</div><div class="invoiceBranches">${branches}</div><div class="invoiceTotal"><div class="k">Total payable to Pin</div><div class="v">${baht(inv.totals?.payPin||0)}</div></div>${inv.shopNote?`<div class="invoiceNoteSaved"><b>Note to shop:</b> ${escapeHtml(inv.shopNote)}</div>`:""}<div class="invoiceState"><span class="invoiceViewerStatus ${st.cls==='warn'?'warn':''}">${escapeHtml(st.label)}</span><span class="wizardMinimal">Invoice v${Number(inv.version||1)}</span></div>${pending.length?`<div class="invoiceWarning"><b>${pending.length} unresolved adjustment${pending.length>1?'s':''}</b><br>${pending.map(a=>(a.amount>=0?'+':'')+baht(a.amount)).join(', ')} waiting for a resolution.</div>`:""}</div><div class="invoiceSentBox"><div class="invoiceSentRow"><div><b>Customer copy</b><div class="invoiceSentMeta">${sent?`Sent ${escapeHtml(invoiceDateLabel(inv.sent.date))}${inv.sent.note?` · ${escapeHtml(inv.sent.note)}`:''}`:'Not marked as sent'}</div></div><span class="recordStatus ${sent?'ok':'unpaid'}">${sent?'SENT':'NOT SENT'}</span></div><div class="invoiceSentControls"><input id="invoiceSentDate" type="date" value="${escapeHtml(inv.sent?.date||today())}"><input id="invoiceSentNote" placeholder="e.g. LINE / email" value="${escapeHtml(inv.sent?.note||'')}"></div><div class="recordActions"><button class="btn gold" onclick="markInvoiceSent('${inv.id}','sent')">Mark Sent</button><button class="btn" onclick="markInvoiceSent('${inv.id}','not_sent')">Mark Not Sent</button></div></div><div class="invoiceViewerActions"><button class="btn gold" onclick="shareInvoicePDFById('${inv.id}')">Create / Share PDF</button>${inv.payment?`<button class="btn" disabled>${inv.payment.status==='paid'?'Paid '+escapeHtml(invoiceDateLabel(inv.payment.date)):'Unpaid'}</button>`:'<button class="btn" disabled>Payment not recorded</button>'}</div>`;
+}
+window.shareInvoicePDFById=id=>shareInvoicePDF((db.invoices||[]).find(x=>x.id===id));
+window.openInvoiceRecord=id=>{switchTab('invoiceViewer');renderInvoiceRecord(id);window.scrollTo({top:0,behavior:"smooth"});};
+
 function renderInvoiceWizard(state){
   if(!state.financialGreen)return '<div class="wizardLocked">Financial reconciliation must be complete before an invoice can be produced.</div>';
   const card=buildInvoiceCard(state,false);
@@ -3350,6 +3402,19 @@ function renderPaymentWizard(state){
   return `<div class="paymentCard"><div class="paymentTop"><div><div class="wizardMinimal">${escapeHtml(state.invoice.number)}</div><b>Payment status</b></div><div style="text-align:right"><div class="wizardMinimal">Amount due</div><div class="paymentAmount">${baht(state.invoice.totals?.payPin||0)}</div></div></div><div class="paymentStatusBtns"><label id="unpaidStatusBtn" class="paymentStatusBtn ${paid?'':'activeUnpaid'}" onclick="setPaymentStatus('unpaid')"><input id="payUnpaid" type="radio" name="payStatus" value="unpaid" ${paid?'':'checked'} style="display:none">UNPAID</label><label id="paidStatusBtn" class="paymentStatusBtn ${paid?'activePaid':''}" onclick="setPaymentStatus('paid')"><input id="payPaid" type="radio" name="payStatus" value="paid" ${paid?'checked':''} style="display:none">PAID</label></div><div class="paymentFields"><div id="paymentDateWrap" style="display:${paid?'block':'none'}"><label>Payment date</label><input id="paymentDate" type="date" value="${escapeHtml(date)}"></div><div><label>Note (optional)</label><textarea id="paymentNote" placeholder="Cash, bank transfer, reference or other note…">${escapeHtml(note)}</textarea></div></div><button class="btn gold paymentSave" type="button" onclick="saveSundayPayment()">Save Payment Status</button>${p?`<div class="paymentSaved">✓ ${paid?'Paid '+escapeHtml(invoiceDateLabel(p.date)):'Saved as unpaid'}${p.note?` · ${escapeHtml(p.note)}`:''}</div>`:'<div class="paymentHint">Choose Paid or Unpaid, add a date/note if needed, then save.</div>'}</div>`;
 }
 
+function renderDashboardAlerts(){
+  const box=document.getElementById("dashboardAlerts");if(!box)return;
+  const alerts=[];
+  try{
+    const state=currentWizardState();
+    const date=state.items?.[0]?.report?.date;
+    const latest=date?latestInvoiceForDate(date):null;
+    if(latest&&state.financialGreen){const sig=invoiceSignature(date,invoiceFinancialSummary(state.financial));if(latest.signature!==sig&&!latest.supersededBy)alerts.push(`<div class="dashboardAlert"><div class="dashboardAlertHead"><div class="dashboardAlertTitle">⚠ Invoice update required</div></div><div class="dashboardAlertText">Records changed after ${escapeHtml(latest.number||'the invoice')} v${Number(latest.version||1)} was saved. Review the change before the next settlement.</div><button class="btn" onclick="openInvoiceRecord('${latest.id}')">Review invoice</button></div>`);}
+  }catch(e){}
+  const pending=(db.adjustments||[]).filter(a=>a.status==="pending");
+  if(pending.length){const total=pending.reduce((n,a)=>n+Number(a.amount||0),0);alerts.push(`<div class="dashboardAlert info"><div class="dashboardAlertTitle">Adjustment waiting</div><div class="dashboardAlertText">${pending.length} unresolved adjustment${pending.length>1?'s':''} (${total>=0?'+':''}${baht(total)}) still needs a decision.</div><button class="btn" onclick="switchTab('history');document.getElementById('recordsType').value='invoice';renderHistory()">Open Records</button></div>`);}
+  box.innerHTML=alerts.join("");box.style.display=alerts.length?"block":"none";
+}
 function renderSundayWizard(){
   document.body.classList.add("workflowMode");
   const box=document.getElementById("wizardContent"),period=document.getElementById("wizardPeriod");if(!box)return;
@@ -3367,7 +3432,7 @@ function renderSundayWizard(){
 
 document.getElementById("recordsSearch")?.addEventListener("input",renderHistory);
 document.getElementById("recordsType")?.addEventListener("change",renderHistory);
-function switchTab(id){document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===id));document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===id));if(id!=="sundayWizard")document.body.classList.remove("workflowMode");if(id==="weekly"&&!document.querySelector("#weekRows tr"))loadWeek();if(id==="sundayWizard")renderSundayWizard()}
+function switchTab(id){document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===id));document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===id));if(id!=="sundayWizard")document.body.classList.remove("workflowMode");if(id==="weekly"&&!document.querySelector("#weekRows tr"))loadWeek();if(id==="sundayWizard")renderSundayWizard();if(id==="home")renderDashboardAlerts()}
 document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>switchTab(t.dataset.tab));
 
 document.getElementById("exportData").onclick=()=>{
@@ -3380,7 +3445,7 @@ document.getElementById("masterProductSearch").oninput=filterMasterProductSetup;
 document.getElementById("fillMasterCurrent").onclick=()=>renderMasterProductSetup(true);
 document.getElementById("saveMasterProducts").onclick=applyMasterProductSetup;
 document.getElementById("resetData").onclick=()=>{if(confirm("Delete all local Magic Dragon Pin data on this browser?")){localStorage.removeItem("mdpin-db");location.reload()}}
-cleanupDataIntegrity();refreshStoredReconciliations();renderImport();renderArchive();renderAll();
+cleanupDataIntegrity();refreshStoredReconciliations();renderImport();renderArchive();renderAll();renderDashboardAlerts();
 // v0.9.25 contextual Sunday help and compact selection controls
 const sundayHelpButton=document.getElementById("sundayHelpButton");
 const sundayHelp=document.getElementById("sundayHelp");
