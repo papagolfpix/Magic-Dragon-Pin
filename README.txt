@@ -1,15 +1,11 @@
-MAGIC DRAGON PIN v0.9.29 — SUNDAY FINANCIAL WORKFLOW
+MAGIC DRAGON PIN v0.9.30 — COMPACT INVOICE + PRINT FIX + PAYMENT
 
 Changes:
-- Sunday Workflow now opens as a focused mini-app with the normal app header/navigation hidden while inside the workflow.
-- Adds persistent Previous / progress / Next controls at the bottom.
-- Next is gated: stock reconciliation must be green before Financial; financial checks must be green before Invoice.
-- Adds Stage 3 Financial Reconciliation using the imported Sunday report, master product catalogue and normal/edible split rules.
-- Green financial results stay compact; detailed cost/profit/share arithmetic is behind View calculation.
-- Financial exceptions show only the affected product and a direct review action.
-- Invoice is intentionally still a placeholder for the next build; no invoice is generated yet.
+- Invoice confirmation screen is compact so the Save Verified Invoice action stays visible on iPhone without unnecessary scrolling.
+- Screen invoice shows branch sales/amount due and total payable; detailed cost/profit breakdown is collapsible.
+- Printed/PDF invoice retains the full settlement detail.
+- Fixes iPhone/Safari blank print preview by keeping the dedicated invoice print sheet visible while hiding the rest of the app.
+- Adds functional Payment stage with Paid/Unpaid status, selectable payment date and optional note.
+- Complete remains disabled until payment status has been saved.
 
-Deploy all 7 files to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.29.
-
-
-v0.9.29: Adds verified weekly invoice stage to Sunday Workflow. Invoice can only be saved after financial reconciliation passes; Next remains locked until saved. Includes printable/PDF-friendly invoice and input-signature validation so edited source data invalidates an old invoice.
+Deploy all 7 files to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.30.
