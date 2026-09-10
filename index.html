@@ -802,7 +802,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div class="mark"><img src="Magic-Dragon-logo.jpeg" alt="Magic Dragon logo"></div>
     <div><h1>Magic Dragon • Pin</h1><p>Stock, delivery dockets, weekly reconciliation & payment splits</p>
 <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:6px">
-<span class="app-version">v0.9.35</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
+<span class="app-version">v0.9.36</span><button class="miniRefresh noPrint" id="forceRefresh">↻ Refresh App</button>
 </div></div>
   </div>
 
@@ -3380,7 +3380,7 @@ function saveInvoiceViewerPayment(id){
   inv.status=paid?"paid":"unpaid";
   inv.payment={status:paid?"paid":"unpaid",date:paid?date:null,method:paid?method:null,methodOther:paid&&method==="other"?other:"",note,savedAt:new Date().toISOString()};
   localStorage.setItem("mdpin-db",JSON.stringify(db));
-  renderInvoiceRecord(id);renderHistory();renderDashboard();
+  renderInvoiceRecord(id);renderHistory();renderDashboardAlerts();
 }
 window.invoiceViewerPaymentStatus=invoiceViewerPaymentStatus;
 window.invoiceViewerPaymentMethodChanged=invoiceViewerPaymentMethodChanged;
@@ -3531,7 +3531,7 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
     window.addEventListener("load",()=>setTimeout(measure,50));
   })();
 
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0935", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0936", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;
