@@ -1,6 +1,9 @@
-MAGIC DRAGON PIN v0.9.44 — COMPACT WORKSPACE + HEADER MENU
+MAGIC DRAGON PIN v0.9.45 — IPHONE MENU + DELIVERY SCROLL FIX
 
 WHAT CHANGED
+- Fixed Menu stacking so the full 3×3 menu opens below and above the sticky header layer.
+- Fixed the delivery workspace so only the line-item list scrolls between the fixed entry controls and fixed save/correction controls.
+- Prevented iPhone Safari auto-zoom on delivery quantity/edit controls by using an iOS-safe 16px control font size.
 - Magic Dragon black header now remains visible throughout normal app use where practical.
 - The permanent 3×3 navigation grid is hidden from the working screen. Tap Menu in the black header to drop it down; choosing a destination closes it again.
 - Sunday Workflow remains a focused full-screen workflow without the normal header/menu.
@@ -17,7 +20,7 @@ SPACE-SAVING DIRECTION
 The delivery workspace now prioritizes the active controls and current lines. Help, optional notes and navigation are progressively disclosed rather than permanently consuming screen space.
 
 DEPLOYMENT
-Deploy all 7 files in this ZIP to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.44.
+Deploy all 7 files in this ZIP to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.45.
 
 Files:
 Magic-Dragon-logo.jpeg
