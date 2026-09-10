@@ -1,11 +1,10 @@
-MAGIC DRAGON PIN v0.9.30 — COMPACT INVOICE + PRINT FIX + PAYMENT
+MAGIC DRAGON PIN v0.9.31 — INVOICE PDF FILE + SHOP NOTE
 
 Changes:
-- Invoice confirmation screen is compact so the Save Verified Invoice action stays visible on iPhone without unnecessary scrolling.
-- Screen invoice shows branch sales/amount due and total payable; detailed cost/profit breakdown is collapsible.
-- Printed/PDF invoice retains the full settlement detail.
-- Fixes iPhone/Safari blank print preview by keeping the dedicated invoice print sheet visible while hiding the rest of the app.
-- Adds functional Payment stage with Paid/Unpaid status, selectable payment date and optional note.
-- Complete remains disabled until payment status has been saved.
+- Invoice no longer opens the iPhone print dialogue directly.
+- Creates a real PDF file first and uses the iPhone share sheet when supported.
+- PDF can be shared, saved to Files, sent to the shop, or opened later for printing.
+- Optional Note to Shop is saved with the verified invoice and included in the PDF.
+- Financial, reconciliation, docket and payment logic are unchanged.
 
-Deploy all 7 files to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.30.
+Deploy all 7 files to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.31.
