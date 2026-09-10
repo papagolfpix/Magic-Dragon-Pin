@@ -1,4 +1,4 @@
-MAGIC DRAGON PIN v0.9.50 — FOCUSED DOCKET VIEWER TEST
+MAGIC DRAGON PIN v0.9.51 — FOCUSED DOCKET VIEWER TEST
 
 This test build keeps the working v0.9.49 header/menu behavior and replaces the expanding in-place delivery-docket accordion with a stable focused viewer.
 
@@ -12,4 +12,9 @@ TEST FOCUS
 7. Menu still auto-collapses after 5 seconds of inactivity.
 
 DEPLOYMENT
-Replace all 7 files in the GitHub Pages repository root, commit, wait for Pages deployment, then reopen/reload and confirm v0.9.50 in the black header.
+Replace all 7 files in the GitHub Pages repository root, commit, wait for Pages deployment, then reopen/reload and confirm v0.9.51 in the black header.
+
+v0.9.51 focused cleanup
+- Removed Weekly Check from the normal main menu; the manual engine is retained only as a fallback capability.
+- Locked the normal app shell so only page content scrolls; the branded header stays outside the scrolling pane.
+- Matched the version badge width to the Menu button for a balanced header.
