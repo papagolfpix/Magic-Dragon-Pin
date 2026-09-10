@@ -1,4 +1,13 @@
-MAGIC DRAGON PIN v0.9.46 — MENU + DOCKET VIEWER + PUBLIC NAMES
+MAGIC DRAGON PIN v0.9.47 — MOBILE LAYOUT STABILITY FIX
+
+WHAT CHANGED
+- Black Magic Dragon header is physically fixed on normal screens.
+- Menu stays attached directly below the fixed header while the page/content scrolls.
+- Edit Docket keeps its top and bottom work areas stationary while only line items scroll in the middle.
+- Dynamic correction choices no longer push the page/header upward when they appear.
+- Saved Delivery Docket viewer now gives the opened docket body a true touch-scroll area; docket action buttons remain accessible below it.
+- Opening a docket between other collapsed dates no longer clips the bottom of the docket.
+- iPhone quantity entry retains the no-auto-zoom behavior and now releases focus after Add Line to avoid visual-viewport shunting.
 
 WHAT CHANGED
 - Menu opens below the fixed black header instead of covering it.
@@ -27,7 +36,7 @@ SPACE-SAVING DIRECTION
 The delivery workspace now prioritizes the active controls and current lines. Help, optional notes and navigation are progressively disclosed rather than permanently consuming screen space.
 
 DEPLOYMENT
-Deploy all 7 files in this ZIP to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.46.
+Deploy all 7 files in this ZIP to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.47.
 
 Files:
 Magic-Dragon-logo.jpeg
