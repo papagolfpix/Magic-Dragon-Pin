@@ -1,20 +1,21 @@
-MAGIC DRAGON PIN v0.9.51 — FOCUSED DOCKET VIEWER TEST
+MAGIC DRAGON PIN v0.9.53 — UNIFIED DOCUMENT VIEWERS
 
-This test build keeps the working v0.9.49 header/menu behavior and replaces the expanding in-place delivery-docket accordion with a stable focused viewer.
+This release standardises how saved documents open across Records and their own pages.
 
-TEST FOCUS
-1. Open Delivery Docket.
-2. Tap each saved date in turn.
-3. The date selector area stays in the same place.
-4. The selected docket always appears in the same viewing zone underneath.
-5. Scroll inside the docket body; the Edit / Delivered / Delete / Print buttons stay fixed at the bottom of the viewer.
-6. Tap the selected date again to close the viewer.
-7. Menu still auto-collapses after 5 seconds of inactivity.
+FOCUSED CHANGES
+- Records no longer expands a full delivery docket inside the list.
+- Tapping a Delivery docket in Records opens the normal Delivery Docket page and selects that docket in the same stable viewer used there.
+- Sunday reports now use the same selector + one fixed detail-zone pattern rather than expanding accordions down the page.
+- Tapping a Sunday report in Records opens the Sunday Import archive with that report already selected.
+- Invoice and Payment rows continue to open the standalone invoice viewer directly.
+- Manual stock/weekly records remain available as fallback evidence but do not expose the old large manual-entry interface from Records.
+- No change to the 5-second Menu behaviour, delivery accounting rules, or Sunday reconciliation calculations.
 
-DEPLOYMENT
-Replace all 7 files in the GitHub Pages repository root, commit, wait for Pages deployment, then reopen/reload and confirm v0.9.51 in the black header.
+TEST ON IPHONE
+1. Open Records > Delivery dockets and tap several dates. Each should open the normal docket page with the selected docket in the stationary viewer.
+2. Open Records > Sunday reports and tap several dates. Each should open the Sunday archive with one selected report below the compact selector list.
+3. Open Records > Invoices / Payments and confirm they still open directly in the invoice viewer.
+4. Confirm no document expands inside the Records list and pushes later records down the screen.
 
-v0.9.51 focused cleanup
-- Removed Weekly Check from the normal main menu; the manual engine is retained only as a fallback capability.
-- Locked the normal app shell so only page content scrolls; the branded header stays outside the scrolling pane.
-- Matched the version badge width to the Menu button for a balanced header.
+DEPLOY
+Replace all 7 files in the GitHub Pages repository root, commit, wait for Pages deployment, then reopen/reload and confirm v0.9.53 in the black header.
