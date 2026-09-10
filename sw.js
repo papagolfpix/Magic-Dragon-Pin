@@ -1,4 +1,4 @@
-const CACHE_NAME = "magic-dragon-pin-v0.9.57";
+const CACHE_NAME = "magic-dragon-pin-v0.9.58";
 const APP_ASSETS = [
   "./",
   "./index.html",
@@ -35,6 +35,21 @@ self.addEventListener("fetch", event => {
           return response;
         })
         .catch(() => caches.match("./index.html"))
+    );
+    return;
+  }
+
+  if (new URL(event.request.url).pathname.endsWith("/Magic-Dragon-logo.jpeg")) {
+    event.respondWith(
+      fetch(event.request, {cache: "no-store"})
+        .then(response => {
+          if (response && response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request))
     );
     return;
   }
