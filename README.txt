@@ -1,4 +1,4 @@
-MAGIC DRAGON PIN v0.9.60 — DOCKET PDF + COMPACT DASHBOARD
+MAGIC DRAGON PIN v0.9.61 — RELIABLE DOCKET PDF
 
 WHAT CHANGED
 - Delivery dockets now create a real PDF file directly, using the same iPhone share/download approach as invoices.
@@ -15,4 +15,13 @@ TEST
 4. Open/save the PDF and confirm product rows, quantities, cost/retail, total, branch and date are present.
 
 DEPLOYMENT
-Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.60 in the header.
+Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.61 in the header.
+
+
+v0.9.61 focused changes:
+- Replaces native OK/Cancel history prompt with explicit Current docket / Include change history choices.
+- Takes a frozen docket snapshot before PDF creation.
+- Validates PDF bytes before sharing.
+- Disables the docket PDF button while generating.
+- Falls back to a direct PDF save if iPhone native sharing fails transiently.
+- Keeps object URLs alive longer for Safari.
