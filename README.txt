@@ -1,18 +1,19 @@
-MAGIC DRAGON PIN v0.9.58 — CORRECT SEAMLESS HEADER ARTWORK
+MAGIC DRAGON PIN v0.9.59 — FINAL NIGHT SHELL PATCH
 
-Focused visual update only.
+Focused update only.
 
 WHAT CHANGED
-- Replaced the separate square logo + typed title/subtitle with one seamless Magic Dragon banner graphic.
-- The banner occupies all available header space to the left of the version/Menu stack.
-- Version and Menu stay aligned on the right.
-- Existing header isolation, 5-second Menu behavior, workflows, financial logic, records, dockets and invoices are unchanged.
+- Rebuilt the normal app shell around a hard-clipped content viewport below the branded header.
+- Active pages scroll inside that clipped viewport; they cannot paint into the header region.
+- Menu button keeps its existing width and is now approximately square, with the version badge aligned above it.
+- Sunday Workflow remains a dedicated fullscreen workflow.
+- No business, reconciliation, invoice, correction, records, or product logic changed in this release.
+
+ACCEPTANCE TEST
+1. Open Dashboard on iPhone Safari.
+2. Scroll rapidly to the top and bottom several times.
+3. Confirm no Dashboard content appears inside/behind the black header rectangle.
+4. Open Menu and confirm the version/Menu stack remains aligned.
 
 DEPLOYMENT
-Replace all 7 files in the GitHub Pages repository root, commit, wait for Pages deployment, then reopen/reload and confirm v0.9.58 in the header.
-
-
-v0.9.58 focused fixes:
-- Cache-busted/network-first Magic Dragon banner asset so old square artwork cannot be served by an older service worker.
-- Existing invoice remains CURRENT when a docket correction was explicitly queued to next Sunday.
-- Dashboard correction alert now identifies the actual delivery date + branch instead of exposing an internal invoice ID.
+Replace all 7 files in the GitHub Pages repository root, commit, wait for Pages deployment, then reopen/reload and confirm v0.9.59 in the header.
