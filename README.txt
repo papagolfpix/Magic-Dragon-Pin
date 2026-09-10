@@ -1,18 +1,23 @@
-MAGIC DRAGON PIN v0.9.43 — COMPACT DOCKET EDITOR + CORRECTION RULES
+MAGIC DRAGON PIN v0.9.44 — COMPACT WORKSPACE + HEADER MENU
 
 WHAT CHANGED
-- Delivery docket editing is substantially more compact on phones. Existing lines now use a dense single-row layout instead of large stacked cards.
-- Product and quantity remain directly editable on saved dockets. Cost/retail values still follow the master catalogue automatically.
-- The correction choices are now full-width stacked rows so labels cannot overflow or clip on iPhone.
-- If a delivered docket affects an UNPAID invoice, Save remains disabled until one of two choices is made: Update this invoice, or Add to next Sunday’s invoice.
-- If the affected invoice is PAID, there is no choice and no paid-invoice edit. A short notice explains that the financial correction will be carried automatically to the next Sunday billing cycle.
-- If an edit temporarily breaks reconciliation, the app does not calculate a false partial invoice difference. It waits until the week reconciles before applying the locked correction treatment.
-- Next-Sunday corrections remain automatic and appear separately on the next invoice with a short explanation and positive/negative amount.
-- Post-delivery line changes retain human-readable history in the app; pre-delivery draft corrections do not.
-- Routine delivery-entry help is collapsed so the working screen is cleaner while help remains available when needed.
+- Magic Dragon black header now remains visible throughout normal app use where practical.
+- The permanent 3×3 navigation grid is hidden from the working screen. Tap Menu in the black header to drop it down; choosing a destination closes it again.
+- Sunday Workflow remains a focused full-screen workflow without the normal header/menu.
+- New/Edit Delivery is now a three-zone workspace: compact entry controls at the top, independently scrollable line items in the middle, and totals/correction/save controls fixed at the bottom.
+- Existing docket lines remain dense, directly editable rows.
+- Optional delivery note is collapsed by default to save vertical space, while existing notes reopen automatically when editing.
+- Editing status is reduced to a compact chip rather than a large explanatory banner.
+- Correction choices are compact tap rows; the radio control is explicitly sized to prevent the giant iPhone selection-box bug.
+- Unpaid affected invoices still offer only Update this invoice or Add to next Sunday’s invoice.
+- Paid affected invoices remain immutable and corrections automatically carry to the next Sunday invoice.
+- False partial-invoice correction amounts remain blocked whenever an edited week is not fully reconciled.
+
+SPACE-SAVING DIRECTION
+The delivery workspace now prioritizes the active controls and current lines. Help, optional notes and navigation are progressively disclosed rather than permanently consuming screen space.
 
 DEPLOYMENT
-Deploy all 7 files in this ZIP to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.43.
+Deploy all 7 files in this ZIP to the GitHub Pages repository root, commit, wait for Pages, open the app, tap Refresh App, and confirm v0.9.44.
 
 Files:
 Magic-Dragon-logo.jpeg
