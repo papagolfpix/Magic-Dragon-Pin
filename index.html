@@ -1551,7 +1551,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 .payPinTrend{margin:7px 0;border:1px solid #dbe3ec;border-radius:11px;background:#fff;padding:8px 9px}.payPinTrendTitle{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;font-weight:900;color:#475467;margin-bottom:6px}.payPinTrendGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.payPinTrendCell{min-width:0;border:1px solid #e4e8ef;border-radius:9px;padding:7px 5px;text-align:center;background:#fbfcfd}.payPinTrendCell .d{font-size:8px;line-height:1.1;color:#667085;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.payPinTrendCell .a{font-size:15px;line-height:1.15;font-weight:950;color:#172033;margin-top:4px;white-space:nowrap}.payPinTrendCell.current{background:#f4fbf6;border-color:#cfe8d5}.payPinTrendCell.current.due{background:#fffaf0;border-color:#f1d48b}.payPinTrendCell.current .d{color:#475467}.payPinTrendCell.current .a{color:#246b3a}.payPinTrendCell.current.due .a{color:#8a4b08}.payPinTrendArrow{font-size:11px;font-weight:900}.payPinTrendArrow.up{color:#246b3a}.payPinTrendArrow.down{color:#9a3412}.payPinTrendArrow.flat{color:#667085}@media(max-width:390px){.payPinTrendGrid{gap:4px}.payPinTrendCell{padding:6px 3px}.payPinTrendCell .a{font-size:14px}.payPinTrendCell .d{font-size:7px}}
 @media(max-width:390px){#home .dashboardQuickGrid .btn{font-size:11px!important}.dashboardActionCard .smallStatus{font-size:12px}}
 
-/* v0.9.77 invoice record layout + single-file backup */
+/* v0.9.78 invoice record layout + single-file backup */
 #invoiceViewerBody{max-width:760px;margin:0 auto}
 #invoiceViewer .invoiceCard{padding:11px 12px;margin-top:6px}
 #invoiceViewer .invoiceHead{padding-bottom:7px;margin-bottom:7px}
@@ -1574,7 +1574,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 @media(min-width:700px){#invoiceViewerBody{max-width:680px}#invoiceViewer .invoiceBranches{grid-template-columns:1fr 1fr}}
 
 
-/* v0.9.77 invoice record layout + single-file backup */
+/* v0.9.78 invoice record layout + single-file backup */
 #invoiceViewerBody{max-width:980px!important;margin:0 auto!important}
 #invoiceViewer .invoiceCard{padding:9px 10px!important;margin-top:4px!important}
 #invoiceViewer .invoiceHead{padding-bottom:5px!important;margin-bottom:5px!important;align-items:center!important}
@@ -1626,7 +1626,7 @@ body.docketMode .docketActiveScroll{display:block!important}
  #invoiceViewer .invoiceTotal .v{font-size:19px!important}
 }
 
-/* v0.9.77 professional saved-invoice document */
+/* v0.9.78 professional saved-invoice document */
 #invoiceViewerBody{max-width:1080px!important}
 #invoiceViewer .invoiceDocument{grid-column:1/-1;background:#fff;border:1px solid #cfd6e1;border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,.05)}
 #invoiceViewer .invoiceDocHeader{display:flex;justify-content:space-between;gap:24px;padding:20px 22px 16px;border-bottom:2px solid #172033;background:#fff}
@@ -1692,7 +1692,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.77 compact invoice management console */
+/* v0.9.78 compact invoice management console */
 #invoiceViewer .invoiceManagementTitle{
   display:block;
   margin:14px 2px 7px;
@@ -1876,6 +1876,154 @@ body.docketMode .docketActiveScroll{display:block!important}
  #invoiceViewer .invoicePaymentFields{gap:7px}
 }
 
+
+/* v0.9.78 — compact uniform invoice-management editors + iOS no-focus-zoom */
+#invoiceViewer .manageEditor{
+  padding:8px 9px 9px;
+}
+#invoiceViewer .manageFieldGrid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:7px;
+  align-items:end;
+}
+#invoiceViewer .manageFieldGrid label,
+#invoiceViewer .invoicePaymentFields>div{
+  min-width:0;
+  margin:0;
+}
+#invoiceViewer .manageFieldGrid label>span,
+#invoiceViewer .manageEditor label,
+#invoiceViewer .invoicePaymentFields label{
+  display:block;
+  margin:0 0 3px;
+  font-size:9px;
+  line-height:1.1;
+  font-weight:850;
+  color:#475467;
+}
+#invoiceViewer .manageFieldGrid input,
+#invoiceViewer .invoicePaymentFields input,
+#invoiceViewer .invoicePaymentFields select{
+  width:100%;
+  min-width:0;
+  max-width:100%;
+  box-sizing:border-box;
+  height:38px;
+  min-height:38px;
+  margin:0;
+  padding:5px 8px;
+  border:1px solid #cfd6e1;
+  border-radius:9px;
+  background:#fff;
+  color:#172033;
+  font-size:16px; /* iOS Safari: prevents automatic focus zoom */
+  line-height:1.1;
+}
+#invoiceViewer .invoicePaymentFields select{
+  padding-right:28px;
+}
+#invoiceViewer input[type="date"]{
+  -webkit-appearance:none;
+  appearance:none;
+}
+#invoiceViewer .manageButtonRow{
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);
+  gap:7px;
+  margin-top:8px;
+}
+#invoiceViewer .manageButtonRow .btn,
+#invoiceViewer .invoicePaymentSave{
+  width:100%;
+  min-width:0;
+  height:39px;
+  min-height:39px;
+  padding:5px 8px;
+  border-radius:9px;
+  font-size:12px;
+  line-height:1;
+}
+#invoiceViewer .compactToggle{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin:0 0 7px;
+}
+#invoiceViewer .compactToggle button{
+  width:100%;
+  height:38px;
+  min-height:38px;
+  padding:4px 8px;
+  border-radius:9px;
+  font-size:12px;
+}
+#invoiceViewer .invoicePaymentFields{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:7px;
+  align-items:end;
+  margin:0;
+}
+#invoiceViewer .invoicePaymentFields .full{
+  grid-column:1 / -1;
+}
+#invoiceViewer .compactNote{
+  margin-top:7px;
+}
+#invoiceViewer .invoicePaymentSave{
+  margin-top:7px;
+}
+#invoiceViewer .invoicePaymentSummary{
+  margin-top:6px;
+  padding:6px 8px;
+  min-height:0;
+  border-radius:8px;
+  font-size:9.5px;
+  line-height:1.2;
+}
+#invoiceViewer .manageEditor input::placeholder{
+  font-size:15px;
+  color:#a0a7b2;
+}
+#invoiceViewer .manageFieldGrid em,
+#invoiceViewer .invoicePaymentFields em{
+  font-size:8px;
+}
+@media(max-width:430px){
+  #invoiceViewer .manageEditor{padding:8px}
+  #invoiceViewer .manageFieldGrid{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:6px;
+  }
+  #invoiceViewer .invoicePaymentFields{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:6px;
+  }
+  #invoiceViewer .manageButtonRow{gap:6px}
+  #invoiceViewer .manageFieldGrid input,
+  #invoiceViewer .invoicePaymentFields input,
+  #invoiceViewer .invoicePaymentFields select{
+    height:37px;
+    min-height:37px;
+    padding:4px 7px;
+  }
+  #invoiceViewer .compactToggle button,
+  #invoiceViewer .manageButtonRow .btn,
+  #invoiceViewer .invoicePaymentSave{
+    height:38px;
+    min-height:38px;
+  }
+}
+/* Keep all form controls at 16px on touch devices so iOS does not zoom on focus. */
+@media(hover:none) and (pointer:coarse){
+  #invoiceViewer input,
+  #invoiceViewer select,
+  #invoiceViewer textarea{
+    font-size:16px !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1887,7 +2035,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
   <div class="hero">
     <div class="heroBanner"><img src="Magic-Dragon-logo.jpeg?v=0974" alt="Magic Dragon Samui — Pin's Weed Warehouse"></div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.9.77</span>
+      <span class="app-version">v0.9.78</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -5034,7 +5182,7 @@ function renderInvoiceRecord(id){
     <div class="manageEditor">
       <div class="manageFieldGrid">
         <label><span>Sent date</span><input id="invoiceSentDate" type="date" value="${escapeHtml(inv.sent?.date||today())}"></label>
-        <label><span>How sent <em>optional</em></span><input id="invoiceSentNote" placeholder="LINE, email…" value="${escapeHtml(inv.sent?.note||'')}"></label>
+        <label><span>How sent <em>optional</em></span><input id="invoiceSentNote" type="text" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="sentences" spellcheck="false" placeholder="LINE, email…" value="${escapeHtml(inv.sent?.note||'')}"></label>
       </div>
       <div class="manageButtonRow">
         <button class="btn gold" onclick="markInvoiceSent('${inv.id}','sent')">Save as Sent</button>
@@ -5061,9 +5209,9 @@ function renderInvoiceRecord(id){
       <div id="viewerPaidFields" class="invoicePaymentFields" style="display:${inv.payment?.status==='paid'?'grid':'none'}">
         <div><label>Payment date</label><input id="viewerPaymentDate" type="date" value="${escapeHtml(inv.payment?.date||today())}"></div>
         <div><label>Method</label><select id="viewerPaymentMethod" onchange="invoiceViewerPaymentMethodChanged()"><option value="">Choose…</option><option value="cash" ${inv.payment?.method==='cash'?'selected':''}>Cash</option><option value="bank_transfer" ${inv.payment?.method==='bank_transfer'?'selected':''}>Bank transfer</option><option value="promptpay" ${inv.payment?.method==='promptpay'?'selected':''}>PromptPay</option><option value="other" ${inv.payment?.method==='other'?'selected':''}>Other</option></select></div>
-        <div id="viewerPaymentOtherWrap" class="full" style="display:${inv.payment?.method==='other'?'block':'none'}"><label>Other payment method</label><input id="viewerPaymentOther" placeholder="Enter payment method" value="${escapeHtml(inv.payment?.methodOther||'')}"></div>
+        <div id="viewerPaymentOtherWrap" class="full" style="display:${inv.payment?.method==='other'?'block':'none'}"><label>Other payment method</label><input id="viewerPaymentOther" type="text" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" placeholder="Enter payment method" value="${escapeHtml(inv.payment?.methodOther||'')}"></div>
       </div>
-      <div class="invoicePaymentFields compactNote"><div class="full"><label>Payment note <em>optional</em></label><input id="viewerPaymentNote" placeholder="Reference or note" value="${escapeHtml(inv.payment?.note||'')}"></div></div>
+      <div class="invoicePaymentFields compactNote"><div class="full"><label>Payment note <em>optional</em></label><input id="viewerPaymentNote" type="text" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="sentences" spellcheck="false" placeholder="Reference or note" value="${escapeHtml(inv.payment?.note||'')}"></div></div>
       <button class="btn gold invoicePaymentSave" type="button" onclick="saveInvoiceViewerPayment('${inv.id}')">Save Payment</button>
       ${inv.payment?`<div class="invoicePaymentSummary ${inv.payment.status==='paid'?'paid':''}">${inv.payment.status==='paid'?`✓ Paid ${escapeHtml(invoiceDateLabel(inv.payment.date))}${inv.payment.method?` · ${escapeHtml(inv.payment.method==='bank_transfer'?'Bank transfer':inv.payment.method==='promptpay'?'PromptPay':inv.payment.method==='cash'?'Cash':inv.payment.methodOther||'Other')}`:''}`:'Saved as UNPAID'}${inv.payment.note?` · ${escapeHtml(inv.payment.note)}`:''}</div>`:''}
     </div>
@@ -5260,7 +5408,7 @@ document.getElementById("exportData").onclick=async()=>{
  const btn=document.getElementById("exportData");if(btn.disabled)return;btn.disabled=true;backupStatus("Preparing complete backup…");
  try{
   const sourceFiles=await exportArchivedSourceFiles(),counts=backupCounts();
-  const pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.9.77",createdAt:new Date().toISOString(),counts,sourceFilesCount:sourceFiles.length,data:JSON.parse(JSON.stringify(db)),sourceFiles};
+  const pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.9.78",createdAt:new Date().toISOString(),counts,sourceFilesCount:sourceFiles.length,data:JSON.parse(JSON.stringify(db)),sourceFiles};
   await downloadBackupPackage(pkg);
   backupStatus(`Backup ready: ${counts.deliveries} deliveries, ${counts.sundayReports} Sunday reports, ${counts.invoices} invoices, ${sourceFiles.length} archived source file${sourceFiles.length===1?"":"s"}.`);
  }catch(e){console.error(e);backupStatus("Backup could not be created. No app data was changed.",true);alert("The full backup could not be created. Your current app data has not been changed.")}
