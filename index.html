@@ -1458,7 +1458,7 @@ body.workflowMode .contentViewport>#sundayWizard.active{
 .docketActions button[aria-busy="true"]{opacity:.65;pointer-events:none}
 
 
-/* v0.9.63 Sunday completion + payment control polish */
+/* v0.9.64 Sunday completion + payment control polish */
 body.workflowMode #paymentPaidFields>div{min-width:0!important}
 body.workflowMode #paymentPaidFields input,
 body.workflowMode #paymentPaidFields select{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
@@ -1466,6 +1466,13 @@ body.workflowMode #paymentPaidFields select{padding-right:34px!important;text-ov
 @media(max-width:390px){
  body.workflowMode #paymentPaidFields{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:7px!important}
  body.workflowMode #paymentPaidFields input,body.workflowMode #paymentPaidFields select{font-size:16px!important;padding-left:8px!important;padding-right:28px!important}
+}
+
+/* v0.9.64 Sunday lifecycle + narrow-phone payment layout */
+@media(max-width:650px){
+  #paymentPaidFields{grid-template-columns:1fr!important;gap:8px!important}
+  #paymentPaidFields>div{grid-column:1/-1!important;min-width:0!important}
+  #paymentPaidFields input,#paymentPaidFields select{width:100%!important;max-width:100%!important;box-sizing:border-box!important}
 }
 </style>
 </head>
@@ -1478,7 +1485,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
   <div class="hero">
     <div class="heroBanner"><img src="Magic-Dragon-logo.jpeg?v=0960" alt="Magic Dragon Samui — Pin's Weed Warehouse"></div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.9.63</span>
+      <span class="app-version">v0.9.64</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -2228,7 +2235,7 @@ function buildDocketPdfBytes(d,includeHistory=false){
     line(L,y,R,y,.91,.92,.94,.45);
   });
   y-=16;
-  // v0.9.63: ink-light docket summary — compact, right-aligned total with outlined status
+  // v0.9.64: ink-light docket summary — compact, right-aligned total with outlined status
   line(L,y,R,y,.09,.13,.20,1.35);
   const totalLabel='TOTAL COST VALUE';
   const totalValue=pdfMoney(total);
@@ -3975,8 +3982,21 @@ migrateKnownCanonicalDuplicates();
 ensureKnownCatalogueAdditions();
 repairKnownProductPrices();
 let sundayWizardStep=2;
+let sundayWizardTargetDate=null;
 const SUNDAY_STEPS=["Import","Reconcile","Financial","Invoice","Payment"];
-function openSundayWizard(){
+function ensureCompletedSundayCycles(){if(!Array.isArray(db.completedSundayCycles))db.completedSundayCycles=[];}
+function isSundayCycleComplete(date){ensureCompletedSundayCycles();return db.completedSundayCycles.some(x=>x&&x.date===date&&x.status==="complete");}
+function completeSundayCycle(state){
+  const date=state?.items?.[0]?.report?.date;if(!date||!state.paymentSaved)return false;
+  ensureCompletedSundayCycles();
+  const inv=state.invoice;
+  const rec={date,status:"complete",completedAt:new Date().toISOString(),invoiceId:inv?.id||null,invoiceNumber:inv?.number||null};
+  const i=db.completedSundayCycles.findIndex(x=>x&&x.date===date);if(i>=0)db.completedSundayCycles[i]=rec;else db.completedSundayCycles.push(rec);
+  localStorage.setItem("mdpin-db",JSON.stringify(db));
+  return true;
+}
+function openSundayWizard(targetDate=null){
+  sundayWizardTargetDate=targetDate||null;
   const items=latestWizardReports();
   sundayWizardStep=items.length?2:1;
   switchTab("sundayWizard");
@@ -3985,6 +4005,7 @@ function openSundayWizard(){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 function exitSundayWorkflow(){
+  sundayWizardTargetDate=null;
   document.body.classList.remove("workflowMode");
   switchTab("home");
   const resetHomeScroll=()=>{
@@ -3996,9 +4017,11 @@ function exitSundayWorkflow(){
     document.body.scrollTop=0;
     window.scrollTo(0,0);
   };
-  resetHomeScroll();
-  requestAnimationFrame(()=>{resetHomeScroll();requestAnimationFrame(resetHomeScroll)});
-  setTimeout(resetHomeScroll,80);
+  const settle=()=>{resetHomeScroll();if(window.syncShellGeometry)window.syncShellGeometry();};
+  settle();
+  requestAnimationFrame(()=>{settle();requestAnimationFrame(settle)});
+  setTimeout(settle,80);
+  setTimeout(settle,220);
 }
 function wizardAction(type){
   document.body.classList.remove("workflowMode");
@@ -4012,10 +4035,11 @@ function wizardReportsForDate(date){
   return [...(db.sundayImports||[])].filter(r=>r.date===date).map(r=>({report:r,rec:reconcileExcelReport(r)}));
 }
 function latestWizardReports(){
-  ensureSundayArchive(); rebuildSundayReportChain();
-  const all=[...db.sundayImports].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
-  if(!all.length) return [];
-  return wizardReportsForDate(all[0].date);
+  ensureSundayArchive(); rebuildSundayReportChain();ensureCompletedSundayCycles();
+  if(sundayWizardTargetDate)return wizardReportsForDate(sundayWizardTargetDate);
+  const dates=[...new Set((db.sundayImports||[]).map(r=>r.date).filter(Boolean))].sort((a,b)=>String(b).localeCompare(String(a)));
+  const activeDate=dates.find(d=>!isSundayCycleComplete(d));
+  return activeDate?wizardReportsForDate(activeDate):[];
 }
 function financialReconcileReport(rep){
   const stock=reconcileExcelReport(rep);
@@ -4092,7 +4116,7 @@ function renderWizardChrome(state){
   else if(sundayWizardStep===3)canNext=state.financialReady;
   else if(sundayWizardStep===4)canNext=state.invoiceSaved;
   else if(sundayWizardStep===5)canNext=state.paymentSaved;
-  if(next){next.disabled=!canNext;next.textContent=sundayWizardStep>=5?'Complete':'Next ›';next.onclick=()=>{if(sundayWizardStep<5&&canNext){sundayWizardStep++;renderSundayWizard();window.scrollTo({top:0,behavior:"smooth"})}else if(sundayWizardStep===5&&canNext){alert("Sunday workflow complete. Invoice and payment status have been saved.");exitSundayWorkflow();}}}
+  if(next){next.disabled=!canNext;next.textContent=sundayWizardStep>=5?'Complete':'Next ›';next.onclick=()=>{if(sundayWizardStep<5&&canNext){sundayWizardStep++;renderSundayWizard();window.scrollTo({top:0,behavior:"smooth"})}else if(sundayWizardStep===5&&canNext){const fresh=currentWizardState();if(completeSundayCycle(fresh)){exitSundayWorkflow();renderDashboardAlerts();}else alert("This Sunday cycle is not ready to complete yet.");}}}
 }
 function renderStockWizard(items){
   let allGreen=true;
@@ -4451,13 +4475,13 @@ function correctionWorkflowMarkup(inv,live,oldBase,livePay,liveDelta){
 }
 function continueInvoiceCorrection(id){
   const inv=(db.invoices||[]).find(x=>x.id===id);if(!inv)return;
-  openSundayWizard();sundayWizardStep=2;renderSundayWizard();
+  openSundayWizard(inv.reportDate);sundayWizardStep=2;renderSundayWizard();
 }
 function createRevisionFromInvoice(id){
   const inv=(db.invoices||[]).find(x=>x.id===id);if(!inv)return;
   const live=currentWizardStateSafeForInvoice(inv.reportDate);
   if(!live?.financialGreen)return alert('Complete the correction reconciliation first.');
-  openSundayWizard();sundayWizardStep=4;renderSundayWizard();
+  openSundayWizard(inv.reportDate);sundayWizardStep=4;renderSundayWizard();
 }
 function queueCorrectionForNextSunday(id){
   const inv=(db.invoices||[]).find(x=>x.id===id);if(!inv)return;
@@ -4649,6 +4673,7 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
         if(spacer&&!document.body.classList.contains("workflowMode"))spacer.style.height=space+"px";
       });
     };
+    window.syncShellGeometry=syncGeometry;
     let menuTimer=null;
     const armMenuTimer=()=>{clearTimeout(menuTimer);if(tabs.classList.contains("menuOpen"))menuTimer=setTimeout(()=>window.closeMainMenu(),5000);};
     window.closeMainMenu=()=>{clearTimeout(menuTimer);menuTimer=null;tabs.classList.remove("menuOpen");btn.setAttribute("aria-expanded","false");};
@@ -4664,7 +4689,7 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
     window.addEventListener("load",syncGeometry,{once:true});
   })();
 
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0963", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0964", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;
