@@ -1,4 +1,4 @@
-MAGIC DRAGON PIN v0.9.64 — SUNDAY CYCLE RESET
+MAGIC DRAGON PIN v0.9.65 — ACTIVE SUNDAY JOB CONTROLLER
 
 Focused release:
 - Completing a fully valid Sunday Workflow now archives that Sunday cycle as complete.
@@ -9,7 +9,7 @@ Focused release:
 - Returning from the fullscreen Sunday Workflow forces a fresh shell geometry calculation and Dashboard scroll reset.
 
 DEPLOYMENT
-Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.64 in the header.
+Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.65 in the header.
 
 TEST
 1. Finish an in-progress Sunday cycle through Payment and tap Complete.
@@ -17,3 +17,10 @@ TEST
 3. Tap Sunday Wizard again: it should open at Import with no completed week active.
 4. If a newer Sunday report is imported, the Wizard should use that new date and compare it with the immediately prior Sunday.
 5. On iPhone, select Paid and confirm Payment date and Method are stacked with no overlap.
+
+
+v0.9.65
+- Normal Sunday Wizard resumes only an explicitly active imported cycle.
+- Completing a cycle clears the active job and returns the next Wizard opening to Step 1 Import.
+- Older historical Sunday reports are never auto-resurrected as current work.
+- Historical dates can still be opened deliberately from records/review paths.

@@ -1458,7 +1458,7 @@ body.workflowMode .contentViewport>#sundayWizard.active{
 .docketActions button[aria-busy="true"]{opacity:.65;pointer-events:none}
 
 
-/* v0.9.64 Sunday completion + payment control polish */
+/* v0.9.65 Sunday completion + payment control polish */
 body.workflowMode #paymentPaidFields>div{min-width:0!important}
 body.workflowMode #paymentPaidFields input,
 body.workflowMode #paymentPaidFields select{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
@@ -1468,7 +1468,7 @@ body.workflowMode #paymentPaidFields select{padding-right:34px!important;text-ov
  body.workflowMode #paymentPaidFields input,body.workflowMode #paymentPaidFields select{font-size:16px!important;padding-left:8px!important;padding-right:28px!important}
 }
 
-/* v0.9.64 Sunday lifecycle + narrow-phone payment layout */
+/* v0.9.65 Sunday lifecycle + narrow-phone payment layout */
 @media(max-width:650px){
   #paymentPaidFields{grid-template-columns:1fr!important;gap:8px!important}
   #paymentPaidFields>div{grid-column:1/-1!important;min-width:0!important}
@@ -1485,7 +1485,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
   <div class="hero">
     <div class="heroBanner"><img src="Magic-Dragon-logo.jpeg?v=0960" alt="Magic Dragon Samui — Pin's Weed Warehouse"></div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.9.64</span>
+      <span class="app-version">v0.9.65</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -2235,7 +2235,7 @@ function buildDocketPdfBytes(d,includeHistory=false){
     line(L,y,R,y,.91,.92,.94,.45);
   });
   y-=16;
-  // v0.9.64: ink-light docket summary — compact, right-aligned total with outlined status
+  // v0.9.65: ink-light docket summary — compact, right-aligned total with outlined status
   line(L,y,R,y,.09,.13,.20,1.35);
   const totalLabel='TOTAL COST VALUE';
   const totalValue=pdfMoney(total);
@@ -3688,7 +3688,7 @@ document.getElementById("importXlsx").onclick=async()=>{
  const ok=await loadSheetJS();if(!ok)return alert("The Excel reader could not load.");
  if(!detectedWorkbookBlocks.length)await preflightSelectedXlsxFiles();
  const chosen=detectedWorkbookBlocks.filter(b=>b.selected&&b.rep);if(!chosen.length)return alert("No weekly report blocks selected.");
- ensureSundayArchive();const results=document.getElementById("xlsxResults");results.innerHTML="";const reconReports=[];
+ ensureSundayArchive();const results=document.getElementById("xlsxResults");results.innerHTML="";const reconReports=[],importedDates=[];
  for(const block of chosen){
   const file=block.file,rep=block.rep;
   try{
@@ -3697,12 +3697,17 @@ document.getElementById("importXlsx").onclick=async()=>{
    const same=db.sundayImports.filter(x=>x.branch===rep.branch&&x.date===rep.date);
    if(same.length&&!confirm(`${rep.branch} already has a Sunday report for ${rep.date}.\n\nReplace it?`))continue;
    db.sundayImports=db.sundayImports.filter(x=>!(x.branch===rep.branch&&x.date===rep.date));db.weeks=db.weeks.filter(w=>!(w.branch===rep.branch&&w.date===rep.date));
-   db.sundayImports.push(record);reconReports.push(reconciliation);
+   db.sundayImports.push(record);reconReports.push(reconciliation);importedDates.push(rep.date);
    const weeklyRows=rep.rows.map(rr=>{const pm=canonicalProductMatchRow(rr),p=pm.product;return {productId:p?.id||null,sourceProductName:rr.product,opening:rr.oldStock,delivered:rr.newDeliver||0,takeout:rr.takeOut||0,closing:rr.inStock,reportedSold:rr.sold,sellPrice:rr.sellPrice,cost:rr.cost,historyKnown:rr.oldStock!=null,source:"Excel"}});
    db.weeks.push({id:"W"+Date.now()+Math.random().toString(36).slice(2,5),branch:rep.branch,date:rep.date,source:"Excel Sunday import",sourceArchiveId:id,rows:weeklyRows,totals:{sales:rep.rows.reduce((s,r)=>s+(r.totalSales||0),0),cost:rep.rows.reduce((s,r)=>s+(r.totalCost||0),0),profit:rep.rows.reduce((s,r)=>s+(r.totalProfit||0),0),bm:rep.rows.reduce((s,r)=>s+(r.bmShare||0),0),alix:rep.rows.reduce((s,r)=>s+(r.alixShare||0),0),pin:rep.rows.reduce((s,r)=>s+(r.pinShare||0),0)},importAudit:{type:"xlsx",archiveName:rep.archiveName,mathErrors,reconciliation}});
    save();
    results.insertAdjacentHTML("beforeend",`<div class="xlsxResult ${mathErrors.length?"warn":"ok"}"><b>${rep.archiveName}</b><br><span class="small">${displayBranchName(rep.branch)} • ${rep.date} • ${rep.rows.length} product rows</span></div>`);
   }catch(err){results.insertAdjacentHTML("beforeend",`<div class="xlsxResult bad"><b>${file.name}</b><br><span class="small">${err.message}</span></div>`)}
+ }
+ if(importedDates.length){
+   const newest=[...new Set(importedDates.filter(Boolean))].sort((a,b)=>String(b).localeCompare(String(a)))[0];
+   if(newest&&!isSundayCycleComplete(newest))db.activeSundayCycleDate=newest;
+   localStorage.setItem("mdpin-db",JSON.stringify(db));
  }
  cleanupDataIntegrity();refreshStoredReconciliations();retroactivelyRemapAllImports();renderArchive();renderExcelReconciliation(reconReports);renderMappingReview();renderMappingManager();renderAll();
 };
@@ -3992,6 +3997,8 @@ function completeSundayCycle(state){
   const inv=state.invoice;
   const rec={date,status:"complete",completedAt:new Date().toISOString(),invoiceId:inv?.id||null,invoiceNumber:inv?.number||null};
   const i=db.completedSundayCycles.findIndex(x=>x&&x.date===date);if(i>=0)db.completedSundayCycles[i]=rec;else db.completedSundayCycles.push(rec);
+  // A completed cycle is historical. Never let normal Sunday Wizard discovery resurrect older imports.
+  if(db.activeSundayCycleDate===date)db.activeSundayCycleDate=null;
   localStorage.setItem("mdpin-db",JSON.stringify(db));
   return true;
 }
@@ -4036,10 +4043,16 @@ function wizardReportsForDate(date){
 }
 function latestWizardReports(){
   ensureSundayArchive(); rebuildSundayReportChain();ensureCompletedSundayCycles();
+  // Explicit historical/review mode may open any requested date.
   if(sundayWizardTargetDate)return wizardReportsForDate(sundayWizardTargetDate);
-  const dates=[...new Set((db.sundayImports||[]).map(r=>r.date).filter(Boolean))].sort((a,b)=>String(b).localeCompare(String(a)));
-  const activeDate=dates.find(d=>!isSundayCycleComplete(d));
-  return activeDate?wizardReportsForDate(activeDate):[];
+  // Normal Sunday Wizard resumes ONLY a cycle that was explicitly started by an import.
+  // Historical unresolved reports are never auto-selected as current work.
+  const activeDate=db.activeSundayCycleDate||null;
+  if(!activeDate)return [];
+  if(isSundayCycleComplete(activeDate)){db.activeSundayCycleDate=null;localStorage.setItem("mdpin-db",JSON.stringify(db));return [];}
+  const items=wizardReportsForDate(activeDate);
+  if(!items.length){db.activeSundayCycleDate=null;localStorage.setItem("mdpin-db",JSON.stringify(db));return [];}
+  return items;
 }
 function financialReconcileReport(rep){
   const stock=reconcileExcelReport(rep);
@@ -4689,7 +4702,7 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
     window.addEventListener("load",syncGeometry,{once:true});
   })();
 
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0964", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0965", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;
