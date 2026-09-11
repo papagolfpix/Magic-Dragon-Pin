@@ -1,19 +1,19 @@
-MAGIC DRAGON PIN v0.9.73 — DASHBOARD INFORMATION AUDIT + INVOICE VIEW CLEANUP
+MAGIC DRAGON PIN v0.9.74 — INVOICE RECORD LAYOUT + SINGLE-FILE BACKUP
 
-CHANGES
-- Removed Saved Deliveries, Delivery Cost Value and Recorded Weekly Sales from the dashboard. They were historical/database aggregates rather than useful current operational indicators.
-- Confirmed the old Recorded Weekly Sales figure was the sum of stored historical week totals, not the current Sunday cycle; it is no longer shown as a dashboard KPI.
-- Kept operational dashboard information: unpaid invoices/current due, Sunday status, Pay Pin recent weeks, and recent activity.
-- Current Due to Pin remains based only on latest non-void, non-superseded unpaid invoices.
-- Tightened the saved invoice viewer layout, especially on iPad/wider screens, while preserving all accounting/payment controls.
-- Backup summary now counts paid invoice payment records correctly (the prior summary could show Payments: 0 even when an invoice contained a saved payment).
-- Restore/Create backup control typography made more consistent.
+Changes in this build
+- Reworked saved Invoice Records layout for phone and iPad.
+- Invoice branch figures now use compact four-column financial rows.
+- Reduced oversized padding, font sizes and control heights in the invoice viewer.
+- On iPad/tablet, Customer Copy and Payment panels now sit side-by-side.
+- PDF action is compact on wider screens while remaining touch-friendly on phone.
+- Full Backup now shares only the JSON backup file. The iOS share title was removed because iOS can expose that title as a second text.txt item.
+- Backup payment count now recognises both the structured payment record and the invoice paid status for compatibility with older saved data.
 
-DEPLOY
-Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.73 in the header.
+Deployment
+Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.74 in the header.
 
-TEST
-1. Dashboard should no longer show Saved Deliveries, Delivery Cost Value or Recorded Weekly Sales.
-2. Pay Pin strip should show 06 Sep 2026 = THB 11,194 and CURRENT DUE = THB 0 for the current restored data.
-3. Open Records > Invoices and check that the invoice record is compact and readable on iPhone/iPad.
-4. Create a backup and verify the restore preview reports Payments: 1 for the currently paid invoice.
+Quick checks
+1. Open Records > Invoices > a saved invoice on iPad: the record should be substantially denser and use the tablet width intelligently.
+2. On iPhone, branch figures should appear as four compact columns instead of a tall 2 x 2 block.
+3. Settings > Create full backup: the iOS Save sheet should show one JSON item only, not JSON + text.txt.
+4. Restore preview should count an already-paid invoice under Payments.
