@@ -1,40 +1,43 @@
-MAGIC DRAGON PIN v0.9.89 — PRODUCT FAMILY / VARIANT MIGRATION
+MAGIC DRAGON PIN v0.9.90 — ARCHIVE / RESTORE PRODUCTS
 
-NON-DESTRUCTIVE MIGRATION
-Existing product IDs are retained. Historical dockets, Sunday reports, invoices, mappings and audit records are not rewritten.
+Built from verified v0.9.89.
 
-STANDARD CLASSIFICATION
-Cost 60 / Retail 150  -> 1g variant, raw weight 1g
-Cost 300 / Retail 600 -> 5g variant, raw weight 5g
-Cost 75 / Retail 150  -> Pre-Roll variant, estimated raw weight 1g
+WHAT CHANGED
+- Product Catalogue now supports Archive and Restore.
+- Each individual variant can be archived.
+- An entire parent-product family can be archived with Archive all.
+- Archived products are hidden by default.
+- Show archived displays them with Restore controls.
+- Active/archived counts are shown in Product Catalogue.
 
-Other price combinations are marked Special/Exception for later review. Gummies/edibles and identifiable hash/mousse/concentrates remain exceptions.
-
-CATALOGUE MODEL
-Each existing SKU gains:
-- parentName
-- variantKey
-- variantLabel
-- unitWeightGrams
-- catalogueException
-
-Example:
-Super Lemon Haze
-  1g
-  5g
-  Pre-Roll
+IMPORTANT SAFETY BEHAVIOUR
+Archiving is NOT deletion.
+An archived product:
+- disappears from new Delivery Docket product selection
+- disappears from normal active catalogue view
+- retains the same product ID
+- remains available to historical dockets, Sunday reports, invoices, mappings, analytics and audit history
+- can be restored at any time
 
 ADD PRODUCT
-Enter the raw/base product once, then select any combination of:
-- 1g
-- 5g
-- Pre-Roll
-- Special/custom
+If Pin tries to recreate a standard variant that already exists but is archived, the app tells her to Restore it rather than create a duplicate.
 
-An existing parent can receive a new variant later.
+NOT CHANGED
+- Historical records
+- Sunday reconciliation logic
+- Invoice calculations
+- Suggested-delivery logic
+- Combined packing view
+- Product family / variant migration
+- Existing delivery docket viewer/editor
 
-IMPORTANT
-The actual sellable SKU records remain intact so existing delivery, Sunday import, pricing and historical logic continue to work.
-
-NEXT SMALL STEP
-Archive/hide obsolete products without deletion.
+TEST
+1. Settings > Product Catalogue.
+2. Archive one obsolete variant.
+3. Confirm it disappears from the active catalogue.
+4. Start a New Delivery and confirm it is absent from the product dropdown/search list.
+5. Return to Product Catalogue > Show archived.
+6. Confirm the item is still present and marked ARCHIVED.
+7. Restore it.
+8. Confirm it returns to New Delivery selections.
+9. Test Archive all on a product family only if comfortable; Restore all reverses it.
