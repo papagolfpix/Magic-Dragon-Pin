@@ -1468,7 +1468,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
   <div class="hero">
     <div class="heroBanner"><img src="Magic-Dragon-logo.jpeg?v=0960" alt="Magic Dragon Samui — Pin's Weed Warehouse"></div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.9.61</span>
+      <span class="app-version">v0.9.62</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -2217,12 +2217,18 @@ function buildDocketPdfBytes(d,includeHistory=false){
     txt(pdfMoney(r.amount),cols[4]+5,y+9,8.7,true);
     line(L,y,R,y,.91,.92,.94,.45);
   });
-  y-=18;
-  rect(L,y-48,W,48,.09,.13,.20,null,null,null);
-  txt('TOTAL COST VALUE',L+15,y-18,8.5,true,.78,.81,.86);
-  txt(pdfMoney(total),L+15,y-39,18,true,1,1,1);
-  txt(d.deliveredAt?'DELIVERED':'NOT DELIVERED',R-105,y-31,9,true,d.deliveredAt ? .15 : .45,d.deliveredAt ? .42 : .45,d.deliveredAt ? .24 : .45);
-  y-=68;
+  y-=16;
+  // v0.9.62: ink-light docket summary — compact, right-aligned total with outlined status
+  line(L,y,R,y,.09,.13,.20,1.35);
+  const totalLabel='TOTAL COST VALUE';
+  const totalValue=pdfMoney(total);
+  txt(totalLabel,R-150,y-18,8.2,true,.38,.42,.50);
+  txt(totalValue,R-150,y-39,17,true,.09,.13,.20);
+  const statusText=d.deliveredAt?'DELIVERED':'NOT DELIVERED';
+  const statusW=d.deliveredAt?72:98;
+  rect(L,y-38,statusW,24,null,null,null,d.deliveredAt?.27:.55,d.deliveredAt?.55:.55,d.deliveredAt?.34:.55,.9);
+  txt(statusText,L+9,y-30,8.2,true,d.deliveredAt?.18:.42,d.deliveredAt?.46:.42,d.deliveredAt?.26:.42);
+  y-=58;
   if(includeHistory&&(d.lineChanges||[]).length){
     txt('POST-DELIVERY CHANGE HISTORY',L,y,9,true,.55,.25,.08);y-=16;
     for(const ch of (d.lineChanges||[]).slice(0,8)){
@@ -4637,7 +4643,7 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
     window.addEventListener("load",syncGeometry,{once:true});
   })();
 
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0961", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0962", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;

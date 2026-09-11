@@ -1,27 +1,15 @@
-MAGIC DRAGON PIN v0.9.61 — RELIABLE DOCKET PDF
+MAGIC DRAGON PIN v0.9.62 — INK-LIGHT DOCKET PDF
 
-WHAT CHANGED
-- Delivery dockets now create a real PDF file directly, using the same iPhone share/download approach as invoices.
-- Removed dependence on the browser print-preview path that could produce a blank docket.
-- Post-delivery history remains optional when creating the docket PDF.
-- Dashboard controls, metrics and alerts are substantially more compact.
-- Static branch/split information is moved behind a small Business setup disclosure instead of occupying the main dashboard.
-- No reconciliation, pricing, split, invoice, correction, or import logic changed.
-
-TEST
-1. Open Dashboard and confirm it is visibly more compact.
-2. Open Delivery Docket, select a saved docket, tap Create / Share PDF.
-3. On iPhone confirm the share sheet receives one populated PDF file (not a blank print preview).
-4. Open/save the PDF and confirm product rows, quantities, cost/retail, total, branch and date are present.
+Focused change only:
+- Keeps the proven v0.9.61 docket PDF generation/share mechanism unchanged.
+- Removes the large solid black total bar from the docket PDF.
+- Moves TOTAL COST VALUE and amount to the right-hand side, aligned with the money columns.
+- Replaces the heavy delivered area with a small outlined status label.
+- Uses white space and thin rules so printed dockets use substantially less ink.
+- Applies the same presentation to both Current docket and Include change history PDFs.
 
 DEPLOYMENT
-Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.61 in the header.
+Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.62 in the header.
 
-
-v0.9.61 focused changes:
-- Replaces native OK/Cancel history prompt with explicit Current docket / Include change history choices.
-- Takes a frozen docket snapshot before PDF creation.
-- Validates PDF bytes before sharing.
-- Disables the docket PDF button while generating.
-- Falls back to a direct PDF save if iPhone native sharing fails transiently.
-- Keeps object URLs alive longer for Safari.
+TEST
+Open one saved docket and create both PDF versions. Confirm the total appears on the right and the large black bar is gone.
