@@ -1548,6 +1548,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 .dashboardRecentTitle{font-size:12px;font-weight:900;color:#475467;margin-bottom:3px}
 .dashboardRecent>div:not(.dashboardRecentTitle){display:flex;align-items:center;justify-content:space-between;gap:10px;padding:5px 0;border-top:1px solid #edf0f4;font-size:11px}
 .dashboardRecent>div:nth-child(2){border-top:0}.dashboardRecent span{color:#667085}.dashboardRecent b{text-align:right;color:#1f2937}
+.payPinTrend{margin:7px 0;border:1px solid #dbe3ec;border-radius:11px;background:#fff;padding:8px 9px}.payPinTrendTitle{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;font-weight:900;color:#475467;margin-bottom:6px}.payPinTrendGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.payPinTrendCell{min-width:0;border:1px solid #e4e8ef;border-radius:9px;padding:7px 5px;text-align:center;background:#fbfcfd}.payPinTrendCell .d{font-size:8px;line-height:1.1;color:#667085;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.payPinTrendCell .a{font-size:15px;line-height:1.15;font-weight:950;color:#172033;margin-top:4px;white-space:nowrap}.payPinTrendCell.current{background:#f4fbf6;border-color:#cfe8d5}.payPinTrendCell.current.due{background:#fffaf0;border-color:#f1d48b}.payPinTrendCell.current .d{color:#475467}.payPinTrendCell.current .a{color:#246b3a}.payPinTrendCell.current.due .a{color:#8a4b08}.payPinTrendArrow{font-size:11px;font-weight:900}.payPinTrendArrow.up{color:#246b3a}.payPinTrendArrow.down{color:#9a3412}.payPinTrendArrow.flat{color:#667085}@media(max-width:390px){.payPinTrendGrid{gap:4px}.payPinTrendCell{padding:6px 3px}.payPinTrendCell .a{font-size:14px}.payPinTrendCell .d{font-size:7px}}
 @media(max-width:390px){#home .dashboardQuickGrid .btn{font-size:11px!important}.dashboardActionCard .smallStatus{font-size:12px}}
 </style>
 </head>
@@ -1558,9 +1559,9 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
 </script>
 <div class="app">
   <div class="hero">
-    <div class="heroBanner"><img src="Magic-Dragon-logo.jpeg?v=0971" alt="Magic Dragon Samui — Pin's Weed Warehouse"></div>
+    <div class="heroBanner"><img src="Magic-Dragon-logo.jpeg?v=0972" alt="Magic Dragon Samui — Pin's Weed Warehouse"></div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.9.71</span>
+      <span class="app-version">v0.9.72</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -1587,6 +1588,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
     <div id="dashboardAlerts" class="dashboardAlerts" style="display:none"></div>
     <div id="dashboardActionMetrics" class="grid dashboardActionMetrics"></div>
     <div class="grid" id="metrics"></div>
+    <div class="payPinTrend" id="payPinTrend"></div>
     <div class="dashboardRecent" id="dashboardRecent"></div>
   </section>
 
@@ -2552,23 +2554,39 @@ window.editProductName=(id,value)=>{
  retroactivelyRemapAllImports(false);save();renderMasterProductSetup();
 }
 function renderMetrics(){
- const ds=db.deliveries.reduce((s,d)=>s+d.lines.reduce((a,l)=>{const p=db.products.find(x=>x.id===l.productId);return a+l.qty*p.cost},0),0);
- const ws=db.weeks.reduce((s,w)=>s+(w.totals?.sales||0),0), pp=db.weeks.reduce((s,w)=>s+(w.totals?.pin||0),0);
- const latestByDate={};(db.invoices||[]).filter(i=>i&&i.status!=="void").forEach(i=>{const d=i.reportDate;if(!latestByDate[d]||Number(i.version||1)>Number(latestByDate[d].version||1))latestByDate[d]=i;});
- const unpaid=Object.values(latestByDate).filter(i=>!i.supersededBy&&i.payment?.status!=="paid");
+ const ds=db.deliveries.reduce((s,d)=>s+d.lines.reduce((a,l)=>{const p=db.products.find(x=>x.id===l.productId);return a+l.qty*(p?.cost||0)},0),0);
+ const ws=db.weeks.reduce((s,w)=>s+(w.totals?.sales||0),0);
+ const latestByDate={};(db.invoices||[]).filter(i=>i&&i.status!=="void").forEach(i=>{const d=i.reportDate;if(!d)return;if(!latestByDate[d]||Number(i.version||1)>Number(latestByDate[d].version||1))latestByDate[d]=i;});
+ const currentInvoices=Object.values(latestByDate).filter(i=>!i.supersededBy);
+ const unpaid=currentInvoices.filter(i=>i.payment?.status!=="paid");
  const unpaidTotal=unpaid.reduce((n,i)=>n+Number(i.totals?.payPin||0),0);
  const activeDate=db.activeSundayCycleDate||null;
  const sundayLabel=activeDate?`In progress · ${recordDateLabel(activeDate)}`:"Ready for next Sunday";
  const am=document.getElementById("dashboardActionMetrics");if(am)am.innerHTML=`<div class="dashboardActionCard ${unpaid.length?'warn':'ok'}"><div class="k">Unpaid invoices</div><div class="v">${unpaid.length?`${unpaid.length} · ${baht(unpaidTotal)}`:"None"}</div></div><div class="dashboardActionCard ${activeDate?'warn':'ok'}"><div class="k">Sunday status</div><div class="v smallStatus">${escapeHtml(sundayLabel)}</div></div>`;
  document.getElementById("metrics").innerHTML=[
-  ["Saved deliveries",db.deliveries.length],["Delivery cost value",baht(ds)],["Recorded weekly sales",baht(ws)],["Calculated Pay Pin",baht(pp)]
+  ["Saved deliveries",db.deliveries.length],["Delivery cost value",baht(ds)],["Recorded weekly sales",baht(ws)]
  ].map(x=>`<div class="card metric"><div class="k">${x[0]}</div><div class="v">${x[1]}</div></div>`).join("");
+ const trend=document.getElementById("payPinTrend");
+ if(trend){
+   const paid=currentInvoices.filter(i=>i.payment?.status==='paid').sort((a,b)=>String(b.reportDate||b.payment?.date||'').localeCompare(String(a.reportDate||a.payment?.date||'')));
+   const recentPaid=paid.slice(0,3).reverse();
+   const cells=[];
+   for(let i=0;i<3;i++){
+     const inv=recentPaid[i-(3-recentPaid.length)];
+     if(inv){cells.push(`<div class="payPinTrendCell"><div class="d">${escapeHtml(recordDateLabel(inv.reportDate||inv.payment?.date))}</div><div class="a">${baht(inv.totals?.payPin||0)}</div></div>`)}
+     else cells.push(`<div class="payPinTrendCell"><div class="d">Earlier week</div><div class="a">—</div></div>`);
+   }
+   cells.push(`<div class="payPinTrendCell current ${unpaidTotal>0?'due':''}"><div class="d">CURRENT DUE</div><div class="a">${baht(unpaidTotal)}</div></div>`);
+   let arrow='';
+   if(recentPaid.length>=2){const prev=Number(recentPaid[recentPaid.length-2].totals?.payPin||0),last=Number(recentPaid[recentPaid.length-1].totals?.payPin||0);if(prev>0){const pct=Math.round(((last-prev)/prev)*100);arrow=`<span class="payPinTrendArrow ${pct>0?'up':pct<0?'down':'flat'}">${pct>0?'↑':pct<0?'↓':'→'} ${Math.abs(pct)}%</span>`;}}
+   trend.innerHTML=`<div class="payPinTrendTitle"><span>Pay Pin · recent weeks</span>${arrow}</div><div class="payPinTrendGrid">${cells.join('')}</div>`;
+ }
  const recent=document.getElementById("dashboardRecent");
  if(recent){
    const latestDelivery=[...(db.deliveries||[])].sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')))[0];
    ensureCompletedSundayCycles();
    const latestCycle=[...(db.completedSundayCycles||[])].filter(x=>x?.status==='complete').sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')))[0];
-   const paidInvoices=Object.values(latestByDate).filter(i=>!i.supersededBy&&i.payment?.status==='paid').sort((a,b)=>String(b.payment?.date||b.reportDate||'').localeCompare(String(a.payment?.date||a.reportDate||'')));
+   const paidInvoices=currentInvoices.filter(i=>i.payment?.status==='paid').sort((a,b)=>String(b.payment?.date||b.reportDate||'').localeCompare(String(a.payment?.date||a.reportDate||'')));
    const latestPaid=paidInvoices[0];
    const rows=[];
    if(latestDelivery)rows.push(`<div><span>Last delivery</span><b>${escapeHtml(recordDateLabel(latestDelivery.date))} · ${escapeHtml(displayBranchName(latestDelivery.branch))}</b></div>`);
@@ -2577,7 +2595,6 @@ function renderMetrics(){
    recent.innerHTML=rows.length?`<div class="dashboardRecentTitle">Recent activity</div>${rows.join('')}`:'';
    recent.style.display=rows.length?'block':'none';
  }
-
 }
 
 function auditData(){
@@ -4908,7 +4925,7 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
     window.addEventListener("load",syncGeometry,{once:true});
   })();
 
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0971", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0972", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;
