@@ -1551,7 +1551,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 .payPinTrend{margin:7px 0;border:1px solid #dbe3ec;border-radius:11px;background:#fff;padding:8px 9px}.payPinTrendTitle{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;font-weight:900;color:#475467;margin-bottom:6px}.payPinTrendGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.payPinTrendCell{min-width:0;border:1px solid #e4e8ef;border-radius:9px;padding:7px 5px;text-align:center;background:#fbfcfd}.payPinTrendCell .d{font-size:8px;line-height:1.1;color:#667085;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.payPinTrendCell .a{font-size:15px;line-height:1.15;font-weight:950;color:#172033;margin-top:4px;white-space:nowrap}.payPinTrendCell.current{background:#f4fbf6;border-color:#cfe8d5}.payPinTrendCell.current.due{background:#fffaf0;border-color:#f1d48b}.payPinTrendCell.current .d{color:#475467}.payPinTrendCell.current .a{color:#246b3a}.payPinTrendCell.current.due .a{color:#8a4b08}.payPinTrendArrow{font-size:11px;font-weight:900}.payPinTrendArrow.up{color:#246b3a}.payPinTrendArrow.down{color:#9a3412}.payPinTrendArrow.flat{color:#667085}@media(max-width:390px){.payPinTrendGrid{gap:4px}.payPinTrendCell{padding:6px 3px}.payPinTrendCell .a{font-size:14px}.payPinTrendCell .d{font-size:7px}}
 @media(max-width:390px){#home .dashboardQuickGrid .btn{font-size:11px!important}.dashboardActionCard .smallStatus{font-size:12px}}
 
-/* v0.9.80 invoice record layout + single-file backup */
+/* v0.9.82 invoice record layout + single-file backup */
 #invoiceViewerBody{max-width:760px;margin:0 auto}
 #invoiceViewer .invoiceCard{padding:11px 12px;margin-top:6px}
 #invoiceViewer .invoiceHead{padding-bottom:7px;margin-bottom:7px}
@@ -1574,7 +1574,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 @media(min-width:700px){#invoiceViewerBody{max-width:680px}#invoiceViewer .invoiceBranches{grid-template-columns:1fr 1fr}}
 
 
-/* v0.9.80 invoice record layout + single-file backup */
+/* v0.9.82 invoice record layout + single-file backup */
 #invoiceViewerBody{max-width:980px!important;margin:0 auto!important}
 #invoiceViewer .invoiceCard{padding:9px 10px!important;margin-top:4px!important}
 #invoiceViewer .invoiceHead{padding-bottom:5px!important;margin-bottom:5px!important;align-items:center!important}
@@ -1626,7 +1626,7 @@ body.docketMode .docketActiveScroll{display:block!important}
  #invoiceViewer .invoiceTotal .v{font-size:19px!important}
 }
 
-/* v0.9.80 professional saved-invoice document */
+/* v0.9.82 professional saved-invoice document */
 #invoiceViewerBody{max-width:1080px!important}
 #invoiceViewer .invoiceDocument{grid-column:1/-1;background:#fff;border:1px solid #cfd6e1;border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,.05)}
 #invoiceViewer .invoiceDocHeader{display:flex;justify-content:space-between;gap:24px;padding:20px 22px 16px;border-bottom:2px solid #172033;background:#fff}
@@ -1692,7 +1692,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.80 compact invoice management console */
+/* v0.9.82 compact invoice management console */
 #invoiceViewer .invoiceManagementTitle{
   display:block;
   margin:14px 2px 7px;
@@ -1877,7 +1877,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.80 — compact uniform invoice-management editors + iOS no-focus-zoom */
+/* v0.9.82 — compact uniform invoice-management editors + iOS no-focus-zoom */
 #invoiceViewer .manageEditor{
   padding:8px 9px 9px;
 }
@@ -2025,7 +2025,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.80 — hard iOS no-focus-zoom fix for payment reference note.
+/* v0.9.82 — hard iOS no-focus-zoom fix for payment reference note.
    This overrides an older invoicePaymentFields rule that still used 12px !important. */
 #invoiceViewer #viewerPaymentNote{
   font-size:16px !important;
@@ -2041,7 +2041,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.80 — invisible dragon Home/Dashboard hotspot */
+/* v0.9.82 — invisible dragon Home/Dashboard hotspot */
 .heroBanner{
   position:relative!important;
 }
@@ -2083,6 +2083,187 @@ body.docketMode .docketActiveScroll{display:block!important}
   }
 }
 
+
+/* v0.9.82 — Pin-first Sunday handover dashboard */
+#home .pinDashboard{
+  margin:0 0 8px;
+  padding:10px;
+  border:1px solid #d8dee8;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 1px 3px rgba(23,32,51,.04);
+}
+#home .pinDashboardHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:8px;
+}
+#home .pinDashboardEyebrow{
+  font-size:8px;
+  line-height:1;
+  letter-spacing:.14em;
+  font-weight:950;
+  color:#8a6410;
+}
+#home .pinDashboardTitle{
+  margin-top:3px;
+  font-size:16px;
+  line-height:1.1;
+  font-weight:950;
+  color:#172033;
+}
+#home .pinDashboardState{
+  flex:0 0 auto;
+  padding:5px 8px;
+  border-radius:999px;
+  background:#eaf8ef;
+  color:#216b3a;
+  font-size:9px;
+  line-height:1;
+  font-weight:950;
+}
+#home .pinDashboardState.active{
+  background:#fff3d6;
+  color:#895708;
+}
+#home .pinSundayPrimary{
+  width:100%;
+  min-height:60px;
+  box-sizing:border-box;
+  display:grid;
+  grid-template-columns:36px minmax(0,1fr) 16px;
+  align-items:center;
+  gap:9px;
+  margin:0;
+  padding:9px 10px;
+  border:0;
+  border-radius:12px;
+  background:#9a7114;
+  color:#fff;
+  text-align:left;
+  font:inherit;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+#home .pinSundayPrimary:active{transform:scale(.995)}
+#home .pinSundayIcon{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:rgba(255,255,255,.15);
+  font-size:18px;
+  font-weight:950;
+}
+#home .pinSundayCopy{
+  min-width:0;
+  display:grid;
+  gap:2px;
+}
+#home .pinSundayCopy b{
+  font-size:15px;
+  line-height:1.08;
+}
+#home .pinSundayCopy small{
+  font-size:9.5px;
+  line-height:1.2;
+  opacity:.9;
+}
+#home .pinSundayArrow{
+  font-size:27px;
+  line-height:1;
+  font-weight:700;
+}
+#home .pinTaskGrid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:6px;
+  margin-top:7px;
+}
+#home .pinTaskButton{
+  min-width:0;
+  min-height:66px;
+  box-sizing:border-box;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:flex-start;
+  gap:4px;
+  padding:7px;
+  border:1px solid #dbe1e9;
+  border-radius:10px;
+  background:#f9fafc;
+  color:#172033;
+  text-align:left;
+  font:inherit;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+#home .pinTaskButton:active{background:#f0f3f7}
+#home .pinTaskIcon{
+  width:25px;
+  height:25px;
+  display:grid;
+  place-items:center;
+  border-radius:7px;
+  background:#172033;
+  color:#fff;
+  font-size:13px;
+  font-weight:950;
+}
+#home .pinTaskButton span:last-child{
+  min-width:0;
+  display:grid;
+  gap:1px;
+}
+#home .pinTaskButton b{
+  font-size:10.5px;
+  line-height:1.1;
+}
+#home .pinTaskButton small{
+  font-size:8px;
+  line-height:1.15;
+  color:#6b7280;
+}
+@media(max-width:380px){
+  #home .pinDashboard{padding:8px}
+  #home .pinDashboardTitle{font-size:15px}
+  #home .pinSundayPrimary{min-height:56px;padding:8px}
+  #home .pinSundayCopy b{font-size:14px}
+  #home .pinTaskGrid{gap:5px}
+  #home .pinTaskButton{min-height:62px;padding:6px}
+  #home .pinTaskButton b{font-size:9.8px}
+  #home .pinTaskButton small{font-size:7.5px}
+}
+
+
+/* v0.9.82 — experimental A–Z delivery product scrubber */
+#delivery .deliveryAlphabetWrap{margin:2px 0 4px}
+#delivery .deliveryAlphabetScrubber{
+  position:relative;width:100%;height:30px;box-sizing:border-box;display:flex;align-items:center;
+  border:1px solid #cfd6e1;border-radius:9px;background:#f8fafc;user-select:none;-webkit-user-select:none;
+  touch-action:none;cursor:ew-resize;-webkit-tap-highlight-color:transparent
+}
+#delivery .deliveryAlphabetLetters{
+  width:100%;box-sizing:border-box;padding:0 5px;white-space:nowrap;overflow:hidden;text-align:center;
+  color:#667085;font-size:7.4px;line-height:1;font-weight:850;letter-spacing:.15px;pointer-events:none
+}
+#delivery .deliveryAlphabetThumb{
+  position:absolute;z-index:4;left:0;top:50%;transform:translate(-50%,-50%);
+  width:28px;height:28px;display:none;place-items:center;border-radius:8px;background:#172033;color:#fff;
+  border:2px solid #fff;box-shadow:0 2px 7px rgba(23,32,51,.24);font-size:14px;line-height:1;font-weight:950;
+  pointer-events:none
+}
+#delivery .deliveryAlphabetScrubber.active{border-color:#9a7114;background:#fffdf7}
+@media(max-width:430px){
+  #delivery .deliveryAlphabetScrubber{height:29px;border-radius:8px}
+  #delivery .deliveryAlphabetLetters{font-size:7px;padding:0 4px;letter-spacing:0}
+  #delivery .deliveryAlphabetThumb{width:27px;height:27px;font-size:13px}
+}
+
 </style>
 </head>
 <body>
@@ -2097,7 +2278,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
       <button class="heroHomeHotspot noPrint" type="button" aria-label="Return to Dashboard" title="Dashboard" onclick="returnToDashboardFromHeader()"></button>
     </div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.9.80</span>
+      <span class="app-version">v0.9.82</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -2113,12 +2294,37 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
 
   <main class="contentViewport" id="contentViewport">
   <section id="home" class="section active">
-    <div class="homeQuick noPrint">
-      <div class="homeQuickTitle">Quick actions</div>
-      <div class="homeQuickGrid dashboardQuickGrid">
-        <button class="btn gold" onclick="switchTab('docket')">Delivery Dockets</button>
-        <button class="btn" onclick="openSundayWizard()">Sunday Wizard</button>
-        <button class="btn alt" onclick="switchTab('history')">Records</button>
+    <div class="pinDashboard noPrint">
+      <div class="pinDashboardHead">
+        <div>
+          <div class="pinDashboardEyebrow">PIN'S WORKSPACE</div>
+          <div class="pinDashboardTitle">What do you need to do?</div>
+        </div>
+        <div class="pinDashboardState" id="pinDashboardState">Ready</div>
+      </div>
+
+      <button class="pinSundayPrimary" id="pinSundayPrimary" type="button" onclick="openSundayWizard()">
+        <span class="pinSundayIcon">✓</span>
+        <span class="pinSundayCopy">
+          <b id="pinSundayPrimaryTitle">Sunday Workflow</b>
+          <small id="pinSundayPrimaryText">Import reports, reconcile, invoice and record payment.</small>
+        </span>
+        <span class="pinSundayArrow">›</span>
+      </button>
+
+      <div class="pinTaskGrid">
+        <button class="pinTaskButton" type="button" onclick="openDeliveryCreate()">
+          <span class="pinTaskIcon">＋</span>
+          <span><b>New Delivery</b><small>Create a delivery docket</small></span>
+        </button>
+        <button class="pinTaskButton" type="button" onclick="openDashboardInvoices()">
+          <span class="pinTaskIcon">฿</span>
+          <span><b>Invoices / Payments</b><small>Open saved invoices</small></span>
+        </button>
+        <button class="pinTaskButton" type="button" onclick="switchTab('import')">
+          <span class="pinTaskIcon">⇧</span>
+          <span><b>Sunday Reports</b><small>Import or review reports</small></span>
+        </button>
       </div>
     </div>
     <div id="dashboardAlerts" class="dashboardAlerts" style="display:none"></div>
@@ -2259,6 +2465,12 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
         <div class="deliveryTitleRow"><h2>Create delivery</h2><span id="deliveryEditChip" class="deliveryEditChip" style="display:none">Editing docket</span></div>
         <div id="deliveryEditBanner" class="notice deliveryEditBanner" style="display:none"><b>Editing docket.</b> Change product or quantity directly, add/remove lines, then save.</div>
         <div class="field deliverySearch"><label>Find product</label><input id="deliveryProductSearch" type="search" placeholder="Type Pin's product name…" autocomplete="off"></div>
+        <div class="deliveryAlphabetWrap" aria-label="Alphabet product finder">
+          <div id="deliveryAlphabetScrubber" class="deliveryAlphabetScrubber" role="slider" aria-label="Find product by first letter" aria-valuemin="1" aria-valuemax="26" aria-valuenow="1" tabindex="0">
+            <div class="deliveryAlphabetLetters" aria-hidden="true">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</div>
+            <div id="deliveryAlphabetThumb" class="deliveryAlphabetThumb" aria-hidden="true">A</div>
+          </div>
+        </div>
         <details class="compactHelp"><summary>ⓘ Delivery entry help</summary><div class="small">The delivery list uses Pin's master product names. Enter only products being delivered.</div></details>
         <div class="row deliveryMetaRow">
           <div class="field"><label>Branch</label><select id="delBranch"><option>BM Bangrak</option><option>Lamai</option></select></div>
@@ -2558,12 +2770,17 @@ let editingDocketId=null;
 let deliveryEditOriginalSnapshot=null;
 let deliveryEditAffectedInvoiceId=null;
 let deliveryEditResolutionChoice="";
+let activeDeliveryLetter="";
 function fillProducts(){
  const s=document.getElementById("delProduct"), b=document.getElementById("delBranch").value,q=norm(document.getElementById("deliveryProductSearch")?.value||"");
  const previous=s.value;
- const products=branchProducts(b).filter(p=>!q||norm(p.name).includes(q)).sort((a,b)=>a.name.localeCompare(b.name, "en", {sensitivity:"base", numeric:true}));
+ let products=branchProducts(b);
+ if(q)products=products.filter(p=>norm(p.name).includes(q));
+ else if(activeDeliveryLetter)products=products.filter(p=>norm(p.name).startsWith(norm(activeDeliveryLetter)));
+ products=products.sort((a,b)=>a.name.localeCompare(b.name, "en", {sensitivity:"base", numeric:true}));
  s.innerHTML=products.map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join("");
- if(!products.length)s.innerHTML='<option value="">No matching product</option>';
+ if(!products.length)s.innerHTML='<option value="">No product for this letter</option>';
+ else if(!q && activeDeliveryLetter)s.value=products[0].id;
  else if(products.some(p=>p.id===previous))s.value=previous;
 }
 function normalizeDraftLines(lines){return (lines||[]).map(l=>({productId:String(l.productId||""),qty:Number(l.qty||0)})).filter(l=>l.productId&&l.qty>0);}
@@ -3089,7 +3306,42 @@ window.editProductName=(id,value)=>{
  db.productAliases[normalizeProductKey(old)]=id;
  retroactivelyRemapAllImports(false);save();renderMasterProductSetup();
 }
+
+function openDashboardInvoices(){
+  switchTab("history");
+  const type=document.getElementById("recordsType");
+  if(type)type.value="invoice";
+  renderHistory();
+}
+window.openDashboardInvoices=openDashboardInvoices;
+
+function renderPinDashboard(){
+  const badge=document.getElementById("pinDashboardState");
+  const title=document.getElementById("pinSundayPrimaryTitle");
+  const copy=document.getElementById("pinSundayPrimaryText");
+  const button=document.getElementById("pinSundayPrimary");
+  if(!badge||!title||!copy||!button)return;
+
+  ensureCompletedSundayCycles();
+  const activeDate=db.activeSundayCycleDate||null;
+
+  if(activeDate && !isSundayCycleComplete(activeDate)){
+    badge.textContent="IN PROGRESS";
+    badge.classList.add("active");
+    title.textContent="Continue Sunday Workflow";
+    copy.textContent=`Continue ${recordDateLabel(activeDate)} from where you left off.`;
+    button.setAttribute("aria-label",`Continue Sunday workflow for ${recordDateLabel(activeDate)}`);
+  }else{
+    badge.textContent="READY";
+    badge.classList.remove("active");
+    title.textContent="Start Sunday Workflow";
+    copy.textContent="Import reports, reconcile, invoice and record payment.";
+    button.setAttribute("aria-label","Start Sunday workflow");
+  }
+}
+
 function renderMetrics(){
+ renderPinDashboard();
  const ds=db.deliveries.reduce((s,d)=>s+d.lines.reduce((a,l)=>{const p=db.products.find(x=>x.id===l.productId);return a+l.qty*(p?.cost||0)},0),0);
  const ws=db.weeks.reduce((s,w)=>s+(w.totals?.sales||0),0);
  const latestByDate={};(db.invoices||[]).filter(i=>i&&i.status!=="void").forEach(i=>{const d=i.reportDate;if(!d)return;if(!latestByDate[d]||Number(i.version||1)>Number(latestByDate[d].version||1))latestByDate[d]=i;});
@@ -4462,8 +4714,75 @@ function calcImport(){
 }
 
 
+
+const DELIVERY_ALPHA="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+function clearDeliveryAlphabetVisual(){
+  const el=document.getElementById("deliveryAlphabetScrubber");
+  const thumb=document.getElementById("deliveryAlphabetThumb");
+  if(el)el.classList.remove("active");
+  if(thumb)thumb.style.display="none";
+}
+function setDeliveryAlphabetLetter(letter, clientX=null){
+  if(!letter)return;
+  activeDeliveryLetter=letter;
+  const search=document.getElementById("deliveryProductSearch");
+  if(search)search.value="";
+  const el=document.getElementById("deliveryAlphabetScrubber");
+  const thumb=document.getElementById("deliveryAlphabetThumb");
+  if(el){
+    const pos=DELIVERY_ALPHA.indexOf(letter);
+    el.classList.add("active");
+    el.setAttribute("aria-valuenow",String(pos+1));
+    el.setAttribute("aria-valuetext",letter);
+    if(thumb){
+      thumb.textContent=letter;
+      thumb.style.display="grid";
+      const rect=el.getBoundingClientRect();
+      const x=clientX==null?((pos+.5)/26)*rect.width:Math.max(0,Math.min(rect.width,clientX-rect.left));
+      thumb.style.left=`${x}px`;
+    }
+  }
+  fillProducts();
+}
+function deliveryLetterFromPointer(ev){
+  const el=document.getElementById("deliveryAlphabetScrubber");
+  if(!el)return "";
+  const rect=el.getBoundingClientRect();
+  const x=Math.max(0,Math.min(rect.width-0.01,ev.clientX-rect.left));
+  return DELIVERY_ALPHA[Math.floor((x/rect.width)*26)]||"A";
+}
+function setupDeliveryAlphabetScrubber(){
+  const el=document.getElementById("deliveryAlphabetScrubber");
+  if(!el||el.dataset.ready==="1")return;
+  el.dataset.ready="1";
+  let dragging=false;
+  const update=ev=>{
+    const letter=deliveryLetterFromPointer(ev);
+    if(letter)setDeliveryAlphabetLetter(letter,ev.clientX);
+  };
+  el.addEventListener("pointerdown",ev=>{
+    dragging=true;
+    try{el.setPointerCapture(ev.pointerId)}catch(_){}
+    update(ev);
+    ev.preventDefault();
+  });
+  el.addEventListener("pointermove",ev=>{
+    if(!dragging)return;
+    update(ev);
+    ev.preventDefault();
+  });
+  el.addEventListener("pointerup",ev=>{
+    if(dragging)update(ev);
+    dragging=false;
+    try{el.releasePointerCapture(ev.pointerId)}catch(_){}
+    ev.preventDefault();
+  });
+  el.addEventListener("pointercancel",()=>{dragging=false});
+}
+setupDeliveryAlphabetScrubber();
+
 const deliverySearch=document.getElementById("deliveryProductSearch");
-if(deliverySearch)deliverySearch.oninput=fillProducts;
+if(deliverySearch)deliverySearch.oninput=()=>{activeDeliveryLetter="";clearDeliveryAlphabetVisual();fillProducts();};
 
 document.getElementById("impFiles").onchange=e=>{
  importFiles=[...e.target.files]; const box=document.getElementById("shotPreview");box.innerHTML="";
@@ -5422,7 +5741,7 @@ function returnToDashboardFromHeader(){
   if(home){home.scrollTop=0}
 }
 
-function switchTab(id){document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===id));document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===id));document.body.classList.toggle("deliveryMode",id==="docket"&&document.getElementById("deliveryCreatePane")?.style.display!=="none");document.body.classList.toggle("docketMode",id==="docket");if(id!=="sundayWizard")document.body.classList.remove("workflowMode");closeMainMenu();const active=document.getElementById(id);if(active){active.scrollTop=0;requestAnimationFrame(()=>{active.scrollTop=0})}if(id==="weekly"&&!document.querySelector("#weekRows tr"))loadWeek();if(id==="sundayWizard")renderSundayWizard();if(id==="home")renderDashboardAlerts()}
+function switchTab(id){document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===id));document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===id));document.body.classList.toggle("deliveryMode",id==="docket"&&document.getElementById("deliveryCreatePane")?.style.display!=="none");document.body.classList.toggle("docketMode",id==="docket");if(id!=="sundayWizard")document.body.classList.remove("workflowMode");closeMainMenu();const active=document.getElementById(id);if(active){active.scrollTop=0;requestAnimationFrame(()=>{active.scrollTop=0})}if(id==="weekly"&&!document.querySelector("#weekRows tr"))loadWeek();if(id==="sundayWizard")renderSundayWizard();if(id==="home"){renderPinDashboard();renderMetrics();renderDashboardAlerts()}}
 document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{if(t.dataset.tab==="docket")openDeliveryArchive();else switchTab(t.dataset.tab)});
 
 const BACKUP_FORMAT="magic-dragon-pin-full-backup";
@@ -5479,7 +5798,7 @@ document.getElementById("exportData").onclick=async()=>{
  const btn=document.getElementById("exportData");if(btn.disabled)return;btn.disabled=true;backupStatus("Preparing complete backup…");
  try{
   const sourceFiles=await exportArchivedSourceFiles(),counts=backupCounts();
-  const pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.9.80",createdAt:new Date().toISOString(),counts,sourceFilesCount:sourceFiles.length,data:JSON.parse(JSON.stringify(db)),sourceFiles};
+  const pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.9.82",createdAt:new Date().toISOString(),counts,sourceFilesCount:sourceFiles.length,data:JSON.parse(JSON.stringify(db)),sourceFiles};
   await downloadBackupPackage(pkg);
   backupStatus(`Backup ready: ${counts.deliveries} deliveries, ${counts.sundayReports} Sunday reports, ${counts.invoices} invoices, ${sourceFiles.length} archived source file${sourceFiles.length===1?"":"s"}.`);
  }catch(e){console.error(e);backupStatus("Backup could not be created. No app data was changed.",true);alert("The full backup could not be created. Your current app data has not been changed.")}
