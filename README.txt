@@ -1,30 +1,23 @@
-MAGIC DRAGON PIN v0.9.87 — SUGGESTED DOCKET DASHBOARD ROUTING CLEANUP
+MAGIC DRAGON PIN v0.9.87 — CORRECTED DEPLOY BUILD
 
-Primary target: Pin on iPhone.
+This replaces the earlier faulty v0.9.87 package.
 
-Fix
-- Dashboard suggested-delivery cards no longer open directly into Edit Docket.
-- They now open the exact same Delivery Dockets saved-record view used by:
-    Menu > Delivery Dockets
-- The selected suggested docket opens already expanded.
-- From there Pin uses the existing proven Edit Docket button if she wants to make changes.
-- No suggested-docket data model, quantities, pricing, totals, reconciliation, delivery logic, or PDF logic changed.
+Verified change
+- Dashboard suggested-delivery cards now call openDeliveryArchive(id).
+- They open the exact same normal saved-docket view as Menu > Delivery Dockets.
+- The selected suggested docket opens expanded.
+- Edit Docket remains the normal, existing editor.
 
-Why
-- The Menu route already displayed suggested dockets correctly with:
-    full product descriptions
-    Qty
-    Unit cost
-    Retail
-    Amount
-    normal action buttons
-- The Dashboard shortcut was the only route bypassing that correct view and jumping directly into an older edit presentation.
+No other delivery, pricing, invoice, reconciliation, backup or PDF logic changed.
+
+Verification performed on packaged index.html:
+- Visible app version = v0.9.87
+- Backup appVersion = 0.9.87
+- Dashboard route contains openDeliveryArchive(id)
+- Dashboard route does NOT contain editDocket(id)
 
 Test
 1. Dashboard > suggested Bangrak docket.
-2. Confirm Delivery Dockets screen opens with Bangrak suggestion expanded.
-3. Confirm Qty / Unit cost / Retail / Amount are visible.
-4. Tap Edit Docket and confirm normal editing works.
-5. Return to Dashboard using dragon.
-6. Repeat for Lamai.
-7. Confirm Menu > Delivery Dockets still behaves exactly the same.
+2. Confirm normal Delivery Dockets view opens with Bangrak expanded.
+3. Repeat for Lamai.
+4. Confirm Menu > Delivery Dockets remains unchanged.
