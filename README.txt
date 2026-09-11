@@ -1,16 +1,25 @@
-MAGIC DRAGON PIN v0.9.82 — EXPERIMENTAL A–Z PRODUCT SCRUBBER
+MAGIC DRAGON PIN v0.9.83 — DASHBOARD NEW DELIVERY ROUTE FIX
 
-- Adds a slim A–Z touch scrubber under Find Product in Create Delivery.
-- Drag your finger left/right; the current letter follows your finger.
-- Product dropdown filters to products beginning with that letter.
-- First matching product is selected automatically.
-- Typing into Find Product clears alphabet mode and preserves the existing search.
-- Branch filtering remains unchanged.
-- No delivery, pricing, invoice, reconciliation, backup or catalogue data logic changed.
+Primary target: Pin on iPhone.
 
-Test on iPhone:
+Bug fixed
+- Dashboard > New Delivery could open a mostly blank Create Delivery screen.
+- Root cause: the app selected its delivery layout mode before the Create pane was made visible.
+- The Create/Archive pane is now selected first, then the Delivery Dockets section is activated.
+- Create Delivery now explicitly applies deliveryMode and refreshes the Product list + current delivery table.
+- Delivery Archive explicitly removes deliveryMode.
+- Dashboard and Menu routes now use the same delivery layout state.
+
+Retained
+- A–Z product scrubber from v0.9.82.
+- Dragon Home hotspot.
+- Pin-first Dashboard.
+- Existing delivery, pricing, invoice, reconciliation and backup logic unchanged.
+
+Test
 1. Dashboard > New Delivery.
-2. Drag across the A–Z strip.
-3. Confirm the letter bubble follows your finger.
-4. Confirm Product below jumps alphabetically.
-5. Type in Find Product and confirm normal search still works.
+2. Confirm complete Create Delivery form appears immediately.
+3. Confirm A–Z scrubber works.
+4. Tap dragon to return Dashboard.
+5. Menu > Delivery Dockets > + New Delivery.
+6. Confirm the screen looks and behaves the same through both routes.

@@ -1551,7 +1551,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 .payPinTrend{margin:7px 0;border:1px solid #dbe3ec;border-radius:11px;background:#fff;padding:8px 9px}.payPinTrendTitle{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;font-weight:900;color:#475467;margin-bottom:6px}.payPinTrendGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.payPinTrendCell{min-width:0;border:1px solid #e4e8ef;border-radius:9px;padding:7px 5px;text-align:center;background:#fbfcfd}.payPinTrendCell .d{font-size:8px;line-height:1.1;color:#667085;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.payPinTrendCell .a{font-size:15px;line-height:1.15;font-weight:950;color:#172033;margin-top:4px;white-space:nowrap}.payPinTrendCell.current{background:#f4fbf6;border-color:#cfe8d5}.payPinTrendCell.current.due{background:#fffaf0;border-color:#f1d48b}.payPinTrendCell.current .d{color:#475467}.payPinTrendCell.current .a{color:#246b3a}.payPinTrendCell.current.due .a{color:#8a4b08}.payPinTrendArrow{font-size:11px;font-weight:900}.payPinTrendArrow.up{color:#246b3a}.payPinTrendArrow.down{color:#9a3412}.payPinTrendArrow.flat{color:#667085}@media(max-width:390px){.payPinTrendGrid{gap:4px}.payPinTrendCell{padding:6px 3px}.payPinTrendCell .a{font-size:14px}.payPinTrendCell .d{font-size:7px}}
 @media(max-width:390px){#home .dashboardQuickGrid .btn{font-size:11px!important}.dashboardActionCard .smallStatus{font-size:12px}}
 
-/* v0.9.82 invoice record layout + single-file backup */
+/* v0.9.83 invoice record layout + single-file backup */
 #invoiceViewerBody{max-width:760px;margin:0 auto}
 #invoiceViewer .invoiceCard{padding:11px 12px;margin-top:6px}
 #invoiceViewer .invoiceHead{padding-bottom:7px;margin-bottom:7px}
@@ -1574,7 +1574,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 @media(min-width:700px){#invoiceViewerBody{max-width:680px}#invoiceViewer .invoiceBranches{grid-template-columns:1fr 1fr}}
 
 
-/* v0.9.82 invoice record layout + single-file backup */
+/* v0.9.83 invoice record layout + single-file backup */
 #invoiceViewerBody{max-width:980px!important;margin:0 auto!important}
 #invoiceViewer .invoiceCard{padding:9px 10px!important;margin-top:4px!important}
 #invoiceViewer .invoiceHead{padding-bottom:5px!important;margin-bottom:5px!important;align-items:center!important}
@@ -1626,7 +1626,7 @@ body.docketMode .docketActiveScroll{display:block!important}
  #invoiceViewer .invoiceTotal .v{font-size:19px!important}
 }
 
-/* v0.9.82 professional saved-invoice document */
+/* v0.9.83 professional saved-invoice document */
 #invoiceViewerBody{max-width:1080px!important}
 #invoiceViewer .invoiceDocument{grid-column:1/-1;background:#fff;border:1px solid #cfd6e1;border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,.05)}
 #invoiceViewer .invoiceDocHeader{display:flex;justify-content:space-between;gap:24px;padding:20px 22px 16px;border-bottom:2px solid #172033;background:#fff}
@@ -1692,7 +1692,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.82 compact invoice management console */
+/* v0.9.83 compact invoice management console */
 #invoiceViewer .invoiceManagementTitle{
   display:block;
   margin:14px 2px 7px;
@@ -1877,7 +1877,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.82 — compact uniform invoice-management editors + iOS no-focus-zoom */
+/* v0.9.83 — compact uniform invoice-management editors + iOS no-focus-zoom */
 #invoiceViewer .manageEditor{
   padding:8px 9px 9px;
 }
@@ -2025,7 +2025,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.82 — hard iOS no-focus-zoom fix for payment reference note.
+/* v0.9.83 — hard iOS no-focus-zoom fix for payment reference note.
    This overrides an older invoicePaymentFields rule that still used 12px !important. */
 #invoiceViewer #viewerPaymentNote{
   font-size:16px !important;
@@ -2041,7 +2041,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.82 — invisible dragon Home/Dashboard hotspot */
+/* v0.9.83 — invisible dragon Home/Dashboard hotspot */
 .heroBanner{
   position:relative!important;
 }
@@ -2084,7 +2084,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.82 — Pin-first Sunday handover dashboard */
+/* v0.9.83 — Pin-first Sunday handover dashboard */
 #home .pinDashboard{
   margin:0 0 8px;
   padding:10px;
@@ -2240,7 +2240,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.82 — experimental A–Z delivery product scrubber */
+/* v0.9.83 — experimental A–Z delivery product scrubber */
 #delivery .deliveryAlphabetWrap{margin:2px 0 4px}
 #delivery .deliveryAlphabetScrubber{
   position:relative;width:100%;height:30px;box-sizing:border-box;display:flex;align-items:center;
@@ -2278,7 +2278,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
       <button class="heroHomeHotspot noPrint" type="button" aria-label="Return to Dashboard" title="Dashboard" onclick="returnToDashboardFromHeader()"></button>
     </div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.9.82</span>
+      <span class="app-version">v0.9.83</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -5719,16 +5719,27 @@ function renderSundayWizard(){
 document.getElementById("recordsSearch")?.addEventListener("input",renderHistory);
 document.getElementById("recordsType")?.addEventListener("change",renderHistory);
 function openDeliveryCreate(preserveEdit=false){
-  switchTab("docket");
   const a=document.getElementById("deliveryArchivePane"),c=document.getElementById("deliveryCreatePane");
-  if(a)a.style.display="none";if(c)c.style.display="block";
-  if(!preserveEdit && !editingDocketId){ const d=document.getElementById("delDate"); if(d&&!d.value)d.value=today(); }
-  const target=document.getElementById("docket");if(target){target.scrollTop=0;requestAnimationFrame(()=>target.scrollTop=0)}
+  if(a)a.style.display="none";
+  if(c)c.style.display="block";
+  switchTab("docket");
+  document.body.classList.add("deliveryMode","docketMode");
+  if(!preserveEdit && !editingDocketId){
+    const d=document.getElementById("delDate");
+    if(d&&!d.value)d.value=today();
+  }
+  fillProducts();
+  renderDelivery();
+  const target=document.getElementById("docket");
+  if(target){target.scrollTop=0;requestAnimationFrame(()=>target.scrollTop=0)}
 }
 function openDeliveryArchive(openId){
-  switchTab("docket");
   const a=document.getElementById("deliveryArchivePane"),c=document.getElementById("deliveryCreatePane");
-  if(a)a.style.display="block";if(c)c.style.display="none";
+  if(a)a.style.display="block";
+  if(c)c.style.display="none";
+  switchTab("docket");
+  document.body.classList.remove("deliveryMode");
+  document.body.classList.add("docketMode");
   if(openId!==undefined)renderDocketArchive(openId);else renderDocketArchive();
 }
 window.openDeliveryCreate=openDeliveryCreate;window.openDeliveryArchive=openDeliveryArchive;
@@ -5798,7 +5809,7 @@ document.getElementById("exportData").onclick=async()=>{
  const btn=document.getElementById("exportData");if(btn.disabled)return;btn.disabled=true;backupStatus("Preparing complete backup…");
  try{
   const sourceFiles=await exportArchivedSourceFiles(),counts=backupCounts();
-  const pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.9.82",createdAt:new Date().toISOString(),counts,sourceFilesCount:sourceFiles.length,data:JSON.parse(JSON.stringify(db)),sourceFiles};
+  const pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.9.83",createdAt:new Date().toISOString(),counts,sourceFilesCount:sourceFiles.length,data:JSON.parse(JSON.stringify(db)),sourceFiles};
   await downloadBackupPackage(pkg);
   backupStatus(`Backup ready: ${counts.deliveries} deliveries, ${counts.sundayReports} Sunday reports, ${counts.invoices} invoices, ${sourceFiles.length} archived source file${sourceFiles.length===1?"":"s"}.`);
  }catch(e){console.error(e);backupStatus("Backup could not be created. No app data was changed.",true);alert("The full backup could not be created. Your current app data has not been changed.")}
