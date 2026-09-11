@@ -1,43 +1,29 @@
-MAGIC DRAGON PIN v0.9.90 — ARCHIVE / RESTORE PRODUCTS
+MAGIC DRAGON PIN v0.9.91 — MOBILE CATALOGUE LAYOUT FIX
 
-Built from verified v0.9.89.
+Problem fixed
+- On iPhone the Product Catalogue table was wider than the screen.
+- Type / Cost / Retail columns pushed Archive / Restore controls off-screen.
 
-WHAT CHANGED
-- Product Catalogue now supports Archive and Restore.
-- Each individual variant can be archived.
-- An entire parent-product family can be archived with Archive all.
-- Archived products are hidden by default.
-- Show archived displays them with Restore controls.
-- Active/archived counts are shown in Product Catalogue.
+New layout
+- Each product family remains grouped under its parent heading.
+- Each variant now displays as a compact mobile row:
+    Variant badge + product name
+    Type / Cost / Retail underneath
+    Archive / Restore button permanently visible on the right
+- Archive all / Restore all remains on the parent row.
+- No horizontal scrolling should be required.
 
-IMPORTANT SAFETY BEHAVIOUR
-Archiving is NOT deletion.
-An archived product:
-- disappears from new Delivery Docket product selection
-- disappears from normal active catalogue view
-- retains the same product ID
-- remains available to historical dockets, Sunday reports, invoices, mappings, analytics and audit history
-- can be restored at any time
-
-ADD PRODUCT
-If Pin tries to recreate a standard variant that already exists but is archived, the app tells her to Restore it rather than create a duplicate.
-
-NOT CHANGED
-- Historical records
-- Sunday reconciliation logic
-- Invoice calculations
-- Suggested-delivery logic
-- Combined packing view
-- Product family / variant migration
-- Existing delivery docket viewer/editor
+No catalogue logic changed.
+Archive still:
+- removes product from new delivery selections
+- preserves product ID
+- preserves historical dockets, Sunday reports, invoices, mappings and audit data
+- can be reversed with Restore
 
 TEST
-1. Settings > Product Catalogue.
-2. Archive one obsolete variant.
-3. Confirm it disappears from the active catalogue.
-4. Start a New Delivery and confirm it is absent from the product dropdown/search list.
-5. Return to Product Catalogue > Show archived.
-6. Confirm the item is still present and marked ARCHIVED.
-7. Restore it.
-8. Confirm it returns to New Delivery selections.
-9. Test Archive all on a product family only if comfortable; Restore all reverses it.
+1. Settings > Product Catalogue on iPhone.
+2. Confirm each row fits the screen.
+3. Confirm Archive button is visible.
+4. Archive one obsolete variant.
+5. Confirm it disappears from active catalogue and new Delivery product selection.
+6. Show archived and Restore it.
