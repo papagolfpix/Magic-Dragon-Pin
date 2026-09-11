@@ -1458,7 +1458,7 @@ body.workflowMode .contentViewport>#sundayWizard.active{
 .docketActions button[aria-busy="true"]{opacity:.65;pointer-events:none}
 
 
-/* v0.9.68 Sunday completion + payment control polish */
+/* v0.9.69 Sunday completion + payment control polish */
 body.workflowMode #paymentPaidFields>div{min-width:0!important}
 body.workflowMode #paymentPaidFields input,
 body.workflowMode #paymentPaidFields select{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
@@ -1468,14 +1468,14 @@ body.workflowMode #paymentPaidFields select{padding-right:34px!important;text-ov
  body.workflowMode #paymentPaidFields input,body.workflowMode #paymentPaidFields select{font-size:16px!important;padding-left:8px!important;padding-right:28px!important}
 }
 
-/* v0.9.68 Sunday lifecycle + narrow-phone payment layout */
+/* v0.9.69 Sunday lifecycle + narrow-phone payment layout */
 @media(max-width:650px){
   #paymentPaidFields{grid-template-columns:1fr!important;gap:8px!important}
   #paymentPaidFields>div{grid-column:1/-1!important;min-width:0!important}
   #paymentPaidFields input,#paymentPaidFields select{width:100%!important;max-width:100%!important;box-sizing:border-box!important}
 }
 
-/* v0.9.68 dashboard action cards + embedded Sunday import */
+/* v0.9.69 dashboard action cards + embedded Sunday import */
 .dashboardActionMetrics{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;margin:0 0 6px!important}
 .dashboardActionCard{padding:8px 9px;border:1px solid #dbe3ec;border-radius:11px;background:#fff;min-width:0}
 .dashboardActionCard .k{font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:#667085;font-weight:800}
@@ -1485,7 +1485,7 @@ body.workflowMode #paymentPaidFields select{padding-right:34px!important;text-ov
 .wizardImportFile{font-size:13px;font-weight:750;padding:3px 0;overflow-wrap:anywhere}.wizardImportDetected{display:grid;gap:6px}
 .wizardImportDetected>div{display:flex;justify-content:space-between;gap:8px;padding:8px 10px;border:1px solid #e2e8f0;border-radius:10px;background:#fff;font-size:12px}
 
-/* v0.9.68 unified Delivery Docket module + Sunday archive polish */
+/* v0.9.69 unified Delivery Docket module + Sunday archive polish */
 .deliveryModuleCard{padding:12px!important}
 .deliveryModuleHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
 .deliveryModuleNew{flex:0 0 auto;padding:9px 12px!important;min-height:42px}
@@ -1509,7 +1509,7 @@ body.workflowMode #paymentPaidFields select{padding-right:34px!important;text-ov
  #delDate{width:100%!important}
 }
 
-/* v0.9.68 shared controls + compact Sunday Reports module */
+/* v0.9.69 shared controls + compact Sunday Reports module */
 #delBranch,#delDate{height:44px!important;min-height:44px!important;padding:0 12px!important;border:1px solid #cfd8e5!important;border-radius:11px!important;box-sizing:border-box!important;background:#fff!important;font:inherit!important;color:#111827!important}
 #delDate{-webkit-appearance:none!important;appearance:none!important}
 .sundayImportModuleHead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
@@ -1528,6 +1528,16 @@ body.workflowMode #paymentPaidFields select{padding-right:34px!important;text-ov
  #delBranch,#delDate{height:44px!important;min-height:44px!important}
 }
 
+
+/* v0.9.69 docket viewer reliability + Records chevrons */
+body.docketMode #docketArchive{overflow:hidden!important}
+body.docketMode .docketActivePanel{flex:0 0 auto!important;height:clamp(360px,56dvh,620px)!important;min-height:360px!important;max-height:620px!important}
+body.docketMode .docketActiveScroll{display:block!important}
+@media(max-height:760px){body.docketMode .docketActivePanel{height:clamp(300px,50dvh,500px)!important;min-height:300px!important}}
+.recordGroup>summary{grid-template-columns:minmax(0,1fr) auto!important}
+.recordCount{display:none!important}
+.recordGroupChevron{font-size:20px;line-height:1;color:#667085;font-weight:900;transition:transform .15s ease}
+.recordGroup[open] .recordGroupChevron{transform:rotate(90deg)}
 </style>
 </head>
 <body>
@@ -1537,9 +1547,9 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
 </script>
 <div class="app">
   <div class="hero">
-    <div class="heroBanner"><img src="Magic-Dragon-logo.jpeg?v=0968" alt="Magic Dragon Samui — Pin's Weed Warehouse"></div>
+    <div class="heroBanner"><img src="Magic-Dragon-logo.jpeg?v=0969" alt="Magic Dragon Samui — Pin's Weed Warehouse"></div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.9.68</span>
+      <span class="app-version">v0.9.69</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -2287,7 +2297,7 @@ function buildDocketPdfBytes(d,includeHistory=false){
     line(L,y,R,y,.91,.92,.94,.45);
   });
   y-=16;
-  // v0.9.68: ink-light docket summary — compact, right-aligned total with outlined status
+  // v0.9.69: ink-light docket summary — compact, right-aligned total with outlined status
   line(L,y,R,y,.09,.13,.20,1.35);
   const totalLabel='TOTAL COST VALUE';
   const totalValue=pdfMoney(total);
@@ -2492,7 +2502,7 @@ function renderHistory(){
  const defs=[['delivery','Delivery dockets',deliveries],['sunday','Sunday reports',sundays],['invoice','Invoices',invoices],['payment','Payments',payments],['weekly','Stock / weekly checks',weekly]];
  defs.forEach(([key,label,items])=>{if(type!=="all"&&type!==key)return;const filtered=items.filter(x=>!q||`${x.date} ${x.title} ${x.meta} ${x.status}`.toLowerCase().includes(q));if(filtered.length)groups.push({key,label,items:filtered})});
  if(!groups.length){box.innerHTML='<div class="recordsEmpty">No matching records. Try another type or clear the search.</div>';return;}
- box.innerHTML=groups.map((g,gi)=>`<details class="recordGroup" ${groups.length===1||gi===0?'open':''}><summary><span class="recordGroupTitle">${g.label}</span><span class="recordCount">${g.items.length}</span></summary><div class="recordGroupBody">${g.items.map(x=>recordItemHtml(x)).join('')}</div></details>`).join('');
+ box.innerHTML=groups.map((g,gi)=>`<details class="recordGroup" ${groups.length===1||gi===0?'open':''}><summary><span class="recordGroupTitle">${g.label}</span><span class="recordGroupChevron">›</span></summary><div class="recordGroupBody">${g.items.map(x=>recordItemHtml(x)).join('')}</div></details>`).join('');
  box.querySelectorAll('.recordGroup').forEach(el=>el.addEventListener('toggle',()=>{if(!el.open)return;box.querySelectorAll('.recordGroup[open]').forEach(o=>{if(o!==el)o.open=false})}));
 }
 function recordItemHtml(x){
@@ -4801,7 +4811,7 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
     window.addEventListener("load",syncGeometry,{once:true});
   })();
 
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0968", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0969", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;
