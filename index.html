@@ -1458,7 +1458,7 @@ body.workflowMode .contentViewport>#sundayWizard.active{
 .docketActions button[aria-busy="true"]{opacity:.65;pointer-events:none}
 
 
-/* v0.9.67 Sunday completion + payment control polish */
+/* v0.9.68 Sunday completion + payment control polish */
 body.workflowMode #paymentPaidFields>div{min-width:0!important}
 body.workflowMode #paymentPaidFields input,
 body.workflowMode #paymentPaidFields select{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
@@ -1468,14 +1468,14 @@ body.workflowMode #paymentPaidFields select{padding-right:34px!important;text-ov
  body.workflowMode #paymentPaidFields input,body.workflowMode #paymentPaidFields select{font-size:16px!important;padding-left:8px!important;padding-right:28px!important}
 }
 
-/* v0.9.67 Sunday lifecycle + narrow-phone payment layout */
+/* v0.9.68 Sunday lifecycle + narrow-phone payment layout */
 @media(max-width:650px){
   #paymentPaidFields{grid-template-columns:1fr!important;gap:8px!important}
   #paymentPaidFields>div{grid-column:1/-1!important;min-width:0!important}
   #paymentPaidFields input,#paymentPaidFields select{width:100%!important;max-width:100%!important;box-sizing:border-box!important}
 }
 
-/* v0.9.67 dashboard action cards + embedded Sunday import */
+/* v0.9.68 dashboard action cards + embedded Sunday import */
 .dashboardActionMetrics{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;margin:0 0 6px!important}
 .dashboardActionCard{padding:8px 9px;border:1px solid #dbe3ec;border-radius:11px;background:#fff;min-width:0}
 .dashboardActionCard .k{font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:#667085;font-weight:800}
@@ -1485,7 +1485,7 @@ body.workflowMode #paymentPaidFields select{padding-right:34px!important;text-ov
 .wizardImportFile{font-size:13px;font-weight:750;padding:3px 0;overflow-wrap:anywhere}.wizardImportDetected{display:grid;gap:6px}
 .wizardImportDetected>div{display:flex;justify-content:space-between;gap:8px;padding:8px 10px;border:1px solid #e2e8f0;border-radius:10px;background:#fff;font-size:12px}
 
-/* v0.9.67 unified Delivery Docket module + Sunday archive polish */
+/* v0.9.68 unified Delivery Docket module + Sunday archive polish */
 .deliveryModuleCard{padding:12px!important}
 .deliveryModuleHead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
 .deliveryModuleNew{flex:0 0 auto;padding:9px 12px!important;min-height:42px}
@@ -1508,6 +1508,26 @@ body.workflowMode #paymentPaidFields select{padding-right:34px!important;text-ov
  .deliveryMetaRow .field{width:auto!important;min-width:0!important}
  #delDate{width:100%!important}
 }
+
+/* v0.9.68 shared controls + compact Sunday Reports module */
+#delBranch,#delDate{height:44px!important;min-height:44px!important;padding:0 12px!important;border:1px solid #cfd8e5!important;border-radius:11px!important;box-sizing:border-box!important;background:#fff!important;font:inherit!important;color:#111827!important}
+#delDate{-webkit-appearance:none!important;appearance:none!important}
+.sundayImportModuleHead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
+.sundayImportModuleHead h2{margin:0}.sundayImportModuleHead .small{margin-top:2px}
+.sundayImportNew{flex:0 0 auto;padding:9px 12px!important;min-height:42px!important;font-size:13px!important}
+#importWorkPanel{display:none;margin-top:8px}
+#importWorkPanel.open{display:block}
+#importWorkPanel .xlsxPanel{margin:0!important}
+#integrityDetails{display:none!important}
+#integrityDetails.hasIssue{display:block!important}
+.sundaySelectorList{max-height:180px!important;overflow-y:auto!important}
+.sundayActivePanel{margin-top:2px!important}
+@media(max-width:560px){
+ .sundayImportModuleHead{align-items:flex-start}
+ .sundayImportNew{font-size:12px!important;padding:8px 10px!important}
+ #delBranch,#delDate{height:44px!important;min-height:44px!important}
+}
+
 </style>
 </head>
 <body>
@@ -1517,9 +1537,9 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
 </script>
 <div class="app">
   <div class="hero">
-    <div class="heroBanner"><img src="Magic-Dragon-logo.jpeg?v=0967" alt="Magic Dragon Samui — Pin's Weed Warehouse"></div>
+    <div class="heroBanner"><img src="Magic-Dragon-logo.jpeg?v=0968" alt="Magic Dragon Samui — Pin's Weed Warehouse"></div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.9.67</span>
+      <span class="app-version">v0.9.68</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -1573,10 +1593,9 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
 
   <section id="import" class="section">
     <div class="card">
-      <div class="helpTitleRow"><h2>Sunday Report Import</h2><button class="infoButton" type="button" id="sundayHelpButton" aria-label="Sunday Import help" aria-expanded="false">i</button></div>
+      <div class="sundayImportModuleHead"><div><h2>Sunday Reports</h2><div class="small">Import a new Sunday report or open a saved report below.</div></div><button class="btn gold sundayImportNew" id="toggleSundayImport" type="button" onclick="toggleSundayImportPanel()">+ Import Reports</button></div>
       <details class="contextHelp" id="sundayHelp" style="display:none"><summary></summary><div class="contextHelpText"><b>Sunday Excel workflow</b><br>Choose one or both shop Excel files. The app detects branch and report dates, including several weekly reports pasted into one worksheet. Review the detected reports, then import the selected weeks. Missing historical stock stays unknown rather than being treated as zero. Screenshot OCR is available at the bottom only as an emergency fallback.</div></details>
-<button class="btn gold importWizardButton" type="button" onclick="openSundayWizard()">Open Sunday Reconciliation Wizard</button>
-<div class="xlsxPanel importWork">
+<div id="importWorkPanel"><div class="xlsxPanel importWork">
         <div class="importPrimaryHead"><h3>Excel Sunday Reports</h3></div>
         <label class="btn gold" style="display:inline-block">Choose Excel file(s)<input id="xlsxFiles" type="file" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" multiple hidden></label>
         <div id="xlsxSelectionCard" class="selectionCard empty"><b>No Excel files selected</b><div class="small">Choose one or both Sunday report files.</div></div>
@@ -1601,11 +1620,9 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
 <h3 style="margin:0">Product Mapping Review</h3>
 <div class="small">Confirm a shop product name once. The alias is remembered and applied to previous and future imports.</div>
 <div id="mappingReviewList"></div></div>
-      </div>
+      </div></div>
       
-      
-      
-      <details class="card compactUtility" style="margin-top:14px">
+      <details id="integrityDetails" class="card compactUtility" style="margin-top:14px">
         <summary><b>Data Integrity</b><span class="small">Diagnostics</span><span class="chev">⌄</span></summary>
         <div class="compactUtilityBody">
           <div class="small">The app automatically keeps one active Sunday report per branch/date, supersedes lower-quality OCR/manual data when Excel exists, removes duplicate test records, and ignores non-consecutive weeks for reconciliation.</div>
@@ -2270,7 +2287,7 @@ function buildDocketPdfBytes(d,includeHistory=false){
     line(L,y,R,y,.91,.92,.94,.45);
   });
   y-=16;
-  // v0.9.67: ink-light docket summary — compact, right-aligned total with outlined status
+  // v0.9.68: ink-light docket summary — compact, right-aligned total with outlined status
   line(L,y,R,y,.09,.13,.20,1.35);
   const totalLabel='TOTAL COST VALUE';
   const totalValue=pdfMoney(total);
@@ -2941,6 +2958,8 @@ function cleanupDataIntegrity(){
   if(box){
     box.innerHTML=`<b>Data cleaned.</b> ${removedWeeks} duplicate/superseded weekly record${removedWeeks===1?"":"s"} removed, ${removedArchives} duplicate archive record${removedArchives===1?"":"s"} removed${supersededLowerQuality?`, including ${supersededLowerQuality} lower-quality OCR/manual record${supersededLowerQuality===1?"":"s"}`:""}.`;
   }
+  const integrity=document.getElementById("integrityDetails");
+  if(integrity)integrity.classList.toggle("hasIssue",(removedWeeks+removedArchives+supersededLowerQuality)>0);
   return {removedWeeks,removedArchives,supersededLowerQuality};
 }
 
@@ -3637,6 +3656,14 @@ window.deleteSundayReport=async id=>{
   alert("Sunday report deleted.");
 };
 
+window.toggleSundayImportPanel=()=>{
+  const panel=document.getElementById("importWorkPanel"),btn=document.getElementById("toggleSundayImport");
+  if(!panel)return;
+  const open=!panel.classList.contains("open");
+  panel.classList.toggle("open",open);
+  if(btn)btn.textContent=open?"Close Import":"+ Import Reports";
+};
+
 let activeSundayArchiveId=null;
 function renderArchive(openId){
   ensureSundayArchive();
@@ -3663,6 +3690,12 @@ function renderArchive(openId){
     viewer=`<div class="sundayActivePanel" data-report-id="${active.id}"><div class="sundayActiveScroll"><div class="sundayActiveHead"><div><div class="sundayActiveTitle">${escapeHtml(active.date||"No date")} — ${escapeHtml(displayBranchName(active.branch))}</div><div class="sundayActiveMeta">${escapeHtml(active.archiveName||"")}<br>Imported ${escapeHtml(new Date(active.importedAt).toLocaleString())}${rec?.previousDate?` • Previous Sunday: ${escapeHtml(rec.previousDate)}`:""}</div></div><span class="reconStatus ${status[0]}">${escapeHtml(status[1])}</span></div>${rec?stockFlowHtml(rec):'<div class="small">This report has not been reconciled yet.</div>'}</div><div class="sundayActiveActions"><button class="btn alt" onclick="downloadArchivedSource('${active.id}','${String(active.archiveName||'Sunday-report.xlsx').replace(/'/g,"\\'")}')">Source</button><button class="btn dangerBtn" onclick="deleteSundayReport('${active.id}')">Delete</button></div></div>`;
   }
   box.innerHTML=`<div class="sundayArchiveUnified"><div class="sundaySelectorList">${selectors}</div>${viewer}</div>`;
+  const listBox=box.querySelector(".sundaySelectorList"),activeButton=box.querySelector(".sundaySelector.active");
+  if(listBox&&activeButton){
+    const top=activeButton.offsetTop-listBox.offsetTop, bottom=top+activeButton.offsetHeight;
+    if(top<listBox.scrollTop)listBox.scrollTop=top;
+    else if(bottom>listBox.scrollTop+listBox.clientHeight)listBox.scrollTop=bottom-listBox.clientHeight;
+  }
 }
 window.selectSundayArchive=id=>{
   activeSundayArchiveId=(activeSundayArchiveId===id)?null:id;
@@ -4768,7 +4801,7 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
     window.addEventListener("load",syncGeometry,{once:true});
   })();
 
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0967", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0968", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;
