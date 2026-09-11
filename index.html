@@ -1551,7 +1551,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 .payPinTrend{margin:7px 0;border:1px solid #dbe3ec;border-radius:11px;background:#fff;padding:8px 9px}.payPinTrendTitle{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;font-weight:900;color:#475467;margin-bottom:6px}.payPinTrendGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.payPinTrendCell{min-width:0;border:1px solid #e4e8ef;border-radius:9px;padding:7px 5px;text-align:center;background:#fbfcfd}.payPinTrendCell .d{font-size:8px;line-height:1.1;color:#667085;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.payPinTrendCell .a{font-size:15px;line-height:1.15;font-weight:950;color:#172033;margin-top:4px;white-space:nowrap}.payPinTrendCell.current{background:#f4fbf6;border-color:#cfe8d5}.payPinTrendCell.current.due{background:#fffaf0;border-color:#f1d48b}.payPinTrendCell.current .d{color:#475467}.payPinTrendCell.current .a{color:#246b3a}.payPinTrendCell.current.due .a{color:#8a4b08}.payPinTrendArrow{font-size:11px;font-weight:900}.payPinTrendArrow.up{color:#246b3a}.payPinTrendArrow.down{color:#9a3412}.payPinTrendArrow.flat{color:#667085}@media(max-width:390px){.payPinTrendGrid{gap:4px}.payPinTrendCell{padding:6px 3px}.payPinTrendCell .a{font-size:14px}.payPinTrendCell .d{font-size:7px}}
 @media(max-width:390px){#home .dashboardQuickGrid .btn{font-size:11px!important}.dashboardActionCard .smallStatus{font-size:12px}}
 
-/* v0.9.74 invoice record layout + single-file backup */
+/* v0.9.75 invoice record layout + single-file backup */
 #invoiceViewerBody{max-width:760px;margin:0 auto}
 #invoiceViewer .invoiceCard{padding:11px 12px;margin-top:6px}
 #invoiceViewer .invoiceHead{padding-bottom:7px;margin-bottom:7px}
@@ -1574,7 +1574,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 @media(min-width:700px){#invoiceViewerBody{max-width:680px}#invoiceViewer .invoiceBranches{grid-template-columns:1fr 1fr}}
 
 
-/* v0.9.74 invoice record layout + single-file backup */
+/* v0.9.75 invoice record layout + single-file backup */
 #invoiceViewerBody{max-width:980px!important;margin:0 auto!important}
 #invoiceViewer .invoiceCard{padding:9px 10px!important;margin-top:4px!important}
 #invoiceViewer .invoiceHead{padding-bottom:5px!important;margin-bottom:5px!important;align-items:center!important}
@@ -1625,6 +1625,67 @@ body.docketMode .docketActiveScroll{display:block!important}
  #invoiceViewer .invoiceNum .v{font-size:12px!important}
  #invoiceViewer .invoiceTotal .v{font-size:19px!important}
 }
+
+/* v0.9.75 professional saved-invoice document */
+#invoiceViewerBody{max-width:1080px!important}
+#invoiceViewer .invoiceDocument{grid-column:1/-1;background:#fff;border:1px solid #cfd6e1;border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,.05)}
+#invoiceViewer .invoiceDocHeader{display:flex;justify-content:space-between;gap:24px;padding:20px 22px 16px;border-bottom:2px solid #172033;background:#fff}
+#invoiceViewer .invoiceDocTitle{font-size:24px;line-height:1.05;font-weight:950;letter-spacing:.015em;color:#111827}
+#invoiceViewer .invoiceDocPeriod{font-size:13px;color:#667085;margin-top:5px;font-weight:700}
+#invoiceViewer .invoiceDocRef{min-width:245px;display:grid;gap:7px;font-size:11px}
+#invoiceViewer .invoiceDocRef>div{display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid #e5e7eb;padding-bottom:5px}
+#invoiceViewer .invoiceDocRef span{color:#667085;text-transform:uppercase;font-size:9px;letter-spacing:.06em;font-weight:850}
+#invoiceViewer .invoiceDocRef b{text-align:right;color:#172033}
+#invoiceViewer .invoiceDocParties{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:13px 22px;background:#f8fafc;border-bottom:1px solid #e5e7eb;font-size:12px}
+#invoiceViewer .invoiceDocParties>div{display:grid;gap:2px}
+#invoiceViewer .invoiceDocLabel{display:block;color:#667085;text-transform:uppercase;font-size:8.5px;letter-spacing:.07em;font-weight:850;margin-bottom:2px}
+#invoiceViewer .invoiceTableWrap{overflow-x:auto;padding:16px 22px 10px}
+#invoiceViewer .invoiceTable{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12px;color:#172033}
+#invoiceViewer .invoiceTable th{background:#172033;color:#fff;padding:9px 10px;text-align:right;font-size:9px;text-transform:uppercase;letter-spacing:.045em;font-weight:900}
+#invoiceViewer .invoiceTable th:first-child{text-align:left;width:26%}
+#invoiceViewer .invoiceTable td{padding:11px 10px;text-align:right;border-bottom:1px solid #e5e7eb;font-weight:700;white-space:nowrap}
+#invoiceViewer .invoiceTable td:first-child{text-align:left;white-space:normal;font-weight:900}
+#invoiceViewer .invoiceTable tbody tr:last-child td{border-bottom:0}
+#invoiceViewer .invoiceTable .amountDueCell{font-weight:950;color:#111827}
+#invoiceViewer .invoiceAdjustments{margin:2px 22px 12px;padding:10px 12px;background:#fffaf0;border:1px solid #f1d48b;border-radius:8px;font-size:11px}
+#invoiceViewer .invoiceAdjustmentsTitle{font-size:9px;text-transform:uppercase;letter-spacing:.06em;font-weight:900;color:#92400e;margin-bottom:5px}
+#invoiceViewer .invoiceAdjustmentLine{display:flex;justify-content:space-between;gap:14px;padding:3px 0}
+#invoiceViewer .invoiceAdjustmentLine.subtotal{border-top:1px solid #e7c875;margin-top:4px;padding-top:6px}
+#invoiceViewer .invoiceDocTotalRow{margin:3px 22px 16px;background:#172033;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:15px 18px;border-radius:8px}
+#invoiceViewer .invoiceDocTotalRow>div{display:grid;gap:2px}
+#invoiceViewer .invoiceDocTotalRow span{text-transform:uppercase;letter-spacing:.055em;font-size:10px;font-weight:900}
+#invoiceViewer .invoiceDocTotalRow small{font-size:9px;color:#cbd5e1;font-weight:600}
+#invoiceViewer .invoiceDocTotalRow strong{font-size:28px;line-height:1;font-weight:950;white-space:nowrap}
+#invoiceViewer .invoiceDocNote{margin:0 22px 15px;padding:10px 12px;border-left:3px solid #a97810;background:#fffbeb;font-size:11px;line-height:1.4}
+#invoiceViewer .invoiceDocFooter{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #e5e7eb;padding:9px 22px;background:#fafafa;color:#667085;font-size:9px}
+#invoiceViewer .invoiceManagementTitle{grid-column:1/-1;display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-top:4px;padding:2px 2px 0;color:#172033}
+#invoiceViewer .invoiceManagementTitle b{font-size:14px}
+#invoiceViewer .invoiceManagementTitle span{font-size:9px;color:#667085}
+@media(min-width:760px){
+ #invoiceViewerBody{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:10px 12px!important;align-items:start!important}
+ #invoiceViewerBody>.invoiceWarning,#invoiceViewerBody>.invoiceDocument,#invoiceViewerBody>.invoiceManagementTitle,#invoiceViewerBody>.invoiceViewerActions{grid-column:1/-1!important}
+ #invoiceViewerBody>.invoiceSentBox,#invoiceViewerBody>.invoicePaymentBox{margin-top:0!important;height:100%!important;box-sizing:border-box!important}
+}
+@media(max-width:759px){
+ #invoiceViewer .invoiceDocHeader{padding:15px 14px 12px;gap:10px}
+ #invoiceViewer .invoiceDocTitle{font-size:19px}
+ #invoiceViewer .invoiceDocRef{min-width:135px;font-size:9px}
+ #invoiceViewer .invoiceDocRef>div{display:grid;gap:1px;text-align:right}
+ #invoiceViewer .invoiceDocRef span{font-size:7.5px}
+ #invoiceViewer .invoiceDocParties{padding:10px 14px;gap:10px;font-size:10px}
+ #invoiceViewer .invoiceTableWrap{padding:12px 10px 8px}
+ #invoiceViewer .invoiceTable{font-size:10px;min-width:560px}
+ #invoiceViewer .invoiceTable th{font-size:7.5px;padding:8px 7px}
+ #invoiceViewer .invoiceTable td{padding:9px 7px}
+ #invoiceViewer .invoiceDocTotalRow{margin:3px 10px 12px;padding:12px 13px}
+ #invoiceViewer .invoiceDocTotalRow strong{font-size:23px}
+ #invoiceViewer .invoiceDocTotalRow small{display:none}
+ #invoiceViewer .invoiceAdjustments,#invoiceViewer .invoiceDocNote{margin-left:10px;margin-right:10px}
+ #invoiceViewer .invoiceDocFooter{padding:8px 10px}
+ #invoiceViewer .invoiceManagementTitle{display:block}
+ #invoiceViewer .invoiceManagementTitle span{display:block;margin-top:2px}
+}
+
 </style>
 </head>
 <body>
@@ -1636,7 +1697,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
   <div class="hero">
     <div class="heroBanner"><img src="Magic-Dragon-logo.jpeg?v=0974" alt="Magic Dragon Samui — Pin's Weed Warehouse"></div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.9.74</span>
+      <span class="app-version">v0.9.75</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -4729,9 +4790,43 @@ function renderInvoiceRecord(id){
   const sourceEdits=postInvoiceDocketEdits(inv);
   const sourceAck=sourceEdits.length&&db.alertAcknowledgements?.[invoiceSourceEditAckKey(inv,sourceEdits)];
   const warning=inv.supersededBy?`<div class="invoiceWarning"><b>This is the original / earlier invoice version.</b><br>A newer version is available. Nothing has been overwritten.<div class="recordActions"><button class="btn" onclick="openInvoiceRecord('${inv.supersededBy}')">Open newer version</button></div></div>`:st.label==="UPDATE REQUIRED"?correctionWorkflowMarkup(inv,live,oldBase,livePay,liveDelta):sourceEdits.length&&!sourceAck?`<div class="invoiceWarning" style="background:#fffaf0;border-color:#f1d48b;color:#78350f"><b>Source docket edited after this invoice</b><br>${sourceEdits.length} delivery docket edit${sourceEdits.length===1?' was':'s were'} made after this invoice was saved. The invoice amount is currently unchanged.<div class="recordActions"><button class="btn" onclick="acknowledgeInvoiceSourceEdits('${inv.id}')">Acknowledge</button></div></div>`:"";
-  const branches=(inv.branches||[]).map(b=>`<div class="invoiceBranch"><div class="invoiceBranchName">${escapeHtml(displayBranchName(b.branch))}</div><div class="invoiceNums"><div class="invoiceNum"><div class="k">Sales</div><div class="v">${baht(b.sales)}</div></div><div class="invoiceNum"><div class="k">Cost recovery</div><div class="v">${baht(b.cost)}</div></div><div class="invoiceNum"><div class="k">Pin profit share</div><div class="v">${baht(b.pinProfit)}</div></div><div class="invoiceNum"><div class="k">Amount due</div><div class="v">${baht(b.payPin)}</div></div></div></div>`).join("");
+  const branchRows=(inv.branches||[]).map(b=>`<tr><td class="branchNameCell">${escapeHtml(displayBranchName(b.branch))}</td><td>${baht(b.sales)}</td><td>${baht(b.cost)}</td><td>${baht(b.pinProfit)}</td><td class="amountDueCell">${baht(b.payPin)}</td></tr>`).join("");
   const pending=(db.adjustments||[]).filter(a=>a.status==="pending"&&(a.oldInvoiceId===inv.id||a.newInvoiceId===inv.id));
-  box.innerHTML=`${warning}<div class="invoiceCard"><div class="invoiceHead"><div><div class="invoiceTitle">Weekly Settlement Invoice</div><div class="wizardMinimal">Week ending ${escapeHtml(invoiceDateLabel(inv.reportDate))}</div></div><div class="invoiceMeta"><b>${escapeHtml(inv.number||"")} v${Number(inv.version||1)}</b><br>${escapeHtml(invoiceDateLabel(inv.createdDate||inv.reportDate))}</div></div><div class="invoiceFrom"><b>Issued by Yaowaret</b><br>The Grocery by BM + BM Lamai weekly settlement</div><div class="invoiceBranches">${branches}</div><div class="invoiceTotal"><div class="k">Total payable to Pin</div><div class="v">${baht(inv.totals?.payPin||0)}</div></div>${(inv.adjustmentsApplied||[]).length?`<div class="invoiceAdjustment"><b>Correction from previous week${inv.adjustmentsApplied.length>1?'s':''}</b>${inv.adjustmentsApplied.map(a=>`<div class="invoiceAdjustmentLine"><span>${escapeHtml(a.description||invoiceDateLabel(a.sourceDate))}</span><b>${Number(a.amount)>=0?'+':''}${baht(a.amount)}</b></div>`).join('')}<div class="invoiceAdjustmentLine total"><span>Current week before adjustment</span><b>${baht(inv.totals?.basePayPin ?? (Number(inv.totals?.payPin||0)-Number(inv.totals?.adjustmentTotal||0)))}</b></div></div>`:''}${inv.shopNote?`<div class="invoiceNoteSaved"><b>Note to shop:</b> ${escapeHtml(inv.shopNote)}</div>`:""}<div class="invoiceState"><span class="invoiceViewerStatus ${st.cls==='warn'?'warn':''}">${escapeHtml(st.label)}</span><span class="wizardMinimal">Invoice v${Number(inv.version||1)}</span></div>${pending.length?`<div class="invoiceWarning"><b>${pending.length} unresolved adjustment${pending.length>1?'s':''}</b><br>${pending.map(a=>`${escapeHtml(invoiceDateLabel(a.sourceDate))}: ${Number(a.amount)>=0?'+':''}${baht(a.amount)}`).join('<br>')}<br><span class="wizardMinimal">It will be offered in the next eligible Sunday workflow, or you can mark it handled separately.</span>${pending.map(a=>`<div class="adjustmentResolve"><button class="btn" onclick="resolveAdjustmentSeparately('${a.id}')">Mark ${Number(a.amount)>=0?'+':''}${baht(a.amount)} handled separately</button></div>`).join('')}</div>`:""}</div><div class="invoiceSentBox"><div class="invoiceSentRow"><div><b>Customer copy</b><div class="invoiceSentMeta">${sent?`Sent ${escapeHtml(invoiceDateLabel(inv.sent.date))}${inv.sent.note?` · ${escapeHtml(inv.sent.note)}`:''}`:'Not marked as sent'}</div></div><span class="recordStatus ${sent?'ok':'unpaid'}">${sent?'SENT':'NOT SENT'}</span></div><div class="invoiceSentControls"><input id="invoiceSentDate" type="date" value="${escapeHtml(inv.sent?.date||today())}"><input id="invoiceSentNote" placeholder="e.g. LINE / email" value="${escapeHtml(inv.sent?.note||'')}"></div><div class="recordActions"><button class="btn gold" onclick="markInvoiceSent('${inv.id}','sent')">Mark Sent</button><button class="btn" onclick="markInvoiceSent('${inv.id}','not_sent')">Mark Not Sent</button></div></div><div class="invoicePaymentBox"><div class="invoicePaymentTop"><div><b>Payment</b><div class="invoicePaymentMeta">Record whether this invoice has been paid.</div></div><span class="recordStatus ${inv.payment?.status==='paid'?'ok':'unpaid'}">${inv.payment?.status==='paid'?'PAID':'UNPAID'}</span></div><input id="viewerPaymentStatus" type="hidden" value="${inv.payment?.status==='paid'?'paid':'unpaid'}"><div class="invoicePaymentToggle"><button id="viewerUnpaidBtn" type="button" class="${inv.payment?.status==='paid'?'':'activeUnpaid'}" aria-pressed="${inv.payment?.status==='paid'?'false':'true'}" onclick="invoiceViewerPaymentStatus('${inv.id}','unpaid')">UNPAID</button><button id="viewerPaidBtn" type="button" class="${inv.payment?.status==='paid'?'activePaid':''}" aria-pressed="${inv.payment?.status==='paid'?'true':'false'}" onclick="invoiceViewerPaymentStatus('${inv.id}','paid')">PAID</button></div><div id="viewerPaidFields" class="invoicePaymentFields" style="display:${inv.payment?.status==='paid'?'grid':'none'}"><div><label>Payment date</label><input id="viewerPaymentDate" type="date" value="${escapeHtml(inv.payment?.date||today())}"></div><div><label>Method</label><select id="viewerPaymentMethod" onchange="invoiceViewerPaymentMethodChanged()"><option value="">Choose…</option><option value="cash" ${inv.payment?.method==='cash'?'selected':''}>Cash</option><option value="bank_transfer" ${inv.payment?.method==='bank_transfer'?'selected':''}>Bank transfer</option><option value="promptpay" ${inv.payment?.method==='promptpay'?'selected':''}>PromptPay</option><option value="other" ${inv.payment?.method==='other'?'selected':''}>Other</option></select></div><div id="viewerPaymentOtherWrap" class="full" style="display:${inv.payment?.method==='other'?'block':'none'}"><label>Other payment method</label><input id="viewerPaymentOther" placeholder="Enter payment method" value="${escapeHtml(inv.payment?.methodOther||'')}"></div></div><div class="invoicePaymentFields"><div class="full"><label>Payment note (optional)</label><input id="viewerPaymentNote" placeholder="Reference or note" value="${escapeHtml(inv.payment?.note||'')}"></div></div><button class="btn gold invoicePaymentSave" type="button" onclick="saveInvoiceViewerPayment('${inv.id}')">Save Payment Status</button>${inv.payment?`<div class="invoicePaymentSummary ${inv.payment.status==='paid'?'paid':''}">${inv.payment.status==='paid'?`✓ Paid ${escapeHtml(invoiceDateLabel(inv.payment.date))}${inv.payment.method?` · ${escapeHtml(inv.payment.method==='bank_transfer'?'Bank transfer':inv.payment.method==='promptpay'?'PromptPay':inv.payment.method==='cash'?'Cash':inv.payment.methodOther||'Other')}`:''}`:'Saved as UNPAID'}${inv.payment.note?` · ${escapeHtml(inv.payment.note)}`:''}</div>`:''}</div><div class="invoiceViewerActions"><button class="btn gold" onclick="shareInvoicePDFById('${inv.id}')">Create / Share PDF</button></div>`;
+  const adjustmentTotal=Number(inv.totals?.adjustmentTotal||0);
+  const basePay=Number(inv.totals?.basePayPin ?? (Number(inv.totals?.payPin||0)-adjustmentTotal));
+  const adjustmentRows=(inv.adjustmentsApplied||[]).map(a=>`<div class="invoiceAdjustmentLine"><span>${escapeHtml(a.description||invoiceDateLabel(a.sourceDate))}</span><b>${Number(a.amount)>=0?'+':''}${baht(a.amount)}</b></div>`).join('');
+  box.innerHTML=`${warning}
+  <div class="invoiceDocument">
+    <div class="invoiceDocHeader">
+      <div>
+        <div class="invoiceDocTitle">WEEKLY SETTLEMENT INVOICE</div>
+        <div class="invoiceDocPeriod">Week ending ${escapeHtml(invoiceDateLabel(inv.reportDate))}</div>
+      </div>
+      <div class="invoiceDocRef">
+        <div><span>Invoice</span><b>${escapeHtml(inv.number||"")} v${Number(inv.version||1)}</b></div>
+        <div><span>Issued</span><b>${escapeHtml(invoiceDateLabel(inv.createdDate||inv.reportDate))}</b></div>
+      </div>
+    </div>
+    <div class="invoiceDocParties">
+      <div><span class="invoiceDocLabel">Issued by</span><b>Yaowaret</b></div>
+      <div><span class="invoiceDocLabel">Settlement for</span><b>The Grocery by BM + BM Lamai</b></div>
+    </div>
+    <div class="invoiceTableWrap">
+      <table class="invoiceTable">
+        <thead><tr><th>Branch</th><th>Sales</th><th>Cost recovery</th><th>Pin profit share</th><th>Amount due</th></tr></thead>
+        <tbody>${branchRows}</tbody>
+      </table>
+    </div>
+    ${(inv.adjustmentsApplied||[]).length?`<div class="invoiceAdjustments"><div class="invoiceAdjustmentsTitle">Previous-week correction${inv.adjustmentsApplied.length>1?'s':''}</div>${adjustmentRows}<div class="invoiceAdjustmentLine subtotal"><span>Current week before adjustment</span><b>${baht(basePay)}</b></div></div>`:''}
+    <div class="invoiceDocTotalRow"><div><span>Total payable to Pin</span><small>Verified cost recovery + Pin profit share${adjustmentTotal?` including ${adjustmentTotal>=0?'+':''}${baht(adjustmentTotal)} adjustment`:''}</small></div><strong>${baht(inv.totals?.payPin||0)}</strong></div>
+    ${inv.shopNote?`<div class="invoiceDocNote"><span class="invoiceDocLabel">Note to shop</span>${escapeHtml(inv.shopNote)}</div>`:""}
+    <div class="invoiceDocFooter"><span class="invoiceViewerStatus ${st.cls==='warn'?'warn':''}">${escapeHtml(st.label)}</span><span>Saved invoice record · v${Number(inv.version||1)}</span></div>
+    ${pending.length?`<div class="invoiceWarning"><b>${pending.length} unresolved adjustment${pending.length>1?'s':''}</b><br>${pending.map(a=>`${escapeHtml(invoiceDateLabel(a.sourceDate))}: ${Number(a.amount)>=0?'+':''}${baht(a.amount)}`).join('<br>')}<br><span class="wizardMinimal">It will be offered in the next eligible Sunday workflow, or you can mark it handled separately.</span>${pending.map(a=>`<div class="adjustmentResolve"><button class="btn" onclick="resolveAdjustmentSeparately('${a.id}')">Mark ${Number(a.amount)>=0?'+':''}${baht(a.amount)} handled separately</button></div>`).join('')}</div>`:""}
+  </div>
+  <div class="invoiceManagementTitle"><b>Invoice management</b><span>These controls are not part of the invoice.</span></div>
+  <div class="invoiceSentBox"><div class="invoiceSentRow"><div><b>Customer copy</b><div class="invoiceSentMeta">${sent?`Sent ${escapeHtml(invoiceDateLabel(inv.sent.date))}${inv.sent.note?` · ${escapeHtml(inv.sent.note)}`:''}`:'Not marked as sent'}</div></div><span class="recordStatus ${sent?'ok':'unpaid'}">${sent?'SENT':'NOT SENT'}</span></div><div class="invoiceSentControls"><input id="invoiceSentDate" type="date" value="${escapeHtml(inv.sent?.date||today())}"><input id="invoiceSentNote" placeholder="e.g. LINE / email" value="${escapeHtml(inv.sent?.note||'')}"></div><div class="recordActions"><button class="btn gold" onclick="markInvoiceSent('${inv.id}','sent')">Mark Sent</button><button class="btn" onclick="markInvoiceSent('${inv.id}','not_sent')">Mark Not Sent</button></div></div>
+  <div class="invoicePaymentBox"><div class="invoicePaymentTop"><div><b>Payment</b><div class="invoicePaymentMeta">Record whether this invoice has been paid.</div></div><span class="recordStatus ${inv.payment?.status==='paid'?'ok':'unpaid'}">${inv.payment?.status==='paid'?'PAID':'UNPAID'}</span></div><input id="viewerPaymentStatus" type="hidden" value="${inv.payment?.status==='paid'?'paid':'unpaid'}"><div class="invoicePaymentToggle"><button id="viewerUnpaidBtn" type="button" class="${inv.payment?.status==='paid'?'':'activeUnpaid'}" aria-pressed="${inv.payment?.status==='paid'?'false':'true'}" onclick="invoiceViewerPaymentStatus('${inv.id}','unpaid')">UNPAID</button><button id="viewerPaidBtn" type="button" class="${inv.payment?.status==='paid'?'activePaid':''}" aria-pressed="${inv.payment?.status==='paid'?'true':'false'}" onclick="invoiceViewerPaymentStatus('${inv.id}','paid')">PAID</button></div><div id="viewerPaidFields" class="invoicePaymentFields" style="display:${inv.payment?.status==='paid'?'grid':'none'}"><div><label>Payment date</label><input id="viewerPaymentDate" type="date" value="${escapeHtml(inv.payment?.date||today())}"></div><div><label>Method</label><select id="viewerPaymentMethod" onchange="invoiceViewerPaymentMethodChanged()"><option value="">Choose…</option><option value="cash" ${inv.payment?.method==='cash'?'selected':''}>Cash</option><option value="bank_transfer" ${inv.payment?.method==='bank_transfer'?'selected':''}>Bank transfer</option><option value="promptpay" ${inv.payment?.method==='promptpay'?'selected':''}>PromptPay</option><option value="other" ${inv.payment?.method==='other'?'selected':''}>Other</option></select></div><div id="viewerPaymentOtherWrap" class="full" style="display:${inv.payment?.method==='other'?'block':'none'}"><label>Other payment method</label><input id="viewerPaymentOther" placeholder="Enter payment method" value="${escapeHtml(inv.payment?.methodOther||'')}"></div></div><div class="invoicePaymentFields"><div class="full"><label>Payment note (optional)</label><input id="viewerPaymentNote" placeholder="Reference or note" value="${escapeHtml(inv.payment?.note||'')}"></div></div><button class="btn gold invoicePaymentSave" type="button" onclick="saveInvoiceViewerPayment('${inv.id}')">Save Payment Status</button>${inv.payment?`<div class="invoicePaymentSummary ${inv.payment.status==='paid'?'paid':''}">${inv.payment.status==='paid'?`✓ Paid ${escapeHtml(invoiceDateLabel(inv.payment.date))}${inv.payment.method?` · ${escapeHtml(inv.payment.method==='bank_transfer'?'Bank transfer':inv.payment.method==='promptpay'?'PromptPay':inv.payment.method==='cash'?'Cash':inv.payment.methodOther||'Other')}`:''}`:'Saved as UNPAID'}${inv.payment.note?` · ${escapeHtml(inv.payment.note)}`:''}</div>`:''}</div>
+  <div class="invoiceViewerActions"><button class="btn gold" onclick="shareInvoicePDFById('${inv.id}')">Create / Share PDF</button></div>`;
 }
 function resolveAdjustmentSeparately(id){
   const a=(db.adjustments||[]).find(x=>x.id===id);if(!a)return;
@@ -4924,7 +5019,7 @@ document.getElementById("exportData").onclick=async()=>{
  const btn=document.getElementById("exportData");if(btn.disabled)return;btn.disabled=true;backupStatus("Preparing complete backup…");
  try{
   const sourceFiles=await exportArchivedSourceFiles(),counts=backupCounts();
-  const pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.9.74",createdAt:new Date().toISOString(),counts,sourceFilesCount:sourceFiles.length,data:JSON.parse(JSON.stringify(db)),sourceFiles};
+  const pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.9.75",createdAt:new Date().toISOString(),counts,sourceFilesCount:sourceFiles.length,data:JSON.parse(JSON.stringify(db)),sourceFiles};
   await downloadBackupPackage(pkg);
   backupStatus(`Backup ready: ${counts.deliveries} deliveries, ${counts.sundayReports} Sunday reports, ${counts.invoices} invoices, ${sourceFiles.length} archived source file${sourceFiles.length===1?"":"s"}.`);
  }catch(e){console.error(e);backupStatus("Backup could not be created. No app data was changed.",true);alert("The full backup could not be created. Your current app data has not been changed.")}

@@ -1,4 +1,4 @@
-MAGIC DRAGON PIN v0.9.74 — INVOICE RECORD LAYOUT + SINGLE-FILE BACKUP
+MAGIC DRAGON PIN v0.9.75 — PROFESSIONAL INVOICE RECORD VIEW
 
 Changes in this build
 - Reworked saved Invoice Records layout for phone and iPad.
@@ -10,7 +10,7 @@ Changes in this build
 - Backup payment count now recognises both the structured payment record and the invoice paid status for compatibility with older saved data.
 
 Deployment
-Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.74 in the header.
+Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.75 in the header.
 
 Quick checks
 1. Open Records > Invoices > a saved invoice on iPad: the record should be substantially denser and use the tablet width intelligently.
