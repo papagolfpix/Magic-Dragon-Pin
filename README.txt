@@ -1,25 +1,43 @@
-MAGIC DRAGON PIN v0.9.83 — DASHBOARD NEW DELIVERY ROUTE FIX
+MAGIC DRAGON PIN v0.9.84 — CLEAN DELIVERY ROUTING REPAIR
 
 Primary target: Pin on iPhone.
+Sunday-handover critical repair.
 
-Bug fixed
-- Dashboard > New Delivery could open a mostly blank Create Delivery screen.
-- Root cause: the app selected its delivery layout mode before the Create pane was made visible.
-- The Create/Archive pane is now selected first, then the Delivery Dockets section is activated.
-- Create Delivery now explicitly applies deliveryMode and refreshes the Product list + current delivery table.
-- Delivery Archive explicitly removes deliveryMode.
-- Dashboard and Menu routes now use the same delivery layout state.
+Root cause repaired
+- Delivery Dockets had two historical layout states:
+    deliveryMode = Create Delivery
+    docketMode   = saved-docket Archive
+- v0.9.83 accidentally applied BOTH states to Create Delivery.
+- Archive fixed-height/overflow CSS then clipped the Create form after the search field.
+- This produced the large blank page seen from Dashboard > New Delivery.
 
-Retained
-- A–Z product scrubber from v0.9.82.
-- Dragon Home hotspot.
-- Pin-first Dashboard.
-- Existing delivery, pricing, invoice, reconciliation and backup logic unchanged.
+Clean architectural repair
+- Added one setDeliveryView() controller.
+- Create and Archive states are now mutually exclusive.
+- openDeliveryCreate() always establishes Create state before navigation.
+- openDeliveryArchive() always establishes Archive state before navigation.
+- switchTab() no longer independently changes delivery modes.
+- Records and saved-docket links now enter through openDeliveryArchive().
+- Added a clean late CSS layer so Create Delivery uses a normal iPhone scroll pane
+  and cannot inherit the archive's fixed-height clipping rules.
 
-Test
+A–Z scrubber improvement
+- Typed Find Product search is UNCHANGED: more typed letters still narrow the list.
+- A–Z scrubber no longer filters the dropdown to a single letter.
+- Scrubbing to a letter selects the first product at/after that alphabetical position.
+- The FULL alphabetic product list remains available when the selector is opened.
+- This means landing on R instead of T still leaves Pin only a short scroll away.
+
+Test sequence
 1. Dashboard > New Delivery.
-2. Confirm complete Create Delivery form appears immediately.
-3. Confirm A–Z scrubber works.
-4. Tap dragon to return Dashboard.
-5. Menu > Delivery Dockets > + New Delivery.
-6. Confirm the screen looks and behaves the same through both routes.
+   - Complete Create Delivery form must be visible.
+2. Dragon > Dashboard.
+3. Menu > Delivery Dockets > + New Delivery.
+   - Must produce the identical Create Delivery screen.
+4. Drag A–Z scrubber to R/S/T.
+   - Product selection should jump alphabetically.
+   - Open Product dropdown: full catalogue should still be available.
+5. Type several letters into Find Product.
+   - Existing narrowing search must still work unchanged.
+6. Add a line and save a test docket.
+7. Open the saved docket from Records and from Delivery Dockets archive.

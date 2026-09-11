@@ -1551,7 +1551,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 .payPinTrend{margin:7px 0;border:1px solid #dbe3ec;border-radius:11px;background:#fff;padding:8px 9px}.payPinTrendTitle{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;font-weight:900;color:#475467;margin-bottom:6px}.payPinTrendGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.payPinTrendCell{min-width:0;border:1px solid #e4e8ef;border-radius:9px;padding:7px 5px;text-align:center;background:#fbfcfd}.payPinTrendCell .d{font-size:8px;line-height:1.1;color:#667085;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.payPinTrendCell .a{font-size:15px;line-height:1.15;font-weight:950;color:#172033;margin-top:4px;white-space:nowrap}.payPinTrendCell.current{background:#f4fbf6;border-color:#cfe8d5}.payPinTrendCell.current.due{background:#fffaf0;border-color:#f1d48b}.payPinTrendCell.current .d{color:#475467}.payPinTrendCell.current .a{color:#246b3a}.payPinTrendCell.current.due .a{color:#8a4b08}.payPinTrendArrow{font-size:11px;font-weight:900}.payPinTrendArrow.up{color:#246b3a}.payPinTrendArrow.down{color:#9a3412}.payPinTrendArrow.flat{color:#667085}@media(max-width:390px){.payPinTrendGrid{gap:4px}.payPinTrendCell{padding:6px 3px}.payPinTrendCell .a{font-size:14px}.payPinTrendCell .d{font-size:7px}}
 @media(max-width:390px){#home .dashboardQuickGrid .btn{font-size:11px!important}.dashboardActionCard .smallStatus{font-size:12px}}
 
-/* v0.9.83 invoice record layout + single-file backup */
+/* v0.9.84 invoice record layout + single-file backup */
 #invoiceViewerBody{max-width:760px;margin:0 auto}
 #invoiceViewer .invoiceCard{padding:11px 12px;margin-top:6px}
 #invoiceViewer .invoiceHead{padding-bottom:7px;margin-bottom:7px}
@@ -1574,7 +1574,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 @media(min-width:700px){#invoiceViewerBody{max-width:680px}#invoiceViewer .invoiceBranches{grid-template-columns:1fr 1fr}}
 
 
-/* v0.9.83 invoice record layout + single-file backup */
+/* v0.9.84 invoice record layout + single-file backup */
 #invoiceViewerBody{max-width:980px!important;margin:0 auto!important}
 #invoiceViewer .invoiceCard{padding:9px 10px!important;margin-top:4px!important}
 #invoiceViewer .invoiceHead{padding-bottom:5px!important;margin-bottom:5px!important;align-items:center!important}
@@ -1626,7 +1626,7 @@ body.docketMode .docketActiveScroll{display:block!important}
  #invoiceViewer .invoiceTotal .v{font-size:19px!important}
 }
 
-/* v0.9.83 professional saved-invoice document */
+/* v0.9.84 professional saved-invoice document */
 #invoiceViewerBody{max-width:1080px!important}
 #invoiceViewer .invoiceDocument{grid-column:1/-1;background:#fff;border:1px solid #cfd6e1;border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,.05)}
 #invoiceViewer .invoiceDocHeader{display:flex;justify-content:space-between;gap:24px;padding:20px 22px 16px;border-bottom:2px solid #172033;background:#fff}
@@ -1692,7 +1692,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.83 compact invoice management console */
+/* v0.9.84 compact invoice management console */
 #invoiceViewer .invoiceManagementTitle{
   display:block;
   margin:14px 2px 7px;
@@ -1877,7 +1877,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.83 — compact uniform invoice-management editors + iOS no-focus-zoom */
+/* v0.9.84 — compact uniform invoice-management editors + iOS no-focus-zoom */
 #invoiceViewer .manageEditor{
   padding:8px 9px 9px;
 }
@@ -2025,7 +2025,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.83 — hard iOS no-focus-zoom fix for payment reference note.
+/* v0.9.84 — hard iOS no-focus-zoom fix for payment reference note.
    This overrides an older invoicePaymentFields rule that still used 12px !important. */
 #invoiceViewer #viewerPaymentNote{
   font-size:16px !important;
@@ -2041,7 +2041,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.83 — invisible dragon Home/Dashboard hotspot */
+/* v0.9.84 — invisible dragon Home/Dashboard hotspot */
 .heroBanner{
   position:relative!important;
 }
@@ -2084,7 +2084,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.83 — Pin-first Sunday handover dashboard */
+/* v0.9.84 — Pin-first Sunday handover dashboard */
 #home .pinDashboard{
   margin:0 0 8px;
   padding:10px;
@@ -2240,7 +2240,7 @@ body.docketMode .docketActiveScroll{display:block!important}
 }
 
 
-/* v0.9.83 — experimental A–Z delivery product scrubber */
+/* v0.9.84 — experimental A–Z delivery product scrubber */
 #delivery .deliveryAlphabetWrap{margin:2px 0 4px}
 #delivery .deliveryAlphabetScrubber{
   position:relative;width:100%;height:30px;box-sizing:border-box;display:flex;align-items:center;
@@ -2264,6 +2264,84 @@ body.docketMode .docketActiveScroll{display:block!important}
   #delivery .deliveryAlphabetThumb{width:27px;height:27px;font-size:13px}
 }
 
+
+/* v0.9.84 — clean mutually-exclusive Delivery Create / Archive layout */
+
+/* CREATE MODE:
+   Use the normal section scroll pane. Do not inherit the old archive
+   fixed-height flex rules that previously clipped the form. */
+body.deliveryMode #docket.active{
+  display:block!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  min-height:0!important;
+  padding-top:6px!important;
+}
+body.deliveryMode #docket>.deliveryModuleCard{
+  display:block!important;
+  min-height:0!important;
+  height:auto!important;
+  overflow:visible!important;
+}
+body.deliveryMode #deliveryCreatePane{
+  display:block!important;
+  min-height:0!important;
+  height:auto!important;
+  overflow:visible!important;
+}
+body.deliveryMode #deliveryArchivePane{
+  display:none!important;
+}
+body.deliveryMode #deliveryCreatePane>.deliveryWorkspace{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  min-height:0!important;
+  overflow:visible!important;
+}
+body.deliveryMode .deliveryTopPane,
+body.deliveryMode .deliveryMiddlePane,
+body.deliveryMode .deliveryBottomPane{
+  display:block!important;
+  height:auto!important;
+  min-height:0!important;
+  overflow:visible!important;
+  flex:none!important;
+}
+body.deliveryMode .deliveryMiddlePane{
+  margin-top:5px!important;
+}
+body.deliveryMode .deliveryLinesWrap{
+  height:auto!important;
+  max-height:34dvh!important;
+  min-height:68px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  touch-action:pan-y!important;
+}
+
+/* ARCHIVE MODE:
+   Keep the existing compact saved-docket viewer behaviour. */
+body.docketMode #deliveryArchivePane{
+  display:block!important;
+}
+body.docketMode #deliveryCreatePane{
+  display:none!important;
+}
+
+/* Never allow both mode classes to produce competing rules if old state
+   is encountered from a cached page before the new JS normalises it. */
+body.deliveryMode.docketMode #docket.active{
+  overflow-y:auto!important;
+}
+body.deliveryMode.docketMode #deliveryCreatePane{
+  display:block!important;
+}
+body.deliveryMode.docketMode #deliveryArchivePane{
+  display:none!important;
+}
+
 </style>
 </head>
 <body>
@@ -2278,7 +2356,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
       <button class="heroHomeHotspot noPrint" type="button" aria-label="Return to Dashboard" title="Dashboard" onclick="returnToDashboardFromHeader()"></button>
     </div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.9.83</span>
+      <span class="app-version">v0.9.84</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -2774,14 +2852,30 @@ let activeDeliveryLetter="";
 function fillProducts(){
  const s=document.getElementById("delProduct"), b=document.getElementById("delBranch").value,q=norm(document.getElementById("deliveryProductSearch")?.value||"");
  const previous=s.value;
- let products=branchProducts(b);
- if(q)products=products.filter(p=>norm(p.name).includes(q));
- else if(activeDeliveryLetter)products=products.filter(p=>norm(p.name).startsWith(norm(activeDeliveryLetter)));
- products=products.sort((a,b)=>a.name.localeCompare(b.name, "en", {sensitivity:"base", numeric:true}));
+ let products=branchProducts(b).sort((a,b)=>a.name.localeCompare(b.name, "en", {sensitivity:"base", numeric:true}));
+
+ // Typed search keeps its existing narrowing behaviour.
+ if(q){
+   products=products.filter(p=>norm(p.name).includes(q));
+ }
+
  s.innerHTML=products.map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join("");
- if(!products.length)s.innerHTML='<option value="">No product for this letter</option>';
- else if(!q && activeDeliveryLetter)s.value=products[0].id;
- else if(products.some(p=>p.id===previous))s.value=previous;
+ if(!products.length){
+   s.innerHTML='<option value="">No matching product</option>';
+   return;
+ }
+
+ // A–Z scrubber never filters the catalogue. It simply selects the
+ // first product at or after the chosen alphabetical neighbourhood.
+ if(!q && activeDeliveryLetter){
+   const target=norm(activeDeliveryLetter);
+   let jumpIndex=products.findIndex(p=>norm(p.name).charAt(0)>=target);
+   if(jumpIndex<0)jumpIndex=products.length-1;
+   s.selectedIndex=jumpIndex;
+   return;
+ }
+
+ if(products.some(p=>p.id===previous))s.value=previous;
 }
 function normalizeDraftLines(lines){return (lines||[]).map(l=>({productId:String(l.productId||""),qty:Number(l.qty||0)})).filter(l=>l.productId&&l.qty>0);}
 function docketDraftChanged(){
@@ -2913,7 +3007,7 @@ document.getElementById("saveDelivery").onclick=()=>{
    refreshReconciliationViews();
    processPendingDocketCorrections();
    resetDeliveryEditor(); renderDocketArchive(savedId); renderMetrics(); renderHistory(); renderAudit(); renderDashboardAlerts();
-   switchTab("docket");
+   openDeliveryArchive(savedId);
    const corr=(db.pendingCorrections||[]).find(c=>c.docketId===savedId&&c.createdAt===editAt);
    if(corr?.status==="waiting_reconciliation")alert("Docket saved. The correction choice is locked in. The app will apply it automatically as soon as this week reconciles again.");
    else if(changed&&before.deliveredAt&&affectedInv)alert(resolutionChoice==="update_current"?"Docket saved. This invoice has been updated automatically.":(invoiceIsPaid(affectedInv)?"Docket saved. The paid invoice remains unchanged. Any financial difference will be added automatically to the next Sunday invoice.":"Docket saved. The correction will be added automatically to the next Sunday invoice."));
@@ -3274,7 +3368,7 @@ function recordItemHtml(x){
  else action=`openRecordWeekly('${o.id}')`;
  return `<div class="recordItemDirect"><button type="button" class="recordItemButton" onclick="${action}"><span class="recordDate">${escapeHtml(recordDateLabel(x.date))}</span><span class="recordMain"><div class="recordName">${escapeHtml(x.title)}</div><div class="recordMeta">${escapeHtml(x.meta)}</div></span><span class="recordStatus ${x.statusClass||''}">${escapeHtml(x.status)}</span><span class="recordOpenChevron">›</span></button></div>`;
 }
-window.openRecordDelivery=id=>{switchTab("docket");renderDocketArchive(id)};
+window.openRecordDelivery=id=>openDeliveryArchive(id);
 window.openRecordSunday=id=>{switchTab('import');renderArchive(id);setTimeout(()=>{document.getElementById('archiveList')?.scrollIntoView({behavior:'smooth',block:'start'})},60)};
 window.openRecordInvoice=id=>openInvoiceRecord(id);
 window.openRecordWeekly=id=>{
@@ -3283,7 +3377,7 @@ window.openRecordWeekly=id=>{
  alert(`${recordDateLabel(w.date)} — ${displayBranchName(w.branch)}\n\nSaved manual stock/weekly check. This is a fallback record; normal Sunday work is handled from the Sunday Excel reports.`);
 };
 
-window.showDock=id=>{switchTab("docket");renderDocketArchive(id)}
+window.showDock=id=>openDeliveryArchive(id)
 window.deleteRecord=(kind,id)=>{
  if(kind==="Delivery")return deleteDocket(id);
  if(!confirm(`Delete this ${kind.toLowerCase()} record?`))return;
@@ -5718,12 +5812,21 @@ function renderSundayWizard(){
 
 document.getElementById("recordsSearch")?.addEventListener("input",renderHistory);
 document.getElementById("recordsType")?.addEventListener("change",renderHistory);
+function setDeliveryView(mode){
+  const archive=document.getElementById("deliveryArchivePane");
+  const create=document.getElementById("deliveryCreatePane");
+  const isCreate=mode==="create";
+
+  if(archive)archive.style.display=isCreate?"none":"block";
+  if(create)create.style.display=isCreate?"block":"none";
+
+  // Create and Archive are deliberately mutually exclusive.
+  document.body.classList.toggle("deliveryMode",isCreate);
+  document.body.classList.toggle("docketMode",!isCreate);
+}
 function openDeliveryCreate(preserveEdit=false){
-  const a=document.getElementById("deliveryArchivePane"),c=document.getElementById("deliveryCreatePane");
-  if(a)a.style.display="none";
-  if(c)c.style.display="block";
+  setDeliveryView("create");
   switchTab("docket");
-  document.body.classList.add("deliveryMode","docketMode");
   if(!preserveEdit && !editingDocketId){
     const d=document.getElementById("delDate");
     if(d&&!d.value)d.value=today();
@@ -5731,16 +5834,16 @@ function openDeliveryCreate(preserveEdit=false){
   fillProducts();
   renderDelivery();
   const target=document.getElementById("docket");
-  if(target){target.scrollTop=0;requestAnimationFrame(()=>target.scrollTop=0)}
+  if(target){
+    target.scrollTop=0;
+    requestAnimationFrame(()=>{target.scrollTop=0});
+  }
 }
 function openDeliveryArchive(openId){
-  const a=document.getElementById("deliveryArchivePane"),c=document.getElementById("deliveryCreatePane");
-  if(a)a.style.display="block";
-  if(c)c.style.display="none";
+  setDeliveryView("archive");
   switchTab("docket");
-  document.body.classList.remove("deliveryMode");
-  document.body.classList.add("docketMode");
-  if(openId!==undefined)renderDocketArchive(openId);else renderDocketArchive();
+  if(openId!==undefined)renderDocketArchive(openId);
+  else renderDocketArchive();
 }
 window.openDeliveryCreate=openDeliveryCreate;window.openDeliveryArchive=openDeliveryArchive;
 function returnToDashboardFromHeader(){
@@ -5752,7 +5855,29 @@ function returnToDashboardFromHeader(){
   if(home){home.scrollTop=0}
 }
 
-function switchTab(id){document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===id));document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===id));document.body.classList.toggle("deliveryMode",id==="docket"&&document.getElementById("deliveryCreatePane")?.style.display!=="none");document.body.classList.toggle("docketMode",id==="docket");if(id!=="sundayWizard")document.body.classList.remove("workflowMode");closeMainMenu();const active=document.getElementById(id);if(active){active.scrollTop=0;requestAnimationFrame(()=>{active.scrollTop=0})}if(id==="weekly"&&!document.querySelector("#weekRows tr"))loadWeek();if(id==="sundayWizard")renderSundayWizard();if(id==="home"){renderPinDashboard();renderMetrics();renderDashboardAlerts()}}
+function switchTab(id){
+  document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===id));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===id));
+
+  // Delivery view mode is owned only by setDeliveryView().
+  // Leaving Delivery Dockets clears both special modes.
+  if(id!=="docket"){
+    document.body.classList.remove("deliveryMode","docketMode");
+  }else if(!document.body.classList.contains("deliveryMode")&&!document.body.classList.contains("docketMode")){
+    setDeliveryView("archive");
+  }
+
+  if(id!=="sundayWizard")document.body.classList.remove("workflowMode");
+  closeMainMenu();
+  const active=document.getElementById(id);
+  if(active){
+    active.scrollTop=0;
+    requestAnimationFrame(()=>{active.scrollTop=0});
+  }
+  if(id==="weekly"&&!document.querySelector("#weekRows tr"))loadWeek();
+  if(id==="sundayWizard")renderSundayWizard();
+  if(id==="home"){renderPinDashboard();renderMetrics();renderDashboardAlerts()}
+}
 document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{if(t.dataset.tab==="docket")openDeliveryArchive();else switchTab(t.dataset.tab)});
 
 const BACKUP_FORMAT="magic-dragon-pin-full-backup";
@@ -5809,7 +5934,7 @@ document.getElementById("exportData").onclick=async()=>{
  const btn=document.getElementById("exportData");if(btn.disabled)return;btn.disabled=true;backupStatus("Preparing complete backup…");
  try{
   const sourceFiles=await exportArchivedSourceFiles(),counts=backupCounts();
-  const pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.9.83",createdAt:new Date().toISOString(),counts,sourceFilesCount:sourceFiles.length,data:JSON.parse(JSON.stringify(db)),sourceFiles};
+  const pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.9.84",createdAt:new Date().toISOString(),counts,sourceFilesCount:sourceFiles.length,data:JSON.parse(JSON.stringify(db)),sourceFiles};
   await downloadBackupPackage(pkg);
   backupStatus(`Backup ready: ${counts.deliveries} deliveries, ${counts.sundayReports} Sunday reports, ${counts.invoices} invoices, ${sourceFiles.length} archived source file${sourceFiles.length===1?"":"s"}.`);
  }catch(e){console.error(e);backupStatus("Backup could not be created. No app data was changed.",true);alert("The full backup could not be created. Your current app data has not been changed.")}
