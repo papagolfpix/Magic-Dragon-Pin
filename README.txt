@@ -1,29 +1,51 @@
-MAGIC DRAGON PIN v0.9.91 — MOBILE CATALOGUE LAYOUT FIX
+MAGIC DRAGON PIN v0.9.92 — SUNDAY SAFETY BUILD
 
-Problem fixed
-- On iPhone the Product Catalogue table was wider than the screen.
-- Type / Cost / Retail columns pushed Archive / Restore controls off-screen.
+Built from verified v0.9.91.
 
-New layout
-- Each product family remains grouped under its parent heading.
-- Each variant now displays as a compact mobile row:
-    Variant badge + product name
-    Type / Cost / Retail underneath
-    Archive / Restore button permanently visible on the right
-- Archive all / Restore all remains on the parent row.
-- No horizontal scrolling should be required.
+ADDED: BASELINE SNAPSHOT
+- Settings > Product catalogue area now includes Safety snapshots.
+- Create Baseline Snapshot stores a known-good snapshot locally on the device.
+- It also immediately opens Share / Download using the same full JSON database payload.
+- Suggested use: create one before Pin begins Sunday operation.
 
-No catalogue logic changed.
-Archive still:
-- removes product from new delivery selections
-- preserves product ID
-- preserves historical dockets, Sunday reports, invoices, mappings and audit data
-- can be reversed with Restore
+ADDED: SUPPORT BACKUP
+- Create Support Backup produces a complete JSON snapshot for troubleshooting.
+- Optional note can be included in the filename/payload.
+- Uses iPhone native Share sheet when available.
+- Can be sent to Paul by Mail / Messages / WhatsApp / AirDrop / Files.
+- Does not alter app data.
 
-TEST
-1. Settings > Product Catalogue on iPhone.
-2. Confirm each row fits the screen.
-3. Confirm Archive button is visible.
-4. Archive one obsolete variant.
-5. Confirm it disappears from active catalogue and new Delivery product selection.
-6. Show archived and Restore it.
+ADDED: SUNDAY COMPLETION BACKUP OFFER
+- After the Sunday save/completion action, the app offers to create/share a full support backup.
+- This remains user-confirmed; no silent email/server is used.
+- Reuses the proven JSON backup concept instead of introducing cloud sync before Sunday.
+
+DELIVERY EDITOR POLISH
+- Added mobile-safe styling hooks for existing editable docket rows.
+- Edit mode heading now identifies Edit delivery docket instead of Create delivery where possible.
+- No delivery calculations, totals, invoice logic or saved data structure changed.
+
+PRESERVED
+- v0.9.91 Product Catalogue layout
+- Product parent/variant grouping
+- Archive / Restore
+- Suggested delivery dockets
+- Combined suggested packing view
+- Existing invoice/payment logic
+- Existing backup/restore data
+
+SUGGESTED TESTS
+1. Settings > Product Catalogue > Create Baseline Snapshot.
+   - Confirm Share sheet opens.
+   - Confirm baseline status shows a timestamp.
+2. Create Support Backup.
+   - Add a short note.
+   - Confirm one JSON file is shared.
+3. Complete a test Sunday workflow.
+   - Confirm the support-backup prompt appears only after completion.
+4. Open an existing suggested delivery docket > Edit Docket.
+   - Confirm edit screen is easier to read on iPhone.
+   - Confirm Qty editing and remove buttons still work.
+5. Return to Product Catalogue.
+   - Confirm Archive / Restore still works.
+6. Confirm Dashboard suggested dockets and Combined Suggested Delivery still open normally.
