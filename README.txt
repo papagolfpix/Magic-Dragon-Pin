@@ -1,4 +1,4 @@
-MAGIC DRAGON PIN v0.9.62 — INK-LIGHT DOCKET PDF
+MAGIC DRAGON PIN v0.9.63 — INK-LIGHT DOCKET PDF
 
 Focused change only:
 - Keeps the proven v0.9.61 docket PDF generation/share mechanism unchanged.
@@ -9,7 +9,7 @@ Focused change only:
 - Applies the same presentation to both Current docket and Include change history PDFs.
 
 DEPLOYMENT
-Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.62 in the header.
+Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.63 in the header.
 
 TEST
 Open one saved docket and create both PDF versions. Confirm the total appears on the right and the large black bar is gone.

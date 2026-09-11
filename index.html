@@ -1457,6 +1457,16 @@ body.workflowMode .contentViewport>#sundayWizard.active{
 .docketPdfChoiceButtons{display:grid;gap:10px}.docketPdfChoiceButtons .btn{width:100%;min-height:50px}.docketPdfChoiceCancel{margin-top:10px;width:100%;background:transparent;border:0;color:#667085;font-weight:700;font-size:16px;padding:10px}
 .docketActions button[aria-busy="true"]{opacity:.65;pointer-events:none}
 
+
+/* v0.9.63 Sunday completion + payment control polish */
+body.workflowMode #paymentPaidFields>div{min-width:0!important}
+body.workflowMode #paymentPaidFields input,
+body.workflowMode #paymentPaidFields select{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+body.workflowMode #paymentPaidFields select{padding-right:34px!important;text-overflow:ellipsis!important}
+@media(max-width:390px){
+ body.workflowMode #paymentPaidFields{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:7px!important}
+ body.workflowMode #paymentPaidFields input,body.workflowMode #paymentPaidFields select{font-size:16px!important;padding-left:8px!important;padding-right:28px!important}
+}
 </style>
 </head>
 <body>
@@ -1468,7 +1478,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
   <div class="hero">
     <div class="heroBanner"><img src="Magic-Dragon-logo.jpeg?v=0960" alt="Magic Dragon Samui — Pin's Weed Warehouse"></div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.9.62</span>
+      <span class="app-version">v0.9.63</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -2218,7 +2228,7 @@ function buildDocketPdfBytes(d,includeHistory=false){
     line(L,y,R,y,.91,.92,.94,.45);
   });
   y-=16;
-  // v0.9.62: ink-light docket summary — compact, right-aligned total with outlined status
+  // v0.9.63: ink-light docket summary — compact, right-aligned total with outlined status
   line(L,y,R,y,.09,.13,.20,1.35);
   const totalLabel='TOTAL COST VALUE';
   const totalValue=pdfMoney(total);
@@ -3977,7 +3987,18 @@ function openSundayWizard(){
 function exitSundayWorkflow(){
   document.body.classList.remove("workflowMode");
   switchTab("home");
-  window.scrollTo({top:0,behavior:"smooth"});
+  const resetHomeScroll=()=>{
+    const home=document.getElementById("home");
+    const viewport=document.querySelector(".contentViewport");
+    if(home) home.scrollTop=0;
+    if(viewport) viewport.scrollTop=0;
+    document.documentElement.scrollTop=0;
+    document.body.scrollTop=0;
+    window.scrollTo(0,0);
+  };
+  resetHomeScroll();
+  requestAnimationFrame(()=>{resetHomeScroll();requestAnimationFrame(resetHomeScroll)});
+  setTimeout(resetHomeScroll,80);
 }
 function wizardAction(type){
   document.body.classList.remove("workflowMode");
@@ -4643,7 +4664,7 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
     window.addEventListener("load",syncGeometry,{once:true});
   })();
 
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0962", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0963", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;
