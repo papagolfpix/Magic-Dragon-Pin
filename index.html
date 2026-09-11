@@ -1550,6 +1550,28 @@ body.docketMode .docketActiveScroll{display:block!important}
 .dashboardRecent>div:nth-child(2){border-top:0}.dashboardRecent span{color:#667085}.dashboardRecent b{text-align:right;color:#1f2937}
 .payPinTrend{margin:7px 0;border:1px solid #dbe3ec;border-radius:11px;background:#fff;padding:8px 9px}.payPinTrendTitle{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;font-weight:900;color:#475467;margin-bottom:6px}.payPinTrendGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}.payPinTrendCell{min-width:0;border:1px solid #e4e8ef;border-radius:9px;padding:7px 5px;text-align:center;background:#fbfcfd}.payPinTrendCell .d{font-size:8px;line-height:1.1;color:#667085;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.payPinTrendCell .a{font-size:15px;line-height:1.15;font-weight:950;color:#172033;margin-top:4px;white-space:nowrap}.payPinTrendCell.current{background:#f4fbf6;border-color:#cfe8d5}.payPinTrendCell.current.due{background:#fffaf0;border-color:#f1d48b}.payPinTrendCell.current .d{color:#475467}.payPinTrendCell.current .a{color:#246b3a}.payPinTrendCell.current.due .a{color:#8a4b08}.payPinTrendArrow{font-size:11px;font-weight:900}.payPinTrendArrow.up{color:#246b3a}.payPinTrendArrow.down{color:#9a3412}.payPinTrendArrow.flat{color:#667085}@media(max-width:390px){.payPinTrendGrid{gap:4px}.payPinTrendCell{padding:6px 3px}.payPinTrendCell .a{font-size:14px}.payPinTrendCell .d{font-size:7px}}
 @media(max-width:390px){#home .dashboardQuickGrid .btn{font-size:11px!important}.dashboardActionCard .smallStatus{font-size:12px}}
+
+/* v0.9.73 information-integrity cleanup + compact invoice record */
+#invoiceViewerBody{max-width:760px;margin:0 auto}
+#invoiceViewer .invoiceCard{padding:11px 12px;margin-top:6px}
+#invoiceViewer .invoiceHead{padding-bottom:7px;margin-bottom:7px}
+#invoiceViewer .invoiceFrom{margin:5px 0 7px;font-size:11px}
+#invoiceViewer .invoiceBranches{gap:6px}
+#invoiceViewer .invoiceBranch{padding:8px 9px}
+#invoiceViewer .invoiceBranchName{margin-bottom:5px}
+#invoiceViewer .invoiceNum{padding:5px 7px}
+#invoiceViewer .invoiceNum .v{font-size:14px}
+#invoiceViewer .invoiceTotal{padding:8px 10px;margin-top:7px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+#invoiceViewer .invoiceTotal .v{font-size:23px;margin:0}
+#invoiceViewer .invoiceState{margin:6px 0 0}
+#invoiceViewer .invoiceSentBox,#invoiceViewer .invoicePaymentBox{padding:9px 10px;margin-top:8px}
+#invoiceViewer .invoiceSentControls,#invoiceViewer .invoicePaymentFields{margin-top:6px}
+#invoiceViewer .invoicePaymentToggle{margin-top:7px}
+#invoiceViewer .invoicePaymentSave{margin-top:7px}
+#invoiceViewer .invoicePaymentSummary{margin-top:6px}
+#exportData,#importData+*{}
+#settings label.btn[for],#settings .btn{font-size:15px;font-weight:850}
+@media(min-width:700px){#invoiceViewerBody{max-width:680px}#invoiceViewer .invoiceBranches{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -1559,9 +1581,9 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
 </script>
 <div class="app">
   <div class="hero">
-    <div class="heroBanner"><img src="Magic-Dragon-logo.jpeg?v=0972" alt="Magic Dragon Samui — Pin's Weed Warehouse"></div>
+    <div class="heroBanner"><img src="Magic-Dragon-logo.jpeg?v=0973" alt="Magic Dragon Samui — Pin's Weed Warehouse"></div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.9.72</span>
+      <span class="app-version">v0.9.73</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -2563,9 +2585,8 @@ function renderMetrics(){
  const activeDate=db.activeSundayCycleDate||null;
  const sundayLabel=activeDate?`In progress · ${recordDateLabel(activeDate)}`:"Ready for next Sunday";
  const am=document.getElementById("dashboardActionMetrics");if(am)am.innerHTML=`<div class="dashboardActionCard ${unpaid.length?'warn':'ok'}"><div class="k">Unpaid invoices</div><div class="v">${unpaid.length?`${unpaid.length} · ${baht(unpaidTotal)}`:"None"}</div></div><div class="dashboardActionCard ${activeDate?'warn':'ok'}"><div class="k">Sunday status</div><div class="v smallStatus">${escapeHtml(sundayLabel)}</div></div>`;
- document.getElementById("metrics").innerHTML=[
-  ["Saved deliveries",db.deliveries.length],["Delivery cost value",baht(ds)],["Recorded weekly sales",baht(ws)]
- ].map(x=>`<div class="card metric"><div class="k">${x[0]}</div><div class="v">${x[1]}</div></div>`).join("");
+ const legacyMetrics=document.getElementById("metrics");
+ if(legacyMetrics){legacyMetrics.innerHTML="";legacyMetrics.style.display="none";}
  const trend=document.getElementById("payPinTrend");
  if(trend){
    const paid=currentInvoices.filter(i=>i.payment?.status==='paid').sort((a,b)=>String(b.reportDate||b.payment?.date||'').localeCompare(String(a.reportDate||a.payment?.date||'')));
@@ -4805,7 +4826,7 @@ function backupCounts(data=db){
   deliveries:Array.isArray(data?.deliveries)?data.deliveries.length:0,
   sundayReports:Array.isArray(data?.sundayImports)?data.sundayImports.length:0,
   invoices:Array.isArray(data?.invoices)?data.invoices.length:0,
-  payments:Array.isArray(data?.payments)?data.payments.length:0
+  payments:Array.isArray(data?.invoices)?data.invoices.filter(i=>i?.payment?.status==="paid").length:(Array.isArray(data?.payments)?data.payments.length:0)
  };
 }
 function bytesToBase64(bytes){let out="";const chunk=0x8000;for(let i=0;i<bytes.length;i+=chunk)out+=String.fromCharCode(...bytes.subarray(i,i+chunk));return btoa(out)}
@@ -4850,7 +4871,7 @@ document.getElementById("exportData").onclick=async()=>{
  const btn=document.getElementById("exportData");if(btn.disabled)return;btn.disabled=true;backupStatus("Preparing complete backup…");
  try{
   const sourceFiles=await exportArchivedSourceFiles(),counts=backupCounts();
-  const pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.9.71",createdAt:new Date().toISOString(),counts,sourceFilesCount:sourceFiles.length,data:JSON.parse(JSON.stringify(db)),sourceFiles};
+  const pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.9.73",createdAt:new Date().toISOString(),counts,sourceFilesCount:sourceFiles.length,data:JSON.parse(JSON.stringify(db)),sourceFiles};
   await downloadBackupPackage(pkg);
   backupStatus(`Backup ready: ${counts.deliveries} deliveries, ${counts.sundayReports} Sunday reports, ${counts.invoices} invoices, ${sourceFiles.length} archived source file${sourceFiles.length===1?"":"s"}.`);
  }catch(e){console.error(e);backupStatus("Backup could not be created. No app data was changed.",true);alert("The full backup could not be created. Your current app data has not been changed.")}
@@ -4925,7 +4946,7 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
     window.addEventListener("load",syncGeometry,{once:true});
   })();
 
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0972", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0973", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;

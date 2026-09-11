@@ -1,19 +1,19 @@
-MAGIC DRAGON PIN v0.9.72 — DASHBOARD PAY PIN CORRECTION + TREND STRIP
+MAGIC DRAGON PIN v0.9.73 — DASHBOARD INFORMATION AUDIT + INVOICE VIEW CLEANUP
 
-Focused release:
-- Fixes the dashboard Pay Pin error: the old figure was summing historical weekly Pin profit-share values, which is not the same as money currently owed.
-- Current Due now comes only from current, non-superseded UNPAID invoices. A paid invoice immediately reduces Current Due to zero.
-- Adds a compact four-column Pay Pin strip: up to three most recent paid invoice cycles plus CURRENT DUE.
-- Missing trusted historical paid cycles show as — rather than inventing values.
-- Adds a small up/down/flat percentage indicator once at least two paid cycles exist.
-- Removes the misleading "Calculated Pay Pin" metric card.
-- No Sunday workflow, invoice, payment, docket or backup data is modified by this release.
+CHANGES
+- Removed Saved Deliveries, Delivery Cost Value and Recorded Weekly Sales from the dashboard. They were historical/database aggregates rather than useful current operational indicators.
+- Confirmed the old Recorded Weekly Sales figure was the sum of stored historical week totals, not the current Sunday cycle; it is no longer shown as a dashboard KPI.
+- Kept operational dashboard information: unpaid invoices/current due, Sunday status, Pay Pin recent weeks, and recent activity.
+- Current Due to Pin remains based only on latest non-void, non-superseded unpaid invoices.
+- Tightened the saved invoice viewer layout, especially on iPad/wider screens, while preserving all accounting/payment controls.
+- Backup summary now counts paid invoice payment records correctly (the prior summary could show Payments: 0 even when an invoice contained a saved payment).
+- Restore/Create backup control typography made more consistent.
 
-DEPLOYMENT
-Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.72 in the header.
+DEPLOY
+Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.73 in the header.
 
 TEST
-1. Dashboard should show CURRENT DUE = ฿0 because the 6 Sep ฿11,194 invoice is paid.
-2. The recent paid strip should show the 6 Sep cycle as ฿11,194 and — for unavailable earlier paid cycles.
-3. Records > Invoices should still show the 6 Sep invoice as PAID with the 11 Sep bank-transfer payment.
-4. Create a test unpaid state only if desired later; Current Due should equal the unpaid invoice amount and return to zero when marked paid.
+1. Dashboard should no longer show Saved Deliveries, Delivery Cost Value or Recorded Weekly Sales.
+2. Pay Pin strip should show 06 Sep 2026 = THB 11,194 and CURRENT DUE = THB 0 for the current restored data.
+3. Open Records > Invoices and check that the invoice record is compact and readable on iPhone/iPad.
+4. Create a backup and verify the restore preview reports Payments: 1 for the currently paid invoice.
