@@ -1558,9 +1558,9 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
 </script>
 <div class="app">
   <div class="hero">
-    <div class="heroBanner"><img src="Magic-Dragon-logo.jpeg?v=0970" alt="Magic Dragon Samui — Pin's Weed Warehouse"></div>
+    <div class="heroBanner"><img src="Magic-Dragon-logo.jpeg?v=0971" alt="Magic Dragon Samui — Pin's Weed Warehouse"></div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.9.70</span>
+      <span class="app-version">v0.9.71</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -1866,12 +1866,13 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
       <details class="settingGroup">
         <summary>Backup & local data</summary>
         <div class="settingGroupBody">
-          <div class="small" style="margin-bottom:9px">Export a local backup before major changes or restore an existing backup to this device.</div>
+          <div class="small" style="margin-bottom:9px">Create one complete backup for moving Pin's app to another device. It includes app records, settings, mappings and any archived Sunday source workbooks stored on this device.</div>
           <div class="actionbar" style="margin:0">
-            <button class="btn alt" id="exportData">Export backup</button>
-            <label class="btn alt" style="display:inline-block">Import backup<input id="importData" type="file" accept=".json" hidden></label>
+            <button class="btn alt" id="exportData">Create full backup</button>
+            <label class="btn alt" style="display:inline-block">Restore backup<input id="importData" type="file" accept=".json,application/json" hidden></label>
             <button class="btn danger" id="resetData">Reset local data</button>
           </div>
+          <div id="backupStatus" class="small" style="margin-top:9px">No backup action in progress.</div>
         </div>
       </details>
     </div>
@@ -4778,11 +4779,86 @@ window.openDeliveryCreate=openDeliveryCreate;window.openDeliveryArchive=openDeli
 function switchTab(id){document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===id));document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab===id));document.body.classList.toggle("deliveryMode",id==="docket"&&document.getElementById("deliveryCreatePane")?.style.display!=="none");document.body.classList.toggle("docketMode",id==="docket");if(id!=="sundayWizard")document.body.classList.remove("workflowMode");closeMainMenu();const active=document.getElementById(id);if(active){active.scrollTop=0;requestAnimationFrame(()=>{active.scrollTop=0})}if(id==="weekly"&&!document.querySelector("#weekRows tr"))loadWeek();if(id==="sundayWizard")renderSundayWizard();if(id==="home")renderDashboardAlerts()}
 document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{if(t.dataset.tab==="docket")openDeliveryArchive();else switchTab(t.dataset.tab)});
 
-document.getElementById("exportData").onclick=()=>{
- const blob=new Blob([JSON.stringify(db,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="magic-dragon-pin-backup.json";a.click();URL.revokeObjectURL(a.href)
+const BACKUP_FORMAT="magic-dragon-pin-full-backup";
+const BACKUP_SCHEMA=1;
+function backupStatus(msg,bad=false){const el=document.getElementById("backupStatus");if(el){el.textContent=msg;el.style.color=bad?"#991b1b":""}}
+function backupCounts(data=db){
+ return {
+  products:Array.isArray(data?.products)?data.products.length:0,
+  deliveries:Array.isArray(data?.deliveries)?data.deliveries.length:0,
+  sundayReports:Array.isArray(data?.sundayImports)?data.sundayImports.length:0,
+  invoices:Array.isArray(data?.invoices)?data.invoices.length:0,
+  payments:Array.isArray(data?.payments)?data.payments.length:0
+ };
+}
+function bytesToBase64(bytes){let out="";const chunk=0x8000;for(let i=0;i<bytes.length;i+=chunk)out+=String.fromCharCode(...bytes.subarray(i,i+chunk));return btoa(out)}
+function base64ToBytes(text){const raw=atob(text),out=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)out[i]=raw.charCodeAt(i);return out}
+async function exportArchivedSourceFiles(){
+ try{
+  const idb=await openFileDb();
+  const rows=await new Promise((resolve,reject)=>{const tx=idb.transaction("sourceFiles","readonly"),rq=tx.objectStore("sourceFiles").getAll();rq.onsuccess=()=>resolve(rq.result||[]);rq.onerror=()=>reject(rq.error)});
+  idb.close();
+  const out=[];
+  for(const rec of rows){
+   if(!rec?.blob)continue;
+   const bytes=new Uint8Array(await rec.blob.arrayBuffer());
+   out.push({id:rec.id,archiveName:rec.archiveName||"Sunday-Report.xlsx",storedAt:rec.storedAt||null,type:rec.blob.type||"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",data:bytesToBase64(bytes)});
+  }
+  return out;
+ }catch(e){console.warn("Backup could not read archived source files",e);return []}
+}
+async function replaceArchivedSourceFiles(files){
+ const idb=await openFileDb();
+ await new Promise((resolve,reject)=>{const tx=idb.transaction("sourceFiles","readwrite"),store=tx.objectStore("sourceFiles");store.clear();for(const f of files||[]){if(!f?.id||!f?.data)continue;const bytes=base64ToBytes(f.data);store.put({id:f.id,archiveName:f.archiveName||"Sunday-Report.xlsx",storedAt:f.storedAt||new Date().toISOString(),blob:new Blob([bytes],{type:f.type||"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"})})}tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error)});
+ idb.close();
+}
+function validateBackupPackage(pkg){
+ if(!pkg||typeof pkg!=="object")throw new Error("This is not a Magic Dragon backup file.");
+ if(pkg.format!==BACKUP_FORMAT||Number(pkg.schema)!==BACKUP_SCHEMA)throw new Error("This backup format is not supported by this version of Magic Dragon.");
+ if(!pkg.data||typeof pkg.data!=="object")throw new Error("The backup does not contain app data.");
+ ["products","deliveries"].forEach(k=>{if(!Array.isArray(pkg.data[k]))throw new Error(`Backup is missing ${k}.`)});
+ if(pkg.sourceFiles!=null&&!Array.isArray(pkg.sourceFiles))throw new Error("Archived source files are invalid.");
+ return true;
+}
+async function downloadBackupPackage(pkg){
+ const blob=new Blob([JSON.stringify(pkg)],{type:"application/json"});
+ const fileName=`Magic-Dragon-Pin-Backup-${today()}.json`;
+ const file=new File([blob],fileName,{type:"application/json"});
+ if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+  try{await navigator.share({files:[file],title:"Magic Dragon Pin backup"});return}catch(e){if(e?.name==="AbortError")return}
+ }
+ const a=document.createElement("a"),url=URL.createObjectURL(blob);a.href=url;a.download=fileName;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);
+}
+document.getElementById("exportData").onclick=async()=>{
+ const btn=document.getElementById("exportData");if(btn.disabled)return;btn.disabled=true;backupStatus("Preparing complete backup…");
+ try{
+  const sourceFiles=await exportArchivedSourceFiles(),counts=backupCounts();
+  const pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.9.71",createdAt:new Date().toISOString(),counts,sourceFilesCount:sourceFiles.length,data:JSON.parse(JSON.stringify(db)),sourceFiles};
+  await downloadBackupPackage(pkg);
+  backupStatus(`Backup ready: ${counts.deliveries} deliveries, ${counts.sundayReports} Sunday reports, ${counts.invoices} invoices, ${sourceFiles.length} archived source file${sourceFiles.length===1?"":"s"}.`);
+ }catch(e){console.error(e);backupStatus("Backup could not be created. No app data was changed.",true);alert("The full backup could not be created. Your current app data has not been changed.")}
+ finally{btn.disabled=false}
 }
 document.getElementById("importData").onchange=e=>{
- const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{Object.assign(db,JSON.parse(r.result));save();alert("Backup imported.")}catch{alert("Invalid backup file.")}};r.readAsText(f)
+ const input=e.target,f=input.files?.[0];if(!f)return;backupStatus("Checking backup file…");
+ const r=new FileReader();
+ r.onload=async()=>{
+  try{
+   const pkg=JSON.parse(r.result);validateBackupPackage(pkg);const c=backupCounts(pkg.data),when=pkg.createdAt?new Date(pkg.createdAt).toLocaleString():"unknown date";
+   const ok=confirm(`Restore this Magic Dragon backup?\n\nCreated: ${when}\nDeliveries: ${c.deliveries}\nSunday reports: ${c.sundayReports}\nInvoices: ${c.invoices}\nPayments: ${c.payments}\nArchived source files: ${(pkg.sourceFiles||[]).length}\n\nThis will replace the data currently stored on this device.`);
+   if(!ok){backupStatus("Restore cancelled. Current data was not changed.");return}
+   backupStatus("Restoring backup…");
+   await replaceArchivedSourceFiles(pkg.sourceFiles||[]);
+   Object.keys(db).forEach(k=>delete db[k]);Object.assign(db,pkg.data);
+   localStorage.setItem("mdpin-db",JSON.stringify(db));
+   backupStatus("Restore complete. Reloading…");
+   alert("Backup restored successfully. Magic Dragon will now reload using the restored data.");
+   location.reload();
+  }catch(err){console.error(err);backupStatus(err?.message||"Invalid backup file.",true);alert(err?.message||"This backup file could not be restored.")}
+  finally{input.value=""}
+ };
+ r.onerror=()=>{backupStatus("The selected backup file could not be read.",true);input.value=""};
+ r.readAsText(f)
 }
 document.getElementById("masterProductSearch").oninput=filterMasterProductSetup;
 document.getElementById("fillMasterCurrent").onclick=()=>renderMasterProductSetup(true);
@@ -4832,7 +4908,7 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
     window.addEventListener("load",syncGeometry,{once:true});
   })();
 
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0970", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=0971", {updateViaCache:"none"}).catch(()=>{}));
 }
 document.getElementById("auditBranch").onchange=renderAudit;
 document.getElementById("auditSearch").oninput=renderAudit;

@@ -1,20 +1,20 @@
-MAGIC DRAGON PIN v0.9.70 — DASHBOARD OPERATIONAL CLEANUP
+MAGIC DRAGON PIN v0.9.71 — FULL BACKUP / RESTORE HARDENING
 
 Focused release:
-- Dashboard is now a compact operational summary rather than a setup page.
-- Quick actions are Delivery Dockets, Sunday Wizard and Records.
-- Unpaid invoices shows outstanding count and total amount due.
-- Sunday status clearly shows Ready for next Sunday or the active cycle date.
-- Recent activity shows latest delivery, completed Sunday cycle and payment when available.
-- Business setup/profit split information is removed from the everyday dashboard.
-- Existing correction and accounting alerts remain conditional and only appear when relevant.
-- Preserves v0.9.69 docket viewer and Records fixes.
+- Settings > Backup & local data now creates a complete portable backup.
+- Backup contains the full app database plus archived Sunday source workbooks stored in IndexedDB.
+- Backup file includes a format/schema marker, timestamp and record counts for validation.
+- Restore validates the package before touching current data and shows exactly what will replace the device state.
+- Restore replaces, rather than merges with, existing app data to avoid stale records surviving.
+- Archived Sunday workbooks are restored to local file storage as part of the same operation.
+- iPhone uses the Share sheet for the backup when supported, with a normal file-save fallback.
+- No Sunday workflow, accounting or docket logic changed.
 
 DEPLOYMENT
-Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.70 in the header.
+Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.71 in the header.
 
 TEST
-1. Open Dashboard and confirm the three quick actions are compact and work.
-2. Confirm Unpaid invoices and Sunday status make sense against the saved data.
-3. Confirm Recent activity is compact and does not overlap the fixed header.
-4. Open Delivery Dockets and Records to confirm v0.9.69 behaviour remains intact.
+1. Settings > Backup & local data > Create full backup.
+2. Save/share the generated Magic-Dragon-Pin-Backup-YYYY-MM-DD.json file.
+3. Preferably test Restore backup on a second browser/device before relying on it operationally.
+4. Confirm restored deliveries, Sunday reports, invoices, payments, mappings and archived source workbooks are present.
