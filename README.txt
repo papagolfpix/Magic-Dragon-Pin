@@ -1,15 +1,20 @@
-MAGIC DRAGON PIN v0.9.69 — DOCKET VIEWER + RECORDS CLEANUP
+MAGIC DRAGON PIN v0.9.70 — DASHBOARD OPERATIONAL CLEANUP
 
 Focused release:
-- Fixes the Delivery Docket viewer collapsing to a thin blank strip when a docket is selected.
-- Keeps the selected docket in a stable, internally scrolling viewer beneath the selector list.
-- Records group headers now use a simple right-side chevron only; stored-record count bubbles are removed.
-- Preserves all v0.9.68 Sunday Reports cleanup and workflow/accounting logic.
+- Dashboard is now a compact operational summary rather than a setup page.
+- Quick actions are Delivery Dockets, Sunday Wizard and Records.
+- Unpaid invoices shows outstanding count and total amount due.
+- Sunday status clearly shows Ready for next Sunday or the active cycle date.
+- Recent activity shows latest delivery, completed Sunday cycle and payment when available.
+- Business setup/profit split information is removed from the everyday dashboard.
+- Existing correction and accounting alerts remain conditional and only appear when relevant.
+- Preserves v0.9.69 docket viewer and Records fixes.
 
 DEPLOYMENT
-Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.69 in the header.
+Replace all 7 files in the GitHub Pages repository root, commit, wait for deployment, then confirm v0.9.70 in the header.
 
 TEST
-1. Open Delivery Dockets and tap each saved docket. Confirm the docket body and action buttons appear beneath the selector list every time.
-2. Tap the selected docket again and confirm it closes cleanly.
-3. Open Records and confirm Delivery dockets / Sunday reports / Invoices / Payments show only a right-side chevron, with no count bubble.
+1. Open Dashboard and confirm the three quick actions are compact and work.
+2. Confirm Unpaid invoices and Sunday status make sense against the saved data.
+3. Confirm Recent activity is compact and does not overlap the fixed header.
+4. Open Delivery Dockets and Records to confirm v0.9.69 behaviour remains intact.
