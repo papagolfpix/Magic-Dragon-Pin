@@ -1,53 +1,43 @@
-MAGIC DRAGON PIN v0.10.4 — CORRECTED SHARED KEYBOARD-SAFE FORM RULE
+MAGIC DRAGON PIN v0.10.6 — BACKUP & RECOVERY CONSOLIDATION
 
-Built from verified v0.10.3.
+Built directly from the proven v0.10.4 production candidate.
+The experimental v0.10.5 barcode-label-sheet module is NOT included.
 
-ROOT CAUSE OF v0.10.3 FAILURE
-The first shared keyboard helper relied on scrollIntoView().
-Magic Dragon does NOT use the browser page as its normal scroll owner.
-Each active app page (.section.active) is an absolute/fixed-shell scroll container.
-On iPhone Safari, scrollIntoView() could therefore centre the barcode field against
-the wrong viewport and push it above the visible screen when the keyboard opened.
+SETTINGS
+Backup controls are now consolidated under one clear:
+Backup & Recovery
 
-CORRECT FIX
-The helper now:
-1. Finds the real app scroll owner, normally the current .section.active.
-2. Reads Safari visualViewport to determine the area actually visible above the keyboard.
-3. Intersects that area with the app's own scrollable section.
-4. Calculates exactly how far the app scroll container must move.
-5. Adjusts section.scrollTop directly.
-6. Runs a second correction after Safari's native focus movement.
-7. Rechecks several times during the keyboard animation.
+PRODUCT CATALOGUE
+The old Safety snapshots card has been removed from Product Catalogue.
 
-BLUEPRINT / HANDOVER RULE — REVISED
-For Magic Dragon mobile forms:
-- The active .section is normally the scroll owner.
-- Do NOT use window scrolling or scrollIntoView() as the primary keyboard fix.
-- Move the real app scroll container directly using visualViewport-safe geometry.
-- Keep focused fields visibly above the iPhone keyboard with surrounding context.
-- New standard inputs should opt in with class="keyboardSafeInput".
-- Special task editors may use their own dedicated keyboard manager.
-- Editable mobile text remains >=16px to prevent Safari zoom.
+BACKUP & RECOVERY NOW PROVIDES
+- Create Full Backup
+- Restore Full Backup
+- Create Quick Safety Snapshot
+- Restore Local Snapshot
+- Create Support Backup
+- Test Sunday Backup Prompt under Advanced / testing
+- Reset Local Data isolated in a danger area
 
-APPLIED TO
-- Product Catalogue shop barcode fields
-- Add Product barcode fields
+IN-APP GUIDE
+Explains exactly what each backup type contains.
 
-UNCHANGED
-- Barcode storage and duplicate protection
-- Barcode Dashboard routing
-- Delivery Docket barcode graphic / A4 PDF
-- Delivery editor specialised Qty keyboard handling
-- Sunday workflow
-- Suggested delivery / Combined Suggested Delivery
-- Product archive/restore
-- Invoices/payments
-- Backup/restore
+FULL BACKUP
+Primary handover/device-transfer recovery file.
+Contains app records/settings/mappings PLUS archived Sunday source workbooks stored on the device.
 
-TEST
-1. Dashboard > Barcode needed.
-2. Tap a barcode field near the lower part of the catalogue.
-3. Let keyboard fully open.
-4. The selected barcode field should move into the visible area above the keyboard,
-   not disappear above the top of the screen.
-5. Type a barcode, dismiss keyboard and repeat on another lower field.
+QUICK SAFETY SNAPSHOT
+App database only.
+Stored locally and offered through Share.
+Does not include archived Sunday source workbooks.
+
+SUPPORT BACKUP
+Shareable app-database snapshot with optional troubleshooting note.
+Does not alter data.
+
+DASHBOARD
++ Add Product now uses the same grey visual family as the shortcut buttons above it.
+
+DATA / BUSINESS LOGIC
+No delivery, Sunday, invoice, payment, catalogue or barcode business logic was changed.
+The proven v0.10.4 keyboard-safe input behavior remains intact.
