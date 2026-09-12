@@ -1,14 +1,55 @@
-MAGIC DRAGON PIN v0.9.99 — BARCODE READINESS
+MAGIC DRAGON PIN v0.10.0 — BARCODE RENDERING + DELIVERY DOCKET
 
-Optional shop barcodes now live on individual sellable variants/SKUs.
-Add Product supports optional barcode entry for 1g, 5g, Pre-Roll and custom variants.
-Product Catalogue supports direct barcode editing.
-Duplicate barcodes are blocked.
-Dashboard shows a Barcode needed task for active variants missing a barcode.
-Tapping the task opens Product Catalogue filtered to missing barcodes only.
+Built from verified v0.9.99.
 
-Archived products do not create missing-barcode tasks, but archived barcodes still remain reserved to prevent accidental reuse.
+NEW REUSABLE BARCODE ENGINE
+- Internal Code 128-B renderer.
+- No external website, library or API required.
+- Barcode data remains stored as plain text on the variant.
+- Graphics are generated only when displayed/printed.
+- Same engine is designed to be reused later for sticker sheets and stock labels.
 
-Barcode graphics/sticker printing are intentionally not included yet; that is the next barcode module after the stored data is verified.
+DELIVERY DOCKET VIEWER
+- Added Barcode column on the right side.
+- Each product variant with a stored barcode displays:
+    scannable Code 128 graphic
+    human-readable barcode text underneath
+- Variants without a barcode show a blank dash.
+- Existing product/pricing/quantity data is unchanged.
 
-All v0.9.98 delivery editor, Sunday workflow, suggested deliveries, Combined Suggested Delivery, archive/restore, invoice/payment and backup logic is preserved.
+A4 DELIVERY DOCKET PDF
+- Added a Barcode column on the right margin.
+- Barcode graphic is generated directly into the PDF drawing commands.
+- Human-readable barcode text is printed underneath.
+- Product remains the widest text column.
+- If a code is unusually long and would make bars too narrow to print reliably, the PDF keeps the human-readable code rather than drawing an unsafe barcode.
+
+BARCODE FORMAT
+- Current graphics use Code 128-B.
+- Supports printable ASCII characters, including ordinary numeric shop codes.
+- This is intentionally general because Pin may receive numeric or alphanumeric shop codes.
+
+NOT YET INCLUDED
+- Sticker-sheet printing.
+- Bulk label quantities.
+- Camera barcode scanning.
+These can reuse this same rendering module.
+
+PRESERVED
+- barcode entry / missing-barcode Dashboard task
+- Delivery editor v0.9.98 behavior
+- Sunday workflow
+- suggested deliveries / Combined Suggested Delivery
+- invoices/payments
+- product families / archive restore
+- backup/restore
+- audit history
+
+TEST
+1. Give one active variant a test barcode in Product Catalogue.
+2. Open a Delivery Docket containing that exact variant.
+3. Confirm barcode appears at right with its text beneath.
+4. Confirm products without codes show no false barcode.
+5. Create / Share PDF.
+6. Open the PDF and confirm the same barcode appears beside that product.
+7. If possible, scan the PDF barcode with another phone/barcode app and confirm it returns the stored text.
