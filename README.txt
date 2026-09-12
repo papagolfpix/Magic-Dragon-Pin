@@ -1,41 +1,39 @@
-MAGIC DRAGON PIN v0.9.93 — SMALL STABILITY PATCH
+MAGIC DRAGON PIN v0.9.94 — CONSERVATIVE AUDIT / CLEANUP
 
-Built from verified v0.9.92.
+Built from verified v0.9.93.
 
-1. DASHBOARD SUGGESTED-DOCKET ROUTING
-- The Dashboard suggestion card now explicitly clears create/edit mode first.
-- It switches to the Delivery Dockets tab/archive state.
-- It waits briefly for the view to settle.
-- It then expands the requested saved suggested docket.
-- This is intended to eliminate the intermittent first-tap opening of the wrong create/edit screen.
-- Docket data, pricing, quantities, PDF and delivery logic are unchanged.
+AUDIT RESULT
+- JavaScript syntax: PASS
+- Duplicate named function declarations: NONE
+- Duplicate window/global handlers: NONE
+- Critical Sunday workflow features preserved
 
-2. TEST SUNDAY BACKUP PROMPT
-Settings > Product catalogue > Safety snapshots now includes:
-- Test Sunday Backup Prompt
+SAFE CLEANUP ONLY
+Removed:
+1. Obsolete PRODUCT_PRICE_PRESETS constant left behind by the old single-SKU Add Product form.
+   - The current parent-product + variant workflow no longer references it.
+2. Obsolete Delivery-editor CSS selectors that no longer attach to any current DOM elements.
 
-This:
-- does NOT alter Sunday reports
-- does NOT create an invoice
-- does NOT reconcile anything
-- simply triggers the same confirmation/support-backup flow used after Sunday completion
+NO BEHAVIOUR CHANGES INTENDED
 
-PRESERVED
-- Combined Suggested Delivery unchanged
-- Product families and variants
+PRESERVED / VERIFIED
+- Product parent + variant catalogue
 - Archive / Restore
+- Dashboard suggested-docket first-tap routing fix
+- Combined Suggested Delivery
 - Baseline Snapshot
 - Support Backup
+- Test Sunday Backup Prompt
+- Existing Sunday workflow
 - Existing invoice/payment logic
-- Existing backup/restore data
-- Delivery docket viewer/editor logic aside from the Dashboard routing reset
+- Existing delivery data / pricing / PDF logic
+- Existing backup/restore data model
 
-TEST
-A. From Dashboard, tap the Bangrak suggested docket once.
-   Confirm it opens the saved-docket viewer directly.
-B. Return Home and tap Lamai once.
-   Confirm it opens correctly first time.
-C. Repeat each once more if desired.
-D. Settings > Product catalogue > Safety snapshots > Test Sunday Backup Prompt.
-   Confirm it says TEST ONLY and opens the Support Backup flow if accepted.
-E. Confirm Combined Suggested Delivery still works unchanged.
+RECOMMENDED CHECK
+This build should behave exactly like v0.9.93. A quick smoke test is enough:
+- open Dashboard
+- open one suggested docket
+- open Combined Suggested Delivery
+- open Product Catalogue
+- verify Archive controls
+- open Safety snapshots
