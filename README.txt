@@ -1,46 +1,57 @@
-MAGIC DRAGON PIN v0.9.96 — DELIVERY EDIT SCROLL CORRECTION
+MAGIC DRAGON PIN v0.9.97 — DELIVERY EDIT WORKSPACE POLISH
 
-This replaces the faulty v0.9.95 edit-scroll approach.
+Built from verified v0.9.96.
 
-ROOT CAUSE
-Magic Dragon uses a fixed contentViewport shell on iPhone.
-v0.9.95 incorrectly tried to make the body/page itself scroll in Edit mode.
-The fixed shell continued clipping the page, so the edit cards extended downward
-without a usable scrolling owner.
+EDIT SCREEN NOW USES THREE FIXED ZONES
 
-CORRECTED ARCHITECTURE
-There is now ONE scroll owner in Delivery Edit mode:
-  #docket inside the existing fixed contentViewport.
+1. TOP ZONE — always visible
+- Delivery Dockets heading
+- Edit delivery docket + reference
+- suggested-docket notice
+- Branch / Date
+- + Add another product
+- Delivery note
+- Vertical spacing and control heights have been reduced without shrinking the main readable input text.
 
-No nested edit-list scrolling.
-No body-scroll workaround.
-No change to the normal saved-docket viewer.
+2. MIDDLE ZONE — ONLY SCROLLING AREA
+- Only the product list scrolls.
+- The rest of the editor remains visible.
+- Product cards are more compact vertically.
+- Product selector remains full-width and readable.
+- Cost / Retail / Cost total stay secondary.
+- Qty and remove controls remain visible.
 
-EDIT MODE
-- #docket fills the available viewport beneath the fixed header.
-- #docket scrolls vertically through the entire edit form.
-- Product cards, bottom controls and Save/Cancel controls all participate in the same scroll.
-- Extra bottom safe-area padding keeps the final controls above iPhone Safari chrome.
-- Product cards have been tightened substantially to reduce unnecessary vertical space.
+3. BOTTOM ZONE — always visible
+- Total cost
+- Cancel
+- Clear Lines
+- Save Docket Changes
 
-PRESERVED
-- saved-docket viewer
-- delivery IDs and quantities
+QTY EDITING
+- Tapping/focusing a Qty box automatically selects the existing number.
+- Typing a new number replaces the old value immediately.
+- No need to press backspace/delete first.
+
+SCROLL POSITION
+- Product-list position is preserved when Qty/product changes cause a rerender.
+
+UNCHANGED
+- saved docket viewer
+- delivery calculations
 - product/pricing logic
 - Sunday reconciliation
-- suggested delivery references
+- suggested docket logic
 - Combined Suggested Delivery
 - invoices/payments
 - archive/restore
-- support/baseline backups
-- PDFs and audit history
+- baseline/support backups
+- PDFs / audit history
 
-CRITICAL TEST
-1. Open suggested docket.
-2. Tap Edit Docket.
-3. Swipe upward through the product list.
-4. Confirm every product can be reached.
-5. Continue until Save Docket Changes / Cancel are visible.
-6. Change one Qty.
-7. Confirm the screen remains at the same scroll position.
-8. Save and confirm viewer opens with the updated quantity.
+TEST
+1. Open a suggested docket > Edit Docket.
+2. Confirm top controls stay visible while products scroll.
+3. Confirm Total cost / Cancel / Clear Lines / Save stay visible at bottom.
+4. Scroll product list from first to last item.
+5. Tap a Qty containing 4 and type 7; result should become 7, not 47.
+6. Change another Qty and confirm product-list scroll position does not jump.
+7. Save and confirm viewer reflects changes.
