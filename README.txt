@@ -1,65 +1,46 @@
-MAGIC DRAGON PIN v0.9.95 — DELIVERY DOCKET EDITOR REPAIR
+MAGIC DRAGON PIN v0.9.96 — DELIVERY EDIT SCROLL CORRECTION
 
-Built from verified v0.9.94.
+This replaces the faulty v0.9.95 edit-scroll approach.
 
-PROBLEM
-The saved Delivery Docket viewer was correct, but Edit Docket reused the Create Delivery presentation.
-On iPhone this caused:
-- heading reverting to Create delivery
-- search/A–Z/new-line controls dominating the screen
-- narrow/truncated product selectors
-- nested/fixed-height scrolling that could trap the last product lines below the visible area
+ROOT CAUSE
+Magic Dragon uses a fixed contentViewport shell on iPhone.
+v0.9.95 incorrectly tried to make the body/page itself scroll in Edit mode.
+The fixed shell continued clipping the page, so the edit cards extended downward
+without a usable scrolling owner.
 
-CLEAN REPAIR
-Edit Docket is now a distinct presentation while still using the exact same delivery data and save engine.
+CORRECTED ARCHITECTURE
+There is now ONE scroll owner in Delivery Edit mode:
+  #docket inside the existing fixed contentViewport.
+
+No nested edit-list scrolling.
+No body-scroll workaround.
+No change to the normal saved-docket viewer.
 
 EDIT MODE
-- Correct heading: Edit delivery docket
-- Existing lines display as full-width mobile cards
-- Product selector gets the full available width
-- Qty has a dedicated compact field
-- Remove button remains visible
-- Cost / retail / cost total appear as small secondary information
-- Product lines remain in the original docket order
-- Entire page uses normal scrolling in Edit mode
-- Extra bottom safe-area padding ensures the final product and save controls can be reached above iPhone Safari chrome
+- #docket fills the available viewport beneath the fixed header.
+- #docket scrolls vertically through the entire edit form.
+- Product cards, bottom controls and Save/Cancel controls all participate in the same scroll.
+- Extra bottom safe-area padding keeps the final controls above iPhone Safari chrome.
+- Product cards have been tightened substantially to reduce unnecessary vertical space.
 
-ADDING A NEW LINE WHILE EDITING
-- Search / A–Z / Product / Add Line tools are collapsed by default
-- Tap “+ Add another product” to reveal the existing proven add-product controls
-- Tap again to hide them
-- No separate data path or duplicate editor was created
-
-STATE SAFETY
-- View mode remains unchanged
-- Create Delivery mode remains unchanged
-- Edit mode is driven explicitly by editingDocketId/editingSuggestionId
-- Cancel and Save return to the normal saved-docket viewer
-- Page position is preserved when changing a product or quantity during edit
-
-UNCHANGED BUSINESS LOGIC
-- delivery IDs
-- suggested-docket references
-- product IDs/prices
+PRESERVED
+- saved-docket viewer
+- delivery IDs and quantities
+- product/pricing logic
 - Sunday reconciliation
-- delivered/not-delivered state
-- correction logic for already-delivered dockets
-- invoice links
-- audit log
-- PDF generation
-- archive/restore
+- suggested delivery references
 - Combined Suggested Delivery
-- baseline/support backups
+- invoices/payments
+- archive/restore
+- support/baseline backups
+- PDFs and audit history
 
-TEST
-1. Open Bangrak suggested docket from Dashboard.
-2. Confirm viewer still looks exactly as before.
-3. Tap Edit Docket.
-4. Confirm heading says Edit delivery docket.
-5. Confirm full product names are readable.
-6. Scroll through every product and confirm the final product is reachable.
-7. Change one Qty and scroll again; confirm position is stable.
-8. Tap + Add another product and confirm search/A–Z/Add Line appear.
-9. Hide those tools again.
-10. Cancel and confirm the saved viewer returns unchanged.
-11. Edit again, make a harmless change, Save Docket Changes and confirm the viewer opens with the saved result.
+CRITICAL TEST
+1. Open suggested docket.
+2. Tap Edit Docket.
+3. Swipe upward through the product list.
+4. Confirm every product can be reached.
+5. Continue until Save Docket Changes / Cancel are visible.
+6. Change one Qty.
+7. Confirm the screen remains at the same scroll position.
+8. Save and confirm viewer opens with the updated quantity.
