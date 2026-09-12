@@ -1,48 +1,53 @@
-MAGIC DRAGON PIN v0.10.3 — SHARED MOBILE KEYBOARD-SAFE INPUT RULE
+MAGIC DRAGON PIN v0.10.4 — CORRECTED SHARED KEYBOARD-SAFE FORM RULE
 
-Built from verified v0.10.2.
+Built from verified v0.10.3.
 
-FIX
-When editing a shop barcode on iPhone, Safari could open the keyboard and move the active field above the visible area.
+ROOT CAUSE OF v0.10.3 FAILURE
+The first shared keyboard helper relied on scrollIntoView().
+Magic Dragon does NOT use the browser page as its normal scroll owner.
+Each active app page (.section.active) is an absolute/fixed-shell scroll container.
+On iPhone Safari, scrollIntoView() could therefore centre the barcode field against
+the wrong viewport and push it above the visible screen when the keyboard opened.
 
-A new reusable keyboard-safe input module now:
-- watches Safari visualViewport changes
-- waits through the keyboard opening animation
-- checks whether the focused field is above/below the visible viewport
-- scrolls the field back into a safe, visible position
-- keeps a generous margin above the keyboard
-- rechecks position while Safari adjusts the visual viewport
+CORRECT FIX
+The helper now:
+1. Finds the real app scroll owner, normally the current .section.active.
+2. Reads Safari visualViewport to determine the area actually visible above the keyboard.
+3. Intersects that area with the app's own scrollable section.
+4. Calculates exactly how far the app scroll container must move.
+5. Adjusts section.scrollTop directly.
+6. Runs a second correction after Safari's native focus movement.
+7. Rechecks several times during the keyboard animation.
 
-APPLIED NOW
-- Product Catalogue barcode fields
+BLUEPRINT / HANDOVER RULE — REVISED
+For Magic Dragon mobile forms:
+- The active .section is normally the scroll owner.
+- Do NOT use window scrolling or scrollIntoView() as the primary keyboard fix.
+- Move the real app scroll container directly using visualViewport-safe geometry.
+- Keep focused fields visibly above the iPhone keyboard with surrounding context.
+- New standard inputs should opt in with class="keyboardSafeInput".
+- Special task editors may use their own dedicated keyboard manager.
+- Editable mobile text remains >=16px to prevent Safari zoom.
+
+APPLIED TO
+- Product Catalogue shop barcode fields
 - Add Product barcode fields
 
-DELIVERY EDITOR
-Delivery Docket Qty fields keep their specialised v0.9.98 keyboard behaviour.
-The shared module deliberately does not interfere with those Qty fields.
-
-BLUEPRINT / HANDOVER RULE — MOBILE INPUTS
-Treat keyboard-safe focus handling as a standard UI rule for Magic Dragon Pin:
-1. Any new mobile text/number input should use the shared keyboard-safe helper unless the screen has its own dedicated keyboard manager.
-2. Focused controls must remain visible above the iPhone keyboard.
-3. Do not rely on Safari's default focus scrolling.
-4. For task-specific editors (such as Delivery Docket Qty), specialised keyboard positioning may override the shared helper.
-5. Keep main editable text at 16px or greater on iPhone to avoid Safari focus zoom.
-6. Test fields near the top and bottom of long scrollable screens before releasing a build.
-
-HOW TO OPT IN FUTURE FIELDS
-- add class="keyboardSafeInput"
-OR
-- call mobileKeyboardSafeFocus(this) on focus and mobileKeyboardSafeBlur(this) on blur.
-
-NO BUSINESS LOGIC CHANGED
-Barcode storage, duplicate protection, Delivery Docket barcode rendering/PDF, Sunday workflow, invoices, archive/restore and backups are unchanged.
+UNCHANGED
+- Barcode storage and duplicate protection
+- Barcode Dashboard routing
+- Delivery Docket barcode graphic / A4 PDF
+- Delivery editor specialised Qty keyboard handling
+- Sunday workflow
+- Suggested delivery / Combined Suggested Delivery
+- Product archive/restore
+- Invoices/payments
+- Backup/restore
 
 TEST
 1. Dashboard > Barcode needed.
-2. Tap a barcode field low down the Product Catalogue.
-3. Confirm keyboard opens.
-4. Confirm the active field remains visible above the keyboard.
-5. Type/edit barcode.
-6. Dismiss keyboard and continue normally.
-7. Repeat using Add Product barcode inputs.
+2. Tap a barcode field near the lower part of the catalogue.
+3. Let keyboard fully open.
+4. The selected barcode field should move into the visible area above the keyboard,
+   not disappear above the top of the screen.
+5. Type a barcode, dismiss keyboard and repeat on another lower field.
