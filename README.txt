@@ -1,68 +1,45 @@
-MAGIC DRAGON PIN v0.10.10 PRODUCTION — UNIFORM DELIVERY HOTFIX
+MAGIC DRAGON PIN v0.10.11 PRODUCTION — DELIVERY STABILITY HOTFIX
 
-BASE
-Built directly from production v0.10.9.
-Retains v0.10.7 footer/keyboard fix, v0.10.8 variant-label work and v0.10.9 finder-only toggle.
+Built directly from production v0.10.10.
 
-PIN-PRIORITY ISSUES FIXED
+OBSERVED FAILURE
+New Delivery -> add one product -> the live editor could collapse/disappear, leaving only a header/table area.
 
-1. NEW DELIVERY COLLAPSED AFTER ADDING A LINE
-Root cause:
-The New Delivery Qty keyboard helper could scroll the whole active #docket section.
-After Safari keyboard movement, that section scroll offset could remain, leaving the fixed top controls and bottom actions visually out of view.
+ROOT CAUSE
+The Add Line handler was doing a global save/render cycle while Pin was still editing:
+- currentDelivery was updated;
+- save() ran;
+- save() calls renderAll();
+- renderAll() rebuilt unrelated screens, including the saved-docket archive;
+- the handler then scrolled the whole docket section.
 
-Fix:
-- The top New Delivery Qty no longer invokes the generic whole-section keyboard scroll helper.
-- Added-line Qty uses the same product-list-only keyboard positioning as Edit/Suggested Delivery.
-- The whole #docket section is never scrolled to position a Delivery Qty field.
+That is unsafe during an active editor session.
 
-2. NEW VS EDIT/SUGGESTED LOOKED DIFFERENT
-Fix:
-New, Edit and Suggested Delivery now use ONE reusable line-item component:
-- Product
-- Qty
-- Cost / Retail / Cost total
-- Remove
-Same card geometry, font sizes, input sizes and scrolling in all three modes.
-The old New-Delivery table editor is retired from the live editor.
+FIX
+- Add Line is now a draft-only in-memory action.
+- It rerenders only the Delivery editor.
+- It does not write the database until Save Delivery is pressed.
+- It no longer scrolls the whole docket section.
+- Only the delivery line list scrolls to the newly-added item.
+- renderAll() will not rebuild the saved-docket archive while Delivery mode is active.
+- Delivery mode forcibly isolates the Create pane from the Archive pane.
 
-3. 1g / 5g / PRE-ROLL LABELS STILL MISSING
-Root cause:
-Older saved production data can contain stale product-family metadata. The prior display fix trusted saved variantKey before the known price/name identity.
-
-Fix:
-Delivery identity now prefers:
-- explicit name suffix (1g / 5g / Pre-Roll), then
-- known price signature, then
-- stored variant metadata.
-This explicit label is used in:
-- Product picker
-- edit/new line cards
-- saved docket viewer
-- printed/PDF docket
-- change-history labels
-
-4. CLEAR WORDING
-Edit docket no longer changes Clear back to "Clear Lines". It stays "Clear".
-
-SMOKE TEST
-A. New Delivery
-- Open New Delivery.
-- Add one product.
-- Confirm top entry controls remain visible.
-- Confirm added item appears as the same editable card style used in Suggested/Edit Delivery.
-- Qty keyboard must not shift the whole page.
-- Dismiss keyboard; Clear and Save remain reachable.
-
-B. Suggested/Edit Delivery
-- Open a suggested docket.
-- Confirm line cards look the same as New Delivery.
-- Hide product finder; only text search + A-Z + help disappear.
-- Product / Qty / Add Line remain visible.
-
-C. VARIANT LABELS
-- Picker must show examples such as "Miami 1g", "Lemon Cherry Gelato 1g", "Lemon Cherry Gelato Pre-Roll".
-- Printed/PDF docket must show the same explicit variant labels.
+RETAINED
+- v0.10.10 unified New/Edit/Suggested Delivery cards
+- explicit 1g / 5g / Pre-Roll labels
+- finder-only hide/show
+- iPhone keyboard/footer fixes
+- Clear wording consistency
 
 NO BUSINESS LOGIC CHANGES
-No Sunday, invoice, payment, price, profit-share, stock or reconciliation calculations changed.
+No Sunday, invoice, payment, stock, price, profit-share or reconciliation logic changed.
+
+TEST
+1. Open New Delivery.
+2. Add one product.
+3. Editor remains visible.
+4. Added line appears as an editable card.
+5. Add several more lines.
+6. Qty keyboard does not move the whole page.
+7. Clear and Save remain reachable.
+8. Save docket successfully.
