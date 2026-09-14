@@ -1,43 +1,41 @@
-MAGIC DRAGON PIN v0.10.6 — BACKUP & RECOVERY CONSOLIDATION
+MAGIC DRAGON PIN v0.10.9 PRODUCTION — PRODUCT FINDER HOTFIX
 
-Built directly from the proven v0.10.4 production candidate.
-The experimental v0.10.5 barcode-label-sheet module is NOT included.
+BASE
+Built directly from production v0.10.8.
+Retains:
+- v0.10.7 iPhone New Delivery footer/keyboard hotfix
+- v0.10.8 explicit 1g / 5g / Pre-Roll variant labels throughout Delivery and printed docket output
 
-SETTINGS
-Backup controls are now consolidated under one clear:
-Backup & Recovery
+BUG
+In Edit / Suggested Delivery, the toggle intended to hide the optional product-finder controls
+was hiding the entire deliveryEntryTools container. That also removed Product, Qty and Add Line.
 
-PRODUCT CATALOGUE
-The old Safety snapshots card has been removed from Product Catalogue.
+FIX
+The Delivery controls are now split into:
+1. OPTIONAL FINDER:
+   - text search
+   - A-Z scrubber
+   - small delivery-entry help
+2. CORE ADD CONTROLS — ALWAYS VISIBLE:
+   - Product
+   - Qty
+   - Add Line
 
-BACKUP & RECOVERY NOW PROVIDES
-- Create Full Backup
-- Restore Full Backup
-- Create Quick Safety Snapshot
-- Restore Local Snapshot
-- Create Support Backup
-- Test Sunday Backup Prompt under Advanced / testing
-- Reset Local Data isolated in a danger area
+The toggle now says:
+- + Show product finder
+- - Hide product finder
 
-IN-APP GUIDE
-Explains exactly what each backup type contains.
+It only opens/closes the optional finder.
+It can never hide Product / Qty / Add Line.
 
-FULL BACKUP
-Primary handover/device-transfer recovery file.
-Contains app records/settings/mappings PLUS archived Sunday source workbooks stored on the device.
+PIN-PRIORITY TEST
+1. Open a Suggested Delivery or existing unsent docket.
+2. Confirm Product, Qty and Add Line are visible.
+3. Tap Hide product finder.
+4. Confirm only Find Product + A-Z + help disappear.
+5. Confirm Product, Qty and Add Line stay visible and usable.
+6. Tap Show product finder and confirm the finder returns.
+7. Save the docket.
 
-QUICK SAFETY SNAPSHOT
-App database only.
-Stored locally and offered through Share.
-Does not include archived Sunday source workbooks.
-
-SUPPORT BACKUP
-Shareable app-database snapshot with optional troubleshooting note.
-Does not alter data.
-
-DASHBOARD
-+ Add Product now uses the same grey visual family as the shortcut buttons above it.
-
-DATA / BUSINESS LOGIC
-No delivery, Sunday, invoice, payment, catalogue or barcode business logic was changed.
-The proven v0.10.4 keyboard-safe input behavior remains intact.
+NO BUSINESS-LOGIC CHANGES
+No Sunday, invoice, payment, catalogue-price, profit-share or stock calculation changes.
