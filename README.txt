@@ -1,4 +1,4 @@
-MAGIC DRAGON PIN v0.10.14 — PRODUCTION CANDIDATE SUNDAY READY v1
+MAGIC DRAGON PIN v0.10.20 — DEPLOY
 
 Built from protected Production v0.10.13. Not copied from TEST.
 
@@ -18,5 +18,5 @@ Before live deployment:
 1. Create Full Backup in current Production.
 2. Keep v0.10.13 ZIP as rollback.
 3. Deploy this candidate.
-4. Confirm v0.10.14 and no TEST badge.
+4. Confirm v0.10.20 and no TEST/DEV badge.
 5. Run the short Production smoke check.

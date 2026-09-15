@@ -1,4 +1,4 @@
-const CACHE_NAME = "magic-dragon-pin-v0.10.14-production-candidate-v1";
+const CACHE_NAME = "magic-pin-v0.10.20-deploy";
 const APP_ASSETS = [
   "./",
   "./index.html",
