@@ -1,16 +1,22 @@
-MAGIC DRAGON PIN v0.10.13 PRODUCTION — PARENT / VARIANT PICKER
+MAGIC DRAGON PIN v0.10.14 — PRODUCTION CANDIDATE SUNDAY READY v1
 
-BASE
-Built directly from production v0.10.12.
+Built from protected Production v0.10.13. Not copied from TEST.
 
-PIN WORKFLOW
-Product picker now shows base product names only. After Product is selected, Variant shows only that product's available 1g / 5g / Pre-Roll / special variants. Qty remains the final compact entry before Add Line.
+Selective real-device-proven backports:
+- Sunday target-stock top-up;
+- exactly two active current Sunday suggestions;
+- edited suggestions preserved as superseded history;
+- Product | Variant | Qty | Add compact row;
+- Qty 1–999 / three digits;
+- text finder and A-Z scrubber removed;
+- iPhone Qty visibility and safe-bottom actions;
+- Combined Suggested Delivery Share PDF.
 
-SHOW ALL STOCK
-Shop list = branch-specific active catalogue. Show all stock = complete active master catalogue across branches. The button changes immediately to Use shop list and both Product and Variant lists rebuild from that mode.
+TEST runner, TEST badge and DEV experimental machinery are excluded.
 
-NEW PRODUCT
-The in-docket Add Product workflow remains. After saving, Pin returns to the same docket and the new parent/variant is selected when possible.
-
-NO RESTOCK TARGET LOGIC YET
-The new Sunday par-stock/top-up calculation remains the next focused build.
+Before live deployment:
+1. Create Full Backup in current Production.
+2. Keep v0.10.13 ZIP as rollback.
+3. Deploy this candidate.
+4. Confirm v0.10.14 and no TEST badge.
+5. Run the short Production smoke check.
