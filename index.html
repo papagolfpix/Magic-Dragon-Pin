@@ -4735,7 +4735,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
       <button class="heroHomeHotspot noPrint" type="button" aria-label="Return to Dashboard" title="Dashboard" onclick="returnToDashboardFromHeader()"></button>
     </div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.10.125 DEPLOY</span>
+      <span class="app-version">v0.10.131 DEPLOY</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -5244,9 +5244,8 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
           <div id="backupStatus" class="backupRecoveryStatus">No backup or restore action in progress.</div>
 
           <details class="backupRecoveryAdvanced">
-            <summary>Advanced / testing</summary>
+            <summary>Advanced / recovery</summary>
             <div class="backupRecoveryAdvancedBody">
-              
               <div class="backupDanger">
                 <b>Reset local data</b>
                 <small>Deletes Magic Dragon's local app database from this browser. Use only when deliberately starting over or after a verified backup.</small>
@@ -5444,7 +5443,7 @@ if(!Array.isArray(db.adjustments)) db.adjustments=[];
   if(changed)localStorage.setItem("mdpin-db",JSON.stringify(db));
 })();
 
-// v0.10.125 TEST — release-candidate sanitation.
+// v0.10.131 DEPLOY — release-candidate sanitation.
 // Remove ONLY synthetic records created by the retired unpaid-conflict test helper.
 // Normal dockets, Sunday reports, real invoices, payments, mappings and amounts are untouched.
 (function cleanupRetiredConflictTestArtifacts(){
@@ -7523,7 +7522,7 @@ function buildFullBackupPayload(kind="SUPPORT",note=""){
   return {
     magicDragonBackup:true,
     app:"Magic Dragon Pin",
-    appVersion:"0.10.125",
+    appVersion:"0.10.131",
     backupKind:String(kind||"SUPPORT").toUpperCase(),
     createdAt:new Date().toISOString(),
     note:String(note||""),
@@ -7929,6 +7928,65 @@ function findDateNearBlock(rows,start){
   return {checkDate:findLabelDate(rows,start,to,/check\s*date/i),oldDate:findLabelDate(rows,start,to,/old\s*stock\s*from/i)};
 }
 
+function spreadsheetFinancialTotalsNearBlock(rows,start,end){
+ const from=Math.max(start+1,0),to=Math.min(rows.length,end+4);
+ for(let r=from;r<to;r++){
+  const row=rows[r]||[];
+  const label=String(row[10]??"").trim().toLowerCase();
+  if(label!=="total")continue;
+  const vals={sales:numOrNull(row[11]),cost:numOrNull(row[12]),profit:numOrNull(row[13]),bm:numOrNull(row[14]),alix:numOrNull(row[15]),pinProfit:numOrNull(row[16]),payPin:numOrNull(row[17]),rowNumber:r+1};
+  if(Object.values(vals).some(v=>typeof v==="number"&&Number.isFinite(v)))return vals;
+ }
+ return null;
+}
+
+function workbookFinancialIntegrity(rep){
+ const sheet=rep?.sheetTotals;if(!sheet)return {status:"unknown",mismatches:[]};
+ const calc={sales:0,cost:0,profit:0,bm:0,alix:0,pinProfit:0,payPin:0};
+ (rep.rows||[]).forEach(r=>{calc.sales+=Number(r.totalSales)||0;calc.cost+=Number(r.totalCost)||0;calc.profit+=Number(r.totalProfit)||0;calc.bm+=Number(r.bmShare)||0;calc.alix+=Number(r.alixShare)||0;calc.pinProfit+=Number(r.pinShare)||0;calc.payPin+=(Number(r.totalCost)||0)+(Number(r.pinShare)||0)});
+ const labels={sales:"Sales",cost:"Cost",profit:"Profit",bm:"BM share",alix:"Alix share",pinProfit:"Pin profit",payPin:"Pay Pin"};
+ const mismatches=[];
+ Object.keys(labels).forEach(k=>{if(sheet[k]!=null&&Math.abs(Number(sheet[k])-Number(calc[k]))>0.011)mismatches.push({key:k,label:labels[k],sheet:Number(sheet[k]),calculated:Number(calc[k]),difference:+(Number(calc[k])-Number(sheet[k])).toFixed(2)})});
+ return {status:mismatches.length?"mismatch":"ok",mismatches,sheet,calculated:calc};
+}
+
+// v0.10.130: financial-integrity mismatches are resolved inside the Sunday
+// workflow. The resolution is bound to the exact mismatch signature so any
+// later change to the workbook/report automatically reopens the warning.
+function financialIntegritySignature(integrity){
+  return JSON.stringify((integrity?.mismatches||[]).map(m=>[m.key,+Number(m.sheet||0).toFixed(2),+Number(m.calculated||0).toFixed(2)]).sort((a,b)=>String(a[0]).localeCompare(String(b[0]))));
+}
+function financialIntegrityResolutionValid(rep,integrity){
+  return !!(rep?.financialIntegrityResolution&&rep.financialIntegrityResolution.mode==="line_items"&&rep.financialIntegrityResolution.signature===financialIntegritySignature(integrity));
+}
+window.resolveFinancialIntegrity=function(reportId){
+  ensureSundayArchive();
+  const rep=(db.sundayImports||[]).find(r=>r&&r.id===reportId);
+  if(!rep)return alert("Sunday report not found.");
+  const integrity=workbookFinancialIntegrity(rep);
+  if(integrity.status!=="mismatch"){
+    alert("This report no longer has a spreadsheet-total mismatch.");
+    renderSundayWizard();
+    return;
+  }
+  const pay=integrity.mismatches.find(m=>m.key==="payPin");
+  const message=`Spreadsheet total mismatch — ${displayBranchName(rep.branch)} ${recordDateLabel(rep.date)}\n\n`+
+    (pay?`Spreadsheet Pay Pin: ${baht(pay.sheet)}\nAll product lines: ${baht(pay.calculated)}\nDifference: ${pay.difference>=0?"+":""}${baht(pay.difference)}\n\n`:"")+
+    `The product-line calculation includes every imported product row.\n\nTap OK to acknowledge the spreadsheet formula problem and use ALL PRODUCT LINES for this Sunday calculation. The original spreadsheet remains unchanged and the acknowledgement is saved in the audit data.\n\nTap Cancel to keep Invoice blocked.`;
+  if(!confirm(message))return;
+  rep.financialIntegrity=integrity;
+  rep.financialIntegrityResolution={
+    mode:"line_items",
+    signature:financialIntegritySignature(integrity),
+    acknowledgedAt:new Date().toISOString(),
+    sheetPayPin:pay?.sheet??null,
+    calculatedPayPin:pay?.calculated??null,
+    mismatchKeys:(integrity.mismatches||[]).map(m=>m.key)
+  };
+  save();
+  renderSundayWizard();
+};
+
 function parseWeeklyBlock(rows,start,end,branch,filename,sheetName,idx){
  const parsed=[];
  for(let r=start+1;r<end;r++){
@@ -7938,7 +7996,8 @@ function parseWeeklyBlock(rows,start,end,branch,filename,sheetName,idx){
  }
  if(!parsed.length)return null;
  const dates=findDateNearBlock(rows,start),date=dates.checkDate||null,branchLabel=displayBranchName(branch||"Unknown-Branch"),importable=!!branch&&!!date;
- return {sheetName,branch,date,oldDate:dates.oldDate,rows:parsed,importable,detectionIssue:!branch&&!date?"Shop and check date could not be detected":!branch?"Shop could not be detected":!date?"Check date could not be detected":"",archiveName:`${date||"DATE-NEEDED"}_${sanitizeArchivePart(branchLabel)}_Sunday-Stock.xlsx`,originalFilename:filename,blockIndex:idx,startRow:start+1,endRow:end};
+ const sheetTotals=spreadsheetFinancialTotalsNearBlock(rows,start,end);
+ return {sheetName,branch,date,oldDate:dates.oldDate,rows:parsed,sheetTotals,financialIntegrity:workbookFinancialIntegrity({rows:parsed,sheetTotals}),importable,detectionIssue:!branch&&!date?"Shop and check date could not be detected":!branch?"Shop could not be detected":!date?"Check date could not be detected":"",archiveName:`${date||"DATE-NEEDED"}_${sanitizeArchivePart(branchLabel)}_Sunday-Stock.xlsx`,originalFilename:filename,blockIndex:idx,startRow:start+1,endRow:end};
 }
 function parseSundayWorkbook(arrayBuffer,filename){
  const wb=XLSX.read(arrayBuffer,{type:"array",cellDates:false,cellFormula:true,cellNF:false}); if(!wb.SheetNames.length)throw new Error("Workbook contains no worksheets.");
@@ -9084,6 +9143,22 @@ async function storeOriginalWorkbook(id,file,archiveName){
   }catch(e){ return false; }
 }
 
+async function getArchivedSourceRecord(id){
+ try{const idb=await openFileDb();const rec=await new Promise((resolve,reject)=>{const tx=idb.transaction("sourceFiles","readonly"),rq=tx.objectStore("sourceFiles").get(id);rq.onsuccess=()=>resolve(rq.result||null);rq.onerror=()=>reject(rq.error)});idb.close();return rec}catch(e){return null}
+}
+async function hydrateWorkbookFinancialIntegrityFromArchive(){
+ if(!window.XLSX) return false;
+ let changed=false;
+ for(const imp of (db.sundayImports||[])){
+  if(imp?.sheetTotals&&imp?.financialIntegrity)continue;
+  if(!imp?.id)continue;
+  const rec=await getArchivedSourceRecord(imp.id);if(!rec?.blob)continue;
+  try{const reps=parseSundayWorkbook(await rec.blob.arrayBuffer(),rec.archiveName||imp.originalFilename||imp.archiveName||"Sunday-Report.xlsx");const match=reps.find(r=>canonicalBranchName(r.branch)===canonicalBranchName(imp.branch)&&String(r.date||"")===String(imp.date||""));if(!match?.sheetTotals)continue;imp.sheetTotals=match.sheetTotals;imp.financialIntegrity=workbookFinancialIntegrity({...imp,rows:match.rows,sheetTotals:match.sheetTotals});const w=(db.weeks||[]).find(w=>w.sourceArchiveId===imp.id);if(w){w.importAudit=w.importAudit||{};w.importAudit.sheetTotals=match.sheetTotals;w.importAudit.financialIntegrity=imp.financialIntegrity;}changed=true}catch(e){}
+ }
+ if(changed){localStorage.setItem("mdpin-db",JSON.stringify(db));renderAll();}
+ return changed;
+}
+
 async function downloadArchivedSource(id,archiveName){
   try{
     const idb=await openFileDb();
@@ -9523,6 +9598,23 @@ document.getElementById("xlsxFiles").onchange=e=>{
 document.getElementById("clearXlsxSelection").onclick=()=>resetSundayImportSelection("","");
 
 
+function sundayImportCycleDateForReport(rep,chosenBlocks=[]){
+  const repDate=String(rep?.date||"");
+  if(!repDate)return repDate;
+  const active=String(db.activeSundayCycleDate||"");
+  if(active&&!isSundayCycleComplete(active)){
+    const gap=Math.abs(Number(daysBetween(repDate,active)));
+    if(Number.isFinite(gap)&&gap<=1)return active;
+  }
+  const nearby=(chosenBlocks||[]).filter(b=>b?.rep&&b.rep.importable!==false&&Math.abs(Number(daysBetween(repDate,String(b.rep.date||""))))<=1);
+  const branches=new Set(nearby.map(b=>canonicalBranchName(b.rep.branch)).filter(Boolean));
+  if(branches.size>=2){
+    const dates=nearby.map(b=>String(b.rep.date||"")).filter(Boolean).sort();
+    if(dates.length)return dates[dates.length-1];
+  }
+  return repDate;
+}
+
 document.getElementById("importXlsx").onclick=async()=>{
  if(!selectedXlsxFiles.length)return alert("Choose one or more Excel files first.");
  const ok=await loadSheetJS();if(!ok)return alert("The Excel reader could not load.");
@@ -9542,19 +9634,29 @@ document.getElementById("importXlsx").onclick=async()=>{
      results.insertAdjacentHTML("beforeend",`<div class="xlsxResult warn"><b>${escapeHtml(rep.archiveName)}</b><br><span class="small">${escapeHtml(displayBranchName(rep.branch))} • ${escapeHtml(rep.date)} — existing report kept. No data changed.</span></div>`);
      continue;
    }
-   const mathErrors=validateWorkbookMath(rep),reconciliation=reconcileExcelReport(rep),id="X"+Date.now()+Math.random().toString(36).slice(2,7),stored=await storeOriginalWorkbook(id,file,rep.archiveName);
-   const record={...rep,id,importedAt:new Date().toISOString(),sourceStored:stored,mathErrors,reconciliation};
+   const mathErrors=validateWorkbookMath(rep),financialIntegrity=workbookFinancialIntegrity(rep),reconciliation=reconcileExcelReport(rep),id="X"+Date.now()+Math.random().toString(36).slice(2,7),stored=await storeOriginalWorkbook(id,file,rep.archiveName);
+   const cycleDate=sundayImportCycleDateForReport(rep,chosen);
+   const record={...rep,cycleDate,id,importedAt:new Date().toISOString(),sourceStored:stored,mathErrors,financialIntegrity,reconciliation};
    if(replaceExisting){
      for(const old of same)await deleteArchivedSourceFile(old.id);
      db.sundayImports=db.sundayImports.filter(x=>!(x.branch===rep.branch&&x.date===rep.date));
      db.weeks=db.weeks.filter(w=>!(w.branch===rep.branch&&w.date===rep.date&&/Excel/i.test(String(w.source||""))));
    }
-   db.sundayImports.push(record);reconReports.push(reconciliation);if(!replaceExisting)importedDates.push(rep.date);if(replaceExisting)replacedExistingCount++;else newImportedCount++;
+   db.sundayImports.push(record);reconReports.push(reconciliation);if(!replaceExisting)importedDates.push(cycleDate||rep.date);if(replaceExisting)replacedExistingCount++;else newImportedCount++;
    const weeklyRows=rep.rows.map(rr=>{const pm=canonicalProductMatchRow(rr),p=pm.product;return {productId:p?.id||null,sourceProductName:rr.product,opening:rr.oldStock,delivered:rr.newDeliver||0,takeout:rr.takeOut||0,closing:rr.inStock,reportedSold:rr.sold,sellPrice:rr.sellPrice,cost:rr.cost,historyKnown:rr.oldStock!=null,source:"Excel"}});
-   db.weeks.push({id:"W"+Date.now()+Math.random().toString(36).slice(2,5),branch:rep.branch,date:rep.date,source:"Excel Sunday import",sourceArchiveId:id,rows:weeklyRows,totals:{sales:rep.rows.reduce((s,r)=>s+(r.totalSales||0),0),cost:rep.rows.reduce((s,r)=>s+(r.totalCost||0),0),profit:rep.rows.reduce((s,r)=>s+(r.totalProfit||0),0),bm:rep.rows.reduce((s,r)=>s+(r.bmShare||0),0),alix:rep.rows.reduce((s,r)=>s+(r.alixShare||0),0),pin:rep.rows.reduce((s,r)=>s+(r.pinShare||0),0)},importAudit:{type:"xlsx",archiveName:rep.archiveName,mathErrors,reconciliation,replacedExisting:!!replaceExisting}});
+   db.weeks.push({id:"W"+Date.now()+Math.random().toString(36).slice(2,5),branch:rep.branch,date:rep.date,source:"Excel Sunday import",sourceArchiveId:id,rows:weeklyRows,totals:{sales:rep.rows.reduce((s,r)=>s+(r.totalSales||0),0),cost:rep.rows.reduce((s,r)=>s+(r.totalCost||0),0),profit:rep.rows.reduce((s,r)=>s+(r.totalProfit||0),0),bm:rep.rows.reduce((s,r)=>s+(r.bmShare||0),0),alix:rep.rows.reduce((s,r)=>s+(r.alixShare||0),0),pin:rep.rows.reduce((s,r)=>s+(r.pinShare||0),0)},importAudit:{type:"xlsx",archiveName:rep.archiveName,mathErrors,financialIntegrity,sheetTotals:rep.sheetTotals||null,reconciliation,replacedExisting:!!replaceExisting}});
    save();
-   results.insertAdjacentHTML("beforeend",`<div class="xlsxResult ${mathErrors.length?"warn":"ok"}"><b>${escapeHtml(rep.archiveName)}</b><br><span class="small">${escapeHtml(displayBranchName(rep.branch))} • ${escapeHtml(rep.date)} • ${rep.rows.length} product rows${replaceExisting?' • replaced previous report':''}</span></div>`);
+   const integrityBad=financialIntegrity.status==="mismatch";
+   const integrityMsg=integrityBad?`<div class="small" style="margin-top:5px;color:#991b1b;font-weight:850">⚠ FINANCIAL TOTAL MISMATCH — spreadsheet Pay Pin ${baht(financialIntegrity.sheet?.payPin)}; product-line calculation ${baht(financialIntegrity.calculated?.payPin)}. Review before invoicing.</div>`:"";
+   results.insertAdjacentHTML("beforeend",`<div class="xlsxResult ${(mathErrors.length||integrityBad)?"bad":"ok"}"><b>${escapeHtml(rep.archiveName)}</b><br><span class="small">${escapeHtml(displayBranchName(rep.branch))} • ${escapeHtml(rep.date)}${cycleDate&&cycleDate!==rep.date?` • billing cycle ${escapeHtml(cycleDate)}`:""} • ${rep.rows.length} product rows${replaceExisting?' • replaced previous report':''}</span>${integrityMsg}</div>`);
   }catch(err){results.insertAdjacentHTML("beforeend",`<div class="xlsxResult bad"><b>${escapeHtml(file.name)}</b><br><span class="small">${escapeHtml(err.message)}</span></div>`)}
+ }
+ // v0.10.128: if one branch was already present from a restored backup without
+ // cycleDate metadata, attach it to the same Saturday/Sunday cycle now.
+ if(importedDates.length){
+   const proposed=[...new Set(importedDates.filter(Boolean))].sort((a,b)=>String(b).localeCompare(String(a)))[0];
+   if(proposed)db.activeSundayCycleDate=proposed;
+   alignActiveSundayCycleReports();
  }
  if(importedDates.length){
    const newest=[...new Set(importedDates.filter(Boolean))].sort((a,b)=>String(b).localeCompare(String(a)))[0];
@@ -9953,7 +10055,7 @@ function normalizeActiveSundayCycle(){
   ensureCompletedSundayCycles();
   const active=db.activeSundayCycleDate||null;
   if(!active)return null;
-  const hasReport=(db.sundayImports||[]).some(r=>r&&r.date===active);
+  const hasReport=(db.sundayImports||[]).some(r=>r&&sundayCycleDateOfReport(r)===active);
   const latestCompleted=(db.completedSundayCycles||[])
     .filter(x=>x&&x.status==="complete"&&x.date)
     .map(x=>String(x.date))
@@ -9970,7 +10072,7 @@ function normalizeActiveSundayCycle(){
   return active;
 }
 function completeSundayCycle(state){
-  const date=state?.items?.[0]?.report?.date;if(!date||!state.paymentSaved)return false;
+  const date=wizardCycleDate(state);if(!date||!state.paymentSaved)return false;
   ensureCompletedSundayCycles();
   const inv=state.invoice;
   const rec={date,status:"complete",completedAt:new Date().toISOString(),invoiceId:inv?.id||null,invoiceNumber:inv?.number||null};
@@ -10013,7 +10115,11 @@ function exitSundayWorkflow(){
   setTimeout(settle,220);
 }
 function wizardAction(type){
-  if(type==="import"){ wizardChooseExcel(); return; }
+  if(type==="import"){
+    document.body.classList.remove("workflowMode");
+    switchTab("import");
+    return;
+  }
   document.body.classList.remove("workflowMode");
   if(type==="delivery") openDeliveryArchive();
   else if(type==="mapping") switchTab("settings");
@@ -10077,9 +10183,41 @@ function wizardImportMarkup(){
   const detected=detectedWorkbookBlocks.filter(b=>b.rep);
   return `<div class="wizardImportBox"><div class="wizardImportFiles"><b>Selected Excel files</b>${selectedXlsxFiles.map(f=>`<div class="wizardImportFile">${escapeHtml(f.name)}</div>`).join('')}</div>${detected.length?`<div class="wizardImportDetected">${detected.map(b=>`<div><span>${escapeHtml(displayBranchName(b.rep.branch))} · ${escapeHtml(b.rep.date)}</span><b>${b.rep.rows.length} rows</b></div>`).join('')}</div>`:`<div class="wizardLocked">Reading the selected workbook…</div>`}<div class="wizardActions"><button class="btn alt" onclick="wizardChooseExcel()">Change files</button><button class="btn gold" ${detected.length?'':'disabled'} onclick="wizardImportSelected()">Import ${detected.length||''} report${detected.length===1?'':'s'}</button></div></div>`;
 }
+function sundayCycleDateOfReport(r){
+  return String(r?.cycleDate||r?.date||"");
+}
+function alignActiveSundayCycleReports(){
+  ensureSundayArchive();ensureCompletedSundayCycles();
+  let active=String(db.activeSundayCycleDate||"");
+  if(!active)return active;
+  // v0.10.128: an older backup can contain one branch on Saturday and the other
+  // on Sunday with no cycleDate metadata. Re-bind adjacent cross-branch reports
+  // to one billing cycle before counting/rendering the Sunday workflow.
+  let candidates=(db.sundayImports||[]).filter(r=>r?.date&&Math.abs(Number(daysBetween(String(r.date),active)))<=1);
+  const branches=new Set(candidates.map(r=>canonicalBranchName(r.branch)).filter(Boolean));
+  if(branches.size<2)return active;
+  const dates=candidates.map(r=>String(r.date)).filter(Boolean).sort();
+  const cycle=dates[dates.length-1]||active;
+  let changed=false;
+  candidates.forEach(r=>{
+    if(sundayCycleDateOfReport(r)!==cycle){r.cycleDate=cycle;changed=true;}
+  });
+  if(active!==cycle){db.activeSundayCycleDate=cycle;active=cycle;changed=true;}
+  if(changed)localStorage.setItem("mdpin-db",JSON.stringify(db));
+  return active;
+}
+function wizardCycleDate(state=null){
+  const active=String(db.activeSundayCycleDate||"");
+  if(active)return active;
+  const items=state?.items||[];
+  const dates=items.map(x=>sundayCycleDateOfReport(x.report)).filter(Boolean).sort();
+  return dates[dates.length-1]||null;
+}
 function wizardReportsForDate(date){
   ensureSundayArchive(); rebuildSundayReportChain();
-  return [...(db.sundayImports||[])].filter(r=>r.date===date).map(r=>({report:r,rec:reconcileExcelReport(r)}));
+  // v0.10.128: a shop may prepare its Sunday stock report one day early.
+  // Preserve the report's true date, but group it into the same billing cycle via cycleDate.
+  return [...(db.sundayImports||[])].filter(r=>(r.cycleDate||r.date)===date).map(r=>({report:r,rec:reconcileExcelReport(r)}));
 }
 function latestWizardReports(){
   ensureSundayArchive(); rebuildSundayReportChain();ensureCompletedSundayCycles();
@@ -10087,6 +10225,7 @@ function latestWizardReports(){
   if(sundayWizardTargetDate)return wizardReportsForDate(sundayWizardTargetDate);
   // Normal Sunday Wizard resumes ONLY a cycle that was explicitly started by an import.
   // Historical unresolved reports are never auto-selected as current work.
+  alignActiveSundayCycleReports();
   const activeDate=normalizeActiveSundayCycle();
   if(!activeDate)return [];
   if(isSundayCycleComplete(activeDate)){db.activeSundayCycleDate=null;localStorage.setItem("mdpin-db",JSON.stringify(db));return [];}
@@ -10115,7 +10254,13 @@ function financialReconcileReport(rep){
     totals.sales+=expectedSales;totals.cost+=expectedCost;totals.profit+=expectedProfit;totals.bm+=expectedBm;totals.alix+=expectedAlix;totals.pinProfit+=expectedPin;totals.payPin+=expectedCost+expectedPin;
     totals.sheetSales+=Number(rr.totalSales)||0;totals.sheetCost+=Number(rr.totalCost)||0;totals.sheetProfit+=Number(rr.totalProfit)||0;totals.sheetBm+=Number(rr.bmShare)||0;totals.sheetAlix+=Number(rr.alixShare)||0;totals.sheetPinProfit+=Number(rr.pinShare)||0;
   });
-  return {status:issues.length?"review":"ok",issues,totals,stock};
+  const integrity=rep.financialIntegrity||workbookFinancialIntegrity(rep);
+  const integrityResolved=financialIntegrityResolutionValid(rep,integrity);
+  if(integrity?.status==="mismatch"&&!integrityResolved) {
+    const pay=integrity.mismatches?.find(x=>x.key==="payPin");
+    issues.unshift({product:"Spreadsheet totals",reason:`Spreadsheet total does not match the product lines${pay?`: Pay Pin ${baht(pay.sheet)} on sheet vs ${baht(pay.calculated)} from all product rows (difference ${pay.difference>=0?"+":""}${baht(pay.difference)})`:""}.`,action:"integrity",financialIntegrity:true});
+  }
+  return {status:issues.length?"review":"ok",issues,totals,stock,financialIntegrity:integrity,financialIntegrityResolved:integrityResolved};
 }
 function invoiceFinancialSummary(financial){
   const branches=financial.filter(x=>x.result.status==="ok").map(x=>({branch:x.report.branch,...x.result.totals}));
@@ -10148,7 +10293,7 @@ function currentWizardState(){
   const stockGreen=items.length>0&&items.every(x=>x.rec.status==="ok");
   const financial=items.map(x=>({report:x.report,result:financialReconcileReport(x.report)}));
   const financialGreen=stockGreen&&financial.length>0&&financial.every(x=>x.result.status==="ok");
-  const latestDate=items[0]?.report?.date||null;
+  const latestDate=wizardCycleDate({items});
   const adjustmentCandidates=latestDate?adjustmentCandidatesForDate(latestDate):[];
   const pendingForDecision=adjustmentCandidates.filter(a=>a.status==="pending"&&a.resolution!=="next_sunday_auto");
   const autoAdjustments=adjustmentCandidates.filter(a=>a.status==="pending"&&a.resolution==="next_sunday_auto");
@@ -10220,17 +10365,23 @@ function renderFinancialWizard(state){
     Object.keys(combined).forEach(k=>combined[k]+=Number(x.totals[k]||0));
     if(x.status==="locked")return `<div class="wizardBranch"><div class="wizardBranchHead"><b>${escapeHtml(r.branch)}</b><span class="reconStatus bad">LOCKED</span></div><div class="wizardBranchBody"><div class="wizardLocked">Complete stock reconciliation first.</div></div></div>`;
     if(x.status==="review"){
-      const issues=x.issues.slice(0,10).map(i=>`<div class="financeIssue"><b>${escapeHtml(i.product)}</b><div class="small">${escapeHtml(i.reason)}</div><div class="wizardActions"><button class="btn" onclick="wizardAction('${i.action}')">${i.action==='mapping'?'Review Product Price':'Review Sunday Report'}</button></div></div>`).join('');
+      const issues=x.issues.slice(0,10).map(i=>{
+        const actions=i.financialIntegrity
+          ? `<div class="wizardActions"><button class="btn gold" onclick="resolveFinancialIntegrity('${r.id}')">Resolve mismatch</button><button class="btn alt" onclick="wizardOpenSundayReport('${r.id}')">Open saved report</button></div>`
+          : `<div class="wizardActions"><button class="btn" onclick="wizardAction('${i.action}')">${i.action==='mapping'?'Review Product Price':'Review Sunday Report'}</button></div>`;
+        return `<div class="financeIssue"><b>${escapeHtml(i.product)}</b><div class="small">${escapeHtml(i.reason)}</div>${actions}</div>`;
+      }).join('');
       return `<div class="wizardBranch"><div class="wizardBranchHead"><b>${escapeHtml(r.branch)}</b><span class="reconStatus bad">ACTION REQUIRED</span></div><div class="wizardBranchBody">${issues}${x.issues.length>10?`<div class="wizardMinimal">+ ${x.issues.length-10} more financial issue(s).</div>`:''}</div></div>`;
     }
     const t=x.totals;
-    return `<div class="wizardBranch"><div class="wizardBranchHead"><b>${escapeHtml(r.branch)}</b><span class="reconStatus ok">FINANCIAL OK</span></div><div class="wizardBranchBody"><div class="wizardGood">✓ Sales, costs and profit shares agree.</div><div class="financeSummary"><div class="financeCell"><div class="k">Sales</div><div class="v">${baht(t.sales)}</div></div><div class="financeCell"><div class="k">Pay Pin</div><div class="v">${baht(t.payPin)}</div></div></div><details class="financeDetails"><summary>View calculation</summary><div class="financeSummary"><div class="financeCell"><div class="k">Cost recovery</div><div class="v">${baht(t.cost)}</div></div><div class="financeCell"><div class="k">Profit</div><div class="v">${baht(t.profit)}</div></div><div class="financeCell"><div class="k">BM share</div><div class="v">${baht(t.bm)}</div></div><div class="financeCell"><div class="k">Alix share</div><div class="v">${baht(t.alix)}</div></div><div class="financeCell"><div class="k">Pin profit</div><div class="v">${baht(t.pinProfit)}</div></div></div></details></div></div>`;
+    const integrityNote=x.financialIntegrityResolved&&x.financialIntegrity?.status==="mismatch"?`<div class="notice warn" style="margin:8px 0"><b>Spreadsheet total mismatch acknowledged.</b><br><span class="small">Using the calculation from all imported product lines. The original spreadsheet total is preserved for audit.</span></div>`:"";
+    return `<div class="wizardBranch"><div class="wizardBranchHead"><b>${escapeHtml(r.branch)}</b><span class="reconStatus ok">FINANCIAL OK</span></div><div class="wizardBranchBody"><div class="wizardGood">✓ Sales, costs and profit shares agree.</div>${integrityNote}<div class="financeSummary"><div class="financeCell"><div class="k">Sales</div><div class="v">${baht(t.sales)}</div></div><div class="financeCell"><div class="k">Pay Pin</div><div class="v">${baht(t.payPin)}</div></div></div><details class="financeDetails"><summary>View calculation</summary><div class="financeSummary"><div class="financeCell"><div class="k">Cost recovery</div><div class="v">${baht(t.cost)}</div></div><div class="financeCell"><div class="k">Profit</div><div class="v">${baht(t.profit)}</div></div><div class="financeCell"><div class="k">BM share</div><div class="v">${baht(t.bm)}</div></div><div class="financeCell"><div class="k">Alix share</div><div class="v">${baht(t.alix)}</div></div><div class="financeCell"><div class="k">Pin profit</div><div class="v">${baht(t.pinProfit)}</div></div></div></details></div></div>`;
   }).join('');
   let adjustmentHtml="";
   const autoCorrections=(state.appliedAdjustments||[]).filter(a=>a.resolution==="next_sunday_auto");
   if(allGreen&&autoCorrections.length){adjustmentHtml+=`<div class="adjustmentPanel"><h3>Correction from previous week</h3>${autoCorrections.map(a=>`<div class="adjustmentRow"><div class="adjustmentTop"><div><b>${escapeHtml(a.description||"Delivery docket correction")}</b><div class="wizardMinimal">From week ending ${escapeHtml(invoiceDateLabel(a.sourceDate))}</div></div><div class="adjustmentAmt ${Number(a.amount)>=0?'pos':'neg'}">${Number(a.amount)>=0?'+':''}${baht(a.amount)}</div></div><div class="adjustmentDecision">This correction is added automatically to this Sunday’s invoice.</div></div>`).join('')}</div>`;}
   if(allGreen&&state.pendingForDecision?.length){
-    adjustmentHtml+=`<div class="adjustmentPanel"><h3>Prior adjustment${state.pendingForDecision.length>1?'s':''}</h3><div class="adjustmentIntro">A previous invoice changed after it was saved. Choose what to do this Sunday. This does not change this week's trading figures.</div>${state.pendingForDecision.map(a=>{const d=adjustmentDecisionForDate(a,state.items[0]?.report?.date);return `<div class="adjustmentRow"><div class="adjustmentTop"><div><b>${escapeHtml(a.oldNumber||'Prior invoice')} adjustment</b><div class="wizardMinimal">From ${escapeHtml(invoiceDateLabel(a.sourceDate))}</div></div><div class="adjustmentAmt ${Number(a.amount)>=0?'pos':'neg'}">${Number(a.amount)>=0?'+':''}${baht(a.amount)}</div></div><div class="adjustmentActions"><button class="${d==='apply'?'selected':''}" onclick="setSundayAdjustmentDecision('${a.id}','apply')">Apply this Sunday</button><button class="${d==='defer'?'selected':''}" onclick="setSundayAdjustmentDecision('${a.id}','defer')">Leave for later</button></div><div class="adjustmentDecision">${d==='apply'?'Will be shown separately on this invoice.':d==='defer'?'Will remain as an alert for a future Sunday.':'Choose one option before continuing.'}</div></div>`}).join('')}</div>`;
+    adjustmentHtml+=`<div class="adjustmentPanel"><h3>Prior adjustment${state.pendingForDecision.length>1?'s':''}</h3><div class="adjustmentIntro">A previous invoice changed after it was saved. Choose what to do this Sunday. This does not change this week's trading figures.</div>${state.pendingForDecision.map(a=>{const d=adjustmentDecisionForDate(a,wizardCycleDate(state));return `<div class="adjustmentRow"><div class="adjustmentTop"><div><b>${escapeHtml(a.oldNumber||'Prior invoice')} adjustment</b><div class="wizardMinimal">From ${escapeHtml(invoiceDateLabel(a.sourceDate))}</div></div><div class="adjustmentAmt ${Number(a.amount)>=0?'pos':'neg'}">${Number(a.amount)>=0?'+':''}${baht(a.amount)}</div></div><div class="adjustmentActions"><button class="${d==='apply'?'selected':''}" onclick="setSundayAdjustmentDecision('${a.id}','apply')">Apply this Sunday</button><button class="${d==='defer'?'selected':''}" onclick="setSundayAdjustmentDecision('${a.id}','defer')">Leave for later</button></div><div class="adjustmentDecision">${d==='apply'?'Will be shown separately on this invoice.':d==='defer'?'Will remain as an alert for a future Sunday.':'Choose one option before continuing.'}</div></div>`}).join('')}</div>`;
   }
   const adjTotal=(state.appliedAdjustments||[]).reduce((n,a)=>n+Number(a.amount||0),0);
   const total=allGreen?`<div class="financeTotal"><b>✓ Financial reconciliation complete</b><div class="wizardMinimal" style="color:#166534;margin-top:3px">Both shops combined</div><div class="big">Pay Pin ${baht(combined.payPin)}</div>${adjTotal?`<div class="wizardMinimal" style="color:#166534">Prior adjustment selected: ${adjTotal>=0?'+':''}${baht(adjTotal)} · Settlement total ${baht(combined.payPin+adjTotal)}</div>`:`<div class="wizardMinimal" style="color:#166534">Sales ${baht(combined.sales)} · Cost recovery ${baht(combined.cost)} · Pin profit ${baht(combined.pinProfit)}</div>`}</div>`:`<div class="wizardLocked">Next stays locked until every financial exception above is resolved.</div>`;
@@ -10238,7 +10389,7 @@ function renderFinancialWizard(state){
   return html+adjustmentHtml+total+gate;
 }
 function setSundayAdjustmentDecision(id,decision){
-  const state=currentWizardState(),date=state.items[0]?.report?.date,adj=(db.adjustments||[]).find(a=>a.id===id);if(!adj||!date)return;
+  const state=currentWizardState(),date=wizardCycleDate(state),adj=(db.adjustments||[]).find(a=>a.id===id);if(!adj||!date)return;
   if(!adj.workflowDecisions||typeof adj.workflowDecisions!=="object")adj.workflowDecisions={};
   adj.workflowDecisions[date]=decision;localStorage.setItem("mdpin-db",JSON.stringify(db));renderSundayWizard();renderDashboardAlerts();
 }
@@ -10249,7 +10400,7 @@ function invoiceDateLabel(date){
   try{return new Date(String(date)+"T12:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})}catch(e){return date||""}
 }
 function buildInvoiceCard(state,printMode=false){
-  const date=state.items[0]?.report?.date||today(),summary=invoiceFinancialSummary(state.financial),saved=state.invoice;
+  const date=wizardCycleDate(state)||today(),summary=invoiceFinancialSummary(state.financial),saved=state.invoice;
   const number=saved?.number||sundayInvoiceNumber(date);
   if(printMode){
     const branches=summary.branches.map(b=>`<div class="invoiceBranch"><div class="invoiceBranchName">${escapeHtml(displayBranchName(b.branch))}</div><div class="invoiceNums"><div class="invoiceNum"><div class="k">Sales</div><div class="v">${baht(b.sales)}</div></div><div class="invoiceNum"><div class="k">Cost recovery</div><div class="v">${baht(b.cost)}</div></div><div class="invoiceNum"><div class="k">Pin profit share</div><div class="v">${baht(b.pinProfit)}</div></div><div class="invoiceNum"><div class="k">Amount due</div><div class="v">${baht(b.payPin)}</div></div></div></div>`).join("");
@@ -10339,12 +10490,45 @@ function finalizeAcknowledgedZeroDifferenceSourceCorrections(onlyInvoiceId=null)
   return changed;
 }
 
+function cleanupKnownRestoredTestSundayCorrection(){
+ // v0.10.129: forensic cleanup for the exact Lamai 23-Aug test residue identified
+ // from Pin's authoritative 24-Sep backup. This is deliberately ID + amount + source scoped
+ // so legitimate Sunday-report corrections are never auto-deleted.
+ const correctionId="SRC1789278494941jex",adjustmentId="ADJ1789278494941xi";
+ const a=(db.adjustments||[]).find(x=>x?.id===adjustmentId&&x.sourceCorrectionId===correctionId&&x.sourceType==="sunday_report_correction"&&x.branch==="Lamai"&&x.sourceDate==="2026-08-23"&&Math.abs(Number(x.amount||0)+87)<0.005);
+ const c=(db.sundaySourceCorrections||[]).find(x=>x?.id===correctionId&&x.adjustmentId===adjustmentId);
+ if(!a&&!c)return false;
+ if(a)db.adjustments=(db.adjustments||[]).filter(x=>x.id!==adjustmentId);
+ if(c){c.status="voided_test_residue";c.voidedAt=c.voidedAt||new Date().toISOString();c.voidReason="Confirmed historical test residue; must not carry into live settlement.";c.adjustmentId=null;}
+ return true;
+}
+
 function processPendingDocketCorrections(){
- if(!Array.isArray(db.pendingCorrections)||!db.pendingCorrections.length)return false;
- let changed=false;
+ let changed=cleanupKnownRestoredTestSundayCorrection();
+ if(!Array.isArray(db.pendingCorrections)||!db.pendingCorrections.length){if(changed)localStorage.setItem("mdpin-db",JSON.stringify(db));return changed;}
+
  db.pendingCorrections.forEach(c=>{
+  const inv=(db.invoices||[]).find(x=>x.id===c.invoiceId);
+  // v0.10.128: backups from older builds can resurrect a queued carry-forward even after
+  // the source week later reconciles to zero. Revalidate queued auto-corrections before
+  // offering them in a new Sunday invoice.
+  if(c.status==="queued"&&c.choice==="next_sunday"){
+    if(!inv){c.status="error";c.message="Affected invoice could not be found.";changed=true;return;}
+    const live=currentWizardStateSafeForInvoice(inv.reportDate);
+    if(!live?.financialGreen)return;
+    const oldBase=Number(inv.totals?.basePayPin ?? (Number(inv.totals?.payPin||0)-Number(inv.totals?.adjustmentTotal||0)));
+    const newBase=Number(live.summary?.combined?.payPin||0);
+    const delta=+(newBase-oldBase).toFixed(2);
+    c.amount=delta;
+    const a=(db.adjustments||[]).find(a=>a.id===c.adjustmentId||a.correctionId===c.id);
+    if(Math.abs(delta)<0.005){
+      if(a&&a.status==="pending")db.adjustments=db.adjustments.filter(x=>x.id!==a.id);
+      c.status="resolved";c.amount=0;c.adjustmentId=null;c.resolvedSignature=live.signature;c.resolvedAt=new Date().toISOString();c.message="No financial difference to carry forward.";changed=true;
+    }else if(a&&a.status==="pending"&&Math.abs(Number(a.amount||0)-delta)>=0.005){a.amount=delta;changed=true;}
+    return;
+  }
   if(!["pending","waiting_reconciliation"].includes(c.status))return;
-  const inv=(db.invoices||[]).find(x=>x.id===c.invoiceId);if(!inv){c.status="error";c.message="Affected invoice could not be found.";changed=true;return;}
+  if(!inv){c.status="error";c.message="Affected invoice could not be found.";changed=true;return;}
   const live=currentWizardStateSafeForInvoice(inv.reportDate);
   if(!live?.financialGreen){if(c.status!=="waiting_reconciliation"){c.status="waiting_reconciliation";changed=true;}c.message="Waiting for the edited week to reconcile.";return;}
   const oldBase=Number(inv.totals?.basePayPin ?? (Number(inv.totals?.payPin||0)-Number(inv.totals?.adjustmentTotal||0))),newBase=Number(live.summary?.combined?.payPin||0),delta=+(newBase-oldBase).toFixed(2);c.amount=delta;c.description=correctionChangeDescription(c);
@@ -10652,7 +10836,7 @@ function saveSundayInvoice(){
   const state=currentWizardState();
   if(!state.financialGreen||!state.items.length)return alert("Financial reconciliation must be complete before saving the invoice.");
   if(!state.adjustmentsReady)return alert("Choose what to do with each prior adjustment before saving the invoice.");
-  const date=state.items[0].report.date,summary=invoiceFinancialSummary(state.financial),sig=invoiceSignature(date,summary),baseNumber=sundayInvoiceNumber(date);
+  const date=wizardCycleDate(state),summary=invoiceFinancialSummary(state.financial),sig=invoiceSignature(date,summary),baseNumber=sundayInvoiceNumber(date);
   if(!Array.isArray(db.invoices))db.invoices=[];
   const latest=latestInvoiceForDate(date),adjSig=settlementAdjustmentSignature(state.appliedAdjustments||[]);
   const latestAdjSig=latest?(latest.adjustmentSignature||settlementAdjustmentSignature(latest.adjustmentsApplied||[])):"";
@@ -11233,9 +11417,18 @@ function renderSundayWizard(){
   const box=document.getElementById("wizardContent"),period=document.getElementById("wizardPeriod");if(!box)return;
   const state=currentWizardState(),items=state.items;
   if(!items.length){sundayWizardStep=1;period.textContent="Start by importing this Sunday's Excel reports.";box.innerHTML=wizardImportMarkup();renderWizardChrome(state);return;}
-  const latest=items[0].report.date,prevDates=[...new Set(items.map(x=>x.rec.previousDate).filter(Boolean))];
+  const latest=wizardCycleDate(state)||items[0].report.date,prevDates=[...new Set(items.map(x=>x.rec.previousDate).filter(Boolean))];
   period.textContent=`${latest}${prevDates.length?` compared with ${prevDates.join(" / ")}`:" — prior Sunday required"}`;
-  if(sundayWizardStep===1){box.innerHTML=`<div class="wizardGood">✓ ${items.length} Sunday report${items.length===1?'':'s'} imported for ${escapeHtml(latest)}.</div><div class="wizardActions"><button class="btn alt" onclick="wizardAction('import')">Review imported reports</button></div>`;}
+  if(sundayWizardStep===1){
+    const existingSummary=`<div class="wizardGood">✓ ${items.length} Sunday report${items.length===1?'':'s'} imported for ${escapeHtml(latest)}.</div>`;
+    // v0.10.126: when a Sunday cycle already contains one report, choosing another file
+    // must keep the pending selection/import controls visible. Previously the onchange
+    // re-render collapsed back to the existing-report summary, so iPhone users could
+    // select the second branch file but had no Import button and nothing changed.
+    box.innerHTML=existingSummary+(selectedXlsxFiles.length
+      ? wizardImportMarkup()
+      : `<div class="wizardActions"><button class="btn alt" onclick="wizardAction('import')">Add / review Excel reports</button></div>`);
+  }
   else if(sundayWizardStep===2){box.innerHTML=renderStockWizard(items);}
   else if(sundayWizardStep===3){box.innerHTML=renderFinancialWizard(state);}
   else if(sundayWizardStep===4){box.innerHTML=renderInvoiceWizard(state);}
@@ -11608,7 +11801,7 @@ function validateBackupPackage(pkg){
 }
 async function createCompleteTransferPackage(kind="FULL_TRANSFER"){
  const sourceFiles=await exportArchivedSourceFiles(),counts=backupCounts();
- return {format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.10.125",backupKind:kind,createdAt:new Date().toISOString(),counts,sourceFilesCount:sourceFiles.length,data:JSON.parse(JSON.stringify(db)),sourceFiles};
+ return {format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.10.131",backupKind:kind,createdAt:new Date().toISOString(),counts,sourceFilesCount:sourceFiles.length,data:JSON.parse(JSON.stringify(db)),sourceFiles};
 }
 async function savePackageFile(pkg,prefix="Magic-Pin-Data"){
  const blob=new Blob([JSON.stringify(pkg)],{type:"application/json"});
@@ -12049,7 +12242,8 @@ document.getElementById("branchAssignmentBranch").onchange=e=>{
 };
 document.getElementById("branchProductDetails").addEventListener("toggle",e=>{if(e.target.open)renderBranchProductAssignments()});
 document.getElementById("resetData").onclick=()=>{if(confirm("Delete all local Magic Dragon Pin data on this browser?")){localStorage.removeItem("mdpin-db");location.reload()}}
-cleanupDataIntegrity();refreshStoredReconciliations();renderImport();renderArchive();migrateLegacyDeliverySuggestions();bootstrapLatestSavedInvoiceSuggestions();renderAll();renderDashboardAlerts();refreshBaselineSnapshotStatus();showLastTransferResult();
+cleanupDataIntegrity();refreshStoredReconciliations();renderImport();renderArchive();migrateLegacyDeliverySuggestions();bootstrapLatestSavedInvoiceSuggestions();processPendingDocketCorrections();renderAll();renderDashboardAlerts();refreshBaselineSnapshotStatus();showLastTransferResult();
+loadSheetJS().then(ok=>{if(ok)hydrateWorkbookFinancialIntegrityFromArchive().then(()=>{processPendingDocketCorrections();renderAll();renderDashboardAlerts();});});
 // v0.9.25 contextual Sunday help and compact selection controls
 const sundayHelpButton=document.getElementById("sundayHelpButton");
 const sundayHelp=document.getElementById("sundayHelp");
