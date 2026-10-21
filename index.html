@@ -4735,7 +4735,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
       <button class="heroHomeHotspot noPrint" type="button" aria-label="Return to Dashboard" title="Dashboard" onclick="returnToDashboardFromHeader()"></button>
     </div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.10.133 DEPLOY</span>
+      <span class="app-version">v0.10.135 DEPLOY</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -5197,8 +5197,8 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
             <b>Keep Pin's data safe</b>
             <div><strong>Export Complete App Data</strong> creates a full device-transfer package with app records, settings, mappings and archived Sunday source workbooks stored on this device.</div>
             <div><strong>Import Complete App Data</strong> previews a transfer package first, creates a pre-import safety backup, then replaces this device only after explicit confirmation.</div>
-            <div><strong>Quick Safety Snapshot</strong> saves the app database locally and also opens Share. It is useful before testing or making changes, but does not include archived Sunday source workbooks.</div>
-            <div><strong>Support Backup</strong> creates a shareable troubleshooting copy of the app database with an optional note.</div>
+            <div><strong>Quick Safety Snapshot</strong> keeps a database-only rollback on this device and exports a complete recovery file including available archived spreadsheets.</div>
+            <div><strong>Complete Backup with Note</strong> saves all app records and available archived spreadsheets in one restorable file.</div>
           </div>
 
           <div class="backupRecoveryCards">
@@ -5223,7 +5223,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
             <div class="backupRecoveryCard">
               <div>
                 <b>Quick Safety Snapshot</b>
-                <small>App database only. Stored on this device and also offered through Share as a JSON copy.</small>
+                <small>Local rollback: database only. Downloaded backup: records and available archived spreadsheets.</small>
               </div>
               <div class="backupRecoveryActions">
                 <button class="btn alt" type="button" onclick="createBaselineSnapshot()">Create Snapshot</button>
@@ -5234,10 +5234,10 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
 
             <div class="backupRecoveryCard">
               <div>
-                <b>Support Backup</b>
-                <small>Share the current app database for troubleshooting without changing any data.</small>
+                <b>Complete Backup with Note</b>
+                <small>Save records and available archived spreadsheets together, with an optional note.</small>
               </div>
-              <button class="btn alt" type="button" onclick="createSupportBackup()">Create Support Backup</button>
+              <button class="btn alt" type="button" onclick="createSupportBackup()">Create Complete Backup</button>
             </div>
           </div>
 
@@ -5383,8 +5383,8 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
   <div class="mdOverlayHead">
     <button class="mdOverlayClose" type="button" aria-label="Close support backup" onclick="closeSupportBackup()">‹</button>
     <div class="mdOverlayTitle">
-      <b>Support Backup</b>
-      <small>Complete app snapshot for troubleshooting</small>
+      <b>Complete Backup</b>
+      <small>App records and archived spreadsheets</small>
     </div>
     <span></span>
   </div>
@@ -5396,12 +5396,12 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
           <input id="supportBackupNote" type="text" placeholder="e.g. Sunday complete / delivery issue">
         </div>
         <div class="mdPresetSummary">
-          This creates the same full JSON backup used by the proven restore system. Nothing is deleted or changed.
+          One restorable JSON file containing all app records and available archived spreadsheets. Save it to Files or share it outside Safari. Previously lost spreadsheets cannot be recreated.
         </div>
       </div>
       <div class="mdFormActions">
         <button type="button" onclick="closeSupportBackup()">Cancel</button>
-        <button class="save" type="button" onclick="shareSupportBackupNow()">Create / Share Backup</button>
+        <button id="supportBackupSave" class="save" type="button" onclick="shareSupportBackupNow()">Save / Share Complete Backup</button>
       </div>
     </div>
   </div>
@@ -5443,7 +5443,7 @@ if(!Array.isArray(db.adjustments)) db.adjustments=[];
   if(changed)localStorage.setItem("mdpin-db",JSON.stringify(db));
 })();
 
-// v0.10.133 DEPLOY — release-candidate sanitation.
+// v0.10.135 DEPLOY — release-candidate sanitation.
 // Remove ONLY synthetic records created by the retired unpaid-conflict test helper.
 // Normal dockets, Sunday reports, real invoices, payments, mappings and amounts are untouched.
 (function cleanupRetiredConflictTestArtifacts(){
@@ -7522,7 +7522,7 @@ function buildFullBackupPayload(kind="SUPPORT",note=""){
   return {
     magicDragonBackup:true,
     app:"Magic Dragon Pin",
-    appVersion:"0.10.133",
+    appVersion:"0.10.135",
     backupKind:String(kind||"SUPPORT").toUpperCase(),
     createdAt:new Date().toISOString(),
     note:String(note||""),
@@ -7565,7 +7565,13 @@ window.createBaselineSnapshot=async()=>{
   }
   const status=document.getElementById("baselineSnapshotStatus");
   if(status)status.textContent=`Baseline saved locally: ${new Date(payload.createdAt).toLocaleString()}`;
-  await shareBackupPayload(payload,`Magic-Pin-BASELINE_${stamp}`);
+  try{
+    const complete=await createCompleteTransferPackage("BASELINE_COMPLETE");
+    const result=await savePackageFile(complete,"Magic-Pin-BASELINE");
+    if(result.cancelled){backupStatus("File export cancelled. The database-only local snapshot is still available.");return;}
+    if(!result.saved)throw new Error("The complete snapshot file could not be saved.");
+    backupStatus(`Snapshot file prepared with ${complete.sourceFilesCount} archived spreadsheets.${backupArchiveWarning(complete)}`);
+  }catch(e){backupStatus(e.message,true);alert(e.message);}
 };
 window.createSupportBackup=()=>{
   const overlay=document.getElementById("supportBackupModal");
@@ -7586,12 +7592,21 @@ window.closeSupportBackup=()=>{
   document.body.style.overflow="";
 };
 window.shareSupportBackupNow=async()=>{
+  const button=document.getElementById("supportBackupSave");
+  if(button?.disabled)return;
+  if(button)button.disabled=true;
   const note=document.getElementById("supportBackupNote")?.value||"";
-  const payload=buildFullBackupPayload("SUPPORT",note);
-  const suffix=mdSafeFilenamePart(note);
-  const name=`Magic-Pin-SUPPORT_${mdNowStamp()}${suffix?`_${suffix}`:""}`;
-  closeSupportBackup();
-  await shareBackupPayload(payload,name);
+  try{
+    backupStatus("Preparing records and archived spreadsheets…");
+    const payload=await createCompleteTransferPackage("COMPLETE_APP_DATA");
+    payload.note=note;
+    const result=await savePackageFile(payload);
+    if(result.cancelled){backupStatus("Backup cancelled. Nothing changed.");return;}
+    if(!result.saved)throw new Error("The backup could not be saved. Please try again.");
+    closeSupportBackup();
+    backupStatus(`Backup file prepared: ${payload.counts.sundayReports} Sunday reports, ${payload.counts.invoices} invoices and ${payload.sourceFilesCount} archived spreadsheets. Keep the file outside Safari.${backupArchiveWarning(payload)}`);
+  }catch(e){backupStatus(e.message||"Backup failed. Please try again.",true);alert(e.message||"Backup failed. Please try again.");}
+  finally{if(button)button.disabled=false;}
 };
 function refreshBaselineSnapshotStatus(){
   const status=document.getElementById("baselineSnapshotStatus");
@@ -7626,7 +7641,7 @@ window.restoreLocalBaselineSnapshot=()=>{
 };
 function offerSundayCompletionBackup(){
   setTimeout(()=>{
-    const ok=confirm("Sunday workflow complete.\n\nCreate / share a full support backup now?");
+    const ok=confirm("Sunday workflow complete.\n\nSave a complete backup with app records and all archived spreadsheets now?");
     if(ok)createSupportBackup();
   },150);
 }
@@ -8992,6 +9007,7 @@ function scrollSundayImportToNextStep(){
   setTimeout(()=>target?.scrollIntoView({block:"start",behavior:"smooth"}),180);
 }
 function continueSundayImportAfterMapping(){
+  if(wizardMappingContext){renderMappingReview();return;}
   if(!sundayImportAutoAdvance)return;
   refreshCurrentSundayImportReconciliation();
   const pending=collectUnmappedProductNames();
@@ -9005,9 +9021,39 @@ function continueSundayImportAfterMapping(){
   setTimeout(()=>document.getElementById("excelReconPanel")?.scrollIntoView({block:"start",behavior:"smooth"}),650);
 }
 
+let wizardMappingContext=null;
+function openWizardMappingReview(productName=""){
+ const panel=document.getElementById("mappingReviewPanel");
+ if(!panel)return;
+ if(!wizardMappingContext){
+  const marker=document.createComment("mapping-review-home");
+  panel.parentNode.insertBefore(marker,panel);
+  const keys=new Set(latestWizardReports().flatMap(x=>(x.report.rows||[]).map(r=>normalizeProductKey(r.product))));
+  wizardMappingContext={marker,keys,skipped:new Set(),focus:normalizeProductKey(productName),overflow:document.body.style.overflow};
+ }
+ let overlay=document.getElementById("wizardMappingOverlay");
+ if(!overlay){
+  overlay=document.createElement("div");overlay.id="wizardMappingOverlay";
+  overlay.className="mdFullScreenOverlay noPrint";overlay.setAttribute("role","dialog");overlay.setAttribute("aria-modal","true");overlay.setAttribute("aria-label","Sunday product mapping");
+  overlay.innerHTML='<div class="mdOverlayHead"><button class="mdOverlayClose" type="button" aria-label="Back to reconciliation" onclick="closeWizardMappingReview()">‹</button><div class="mdOverlayTitle"><b>Sunday · Product mapping</b><small>Choose the matching catalogue product, then save.</small></div></div><div class="mdOverlayBody"><div id="wizardMappingHost"></div></div><div style="flex-shrink:0;padding:12px;padding-bottom:max(12px,env(safe-area-inset-bottom));background:white;border-top:1px solid #ddd"><button class="btn primary" style="width:100%" type="button" onclick="closeWizardMappingReview()">Back to reconciliation</button></div>';
+  document.body.appendChild(overlay);
+ }
+ document.getElementById("wizardMappingHost").appendChild(panel);
+ sundayImportAutoAdvance=false;
+ setMappingActionNotice("Match each name to the correct variant: flower, 5g or pre-roll. Saved matches are remembered. Check Later does not resolve the reconciliation warning.","defer");
+ renderMappingReview();overlay.classList.add("open");overlay.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";
+ overlay.querySelector(".mdOverlayBody").scrollTop=0;
+}
+function closeWizardMappingReview(){
+ if(!wizardMappingContext)return;
+ const context=wizardMappingContext,panel=document.getElementById("mappingReviewPanel"),overlay=document.getElementById("wizardMappingOverlay");
+ context.marker.parentNode.insertBefore(panel,context.marker);context.marker.remove();
+ wizardMappingContext=null;overlay.classList.remove("open");overlay.setAttribute("aria-hidden","true");document.body.style.overflow=context.overflow;
+ refreshStoredReconciliations(false);sundayWizardStep=2;renderSundayWizard();renderMappingReview();
+}
 function collectUnmappedProductNames(){
  const seen=new Map();ensureSundayArchive();
- db.sundayImports.forEach(r=>(r.rows||[]).forEach(rr=>{const pm=canonicalProductMatchRow(rr);if(pm.product)return;const key=normalizeProductKey(rr.product);if(db.deferredMappings?.[key])return;if(!seen.has(key))seen.set(key,{key,name:rr.product,examples:[],best:null,bestScore:0});const it=seen.get(key);it.examples.push(`${r.branch} ${r.date}`);db.products.forEach(p=>{const s=similarity(key,normalizeProductKey(p.name));if(s>it.bestScore){it.bestScore=s;it.best=p}})}));
+ db.sundayImports.forEach(r=>(r.rows||[]).forEach(rr=>{const pm=canonicalProductMatchRow(rr);if(pm.product)return;const key=normalizeProductKey(rr.product);if(db.deferredMappings?.[key]&&(!wizardMappingContext||!wizardMappingContext.keys.has(key)||wizardMappingContext.skipped.has(key)))return;if(!seen.has(key))seen.set(key,{key,name:rr.product,examples:[],best:null,bestScore:0});const it=seen.get(key);it.examples.push(`${r.branch} ${r.date}`);db.products.forEach(p=>{const s=similarity(key,normalizeProductKey(p.name));if(s>it.bestScore){it.bestScore=s;it.best=p}})}));
  return [...seen.values()].sort((a,b)=>b.bestScore-a.bestScore);
 }
 function setMappingActionNotice(message,type="ok"){
@@ -9018,12 +9064,13 @@ function setMappingActionNotice(message,type="ok"){
 }
 function renderMappingReview(){
  const panel=document.getElementById("mappingReviewPanel"),box=document.getElementById("mappingReviewList"),notice=document.getElementById("mappingActionNotice");if(!panel||!box)return;
- const items=collectUnmappedProductNames();
+ const items=collectUnmappedProductNames().filter(it=>!wizardMappingContext||wizardMappingContext.keys.has(it.key));
+ if(wizardMappingContext)items.sort((a,b)=>Number(b.key===wizardMappingContext.focus)-Number(a.key===wizardMappingContext.focus));
  const hasNotice=!!String(notice?.textContent||"").trim();
  if(!items.length){
    if(!hasNotice){panel.style.display="none";box.innerHTML="";return}
    panel.style.display="block";
-   box.innerHTML='<div class="small" style="margin-top:9px"><b>No new or changed product names are waiting for mapping.</b></div>';
+   box.innerHTML=wizardMappingContext?'<div class="small" style="margin-top:9px"><b>Review list finished. Tap Back to reconciliation to check this Sunday. Items saved for later may still need attention.</b></div>':'<div class="small" style="margin-top:9px"><b>No new or changed product names are waiting for mapping.</b></div>';
    return;
  }
  panel.style.display="block";
@@ -9044,6 +9091,7 @@ window.deferMapping=key=>{
   const row=[...document.querySelectorAll(".mappingReviewItem")].find(x=>x.dataset.mapkey===key);
   const name=row?.querySelector("b")?.textContent||key;
   db.deferredMappings[key]={name,deferredAt:new Date().toISOString()};
+  if(wizardMappingContext)wizardMappingContext.skipped.add(key);
   save();
   setMappingActionNotice(`Saved for later — “${name}” has been removed from the active review list and can be reopened from Product mappings.`,"defer");
   renderMappingReview();
@@ -10169,6 +10217,7 @@ function exitSundayWorkflow(){
   setTimeout(settle,220);
 }
 function wizardAction(type){
+  if(type==="mapping"){openWizardMappingReview();return;}
   if(type==="import"){
     document.body.classList.remove("workflowMode");
     switchTab("import");
@@ -10397,6 +10446,7 @@ function renderStockWizard(items){
       else if(d.flags?.rowHasMapping)hint='This shop product name is not linked confidently to Pin’s master product. Fix the mapping once, then return here.';
       else if(d.flags?.rowHasHistoryPending)hint='The app cannot prove the prior-week stock chain for this product. Open the Sunday report to check its prior-week row.';
       let actionButtons=`<button class="btn" onclick="event.preventDefault();event.stopPropagation();wizardAction('${action[0]}')">${action[1]}</button>`;
+      if(action[0]==="mapping")actionButtons=`<button class="btn" type="button" onclick="event.preventDefault();event.stopPropagation();openWizardMappingReview(${escapeHtml(JSON.stringify(d.product||""))})">Fix Product Mapping</button>`;
       let finding='';
       if(d.flags?.rowHasDeliveryIssue){
         const candidates=wizardMatchingDockets(r.branch,rec.previousDate,r.date,d.productId||d.flow?.productId||canonicalProductMatchRow((r.rows||[]).find(x=>x.product===d.product)||{}).product?.id);
@@ -11830,12 +11880,12 @@ async function exportArchivedSourceFiles(){
   idb.close();
   const out=[];
   for(const rec of rows){
-   if(!rec?.blob)continue;
+   if(!rec?.blob)throw new Error("An archived spreadsheet could not be read. No complete backup was created.");
    const bytes=new Uint8Array(await rec.blob.arrayBuffer());
    out.push({id:rec.id,archiveName:rec.archiveName||"Sunday-Report.xlsx",storedAt:rec.storedAt||null,type:rec.blob.type||"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",data:bytesToBase64(bytes)});
   }
   return out;
- }catch(e){console.warn("Backup could not read archived source files",e);return []}
+ }catch(e){console.error("Backup could not read archived source files",e);throw new Error("Could not read all archived spreadsheets. Backup stopped; please try again. Your app data has not been changed.")}
 }
 async function countArchivedSourceFiles(){
  try{const idb=await openFileDb();const n=await new Promise((resolve,reject)=>{const tx=idb.transaction("sourceFiles","readonly"),rq=tx.objectStore("sourceFiles").count();rq.onsuccess=()=>resolve(rq.result||0);rq.onerror=()=>reject(rq.error)});idb.close();return n}catch(e){return -1}
@@ -11851,11 +11901,34 @@ function validateBackupPackage(pkg){
  if(!pkg.data||typeof pkg.data!=="object")throw new Error("The backup does not contain app data.");
  ["products","deliveries"].forEach(k=>{if(!Array.isArray(pkg.data[k]))throw new Error(`Backup is missing ${k}.`)});
  if(pkg.sourceFiles!=null&&!Array.isArray(pkg.sourceFiles))throw new Error("Archived source files are invalid.");
+ const ids=new Set();
+ for(const file of pkg.sourceFiles||[]){
+  if(!file||typeof file.id!=="string"||!file.id||typeof file.data!=="string"||!file.data||ids.has(file.id))throw new Error("An archived spreadsheet is missing data or has a duplicate ID.");
+  base64ToBytes(file.data);ids.add(file.id);
+ }
  return true;
 }
+function normalizeImportedBackup(pkg){
+ if(pkg?.magicDragonBackup===true&&pkg.app==="Magic Dragon Pin"&&["SUPPORT","BASELINE"].includes(pkg.backupKind)&&pkg.db&&typeof pkg.db==="object"){
+  pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:pkg.appVersion,createdAt:pkg.createdAt,backupKind:"RECOVERED_SUPPORT_DATABASE_ONLY",data:pkg.db,note:pkg.note||""};
+ }
+ validateBackupPackage(pkg);
+ return pkg;
+}
+function backupPreservesArchives(pkg){return pkg.sourceFiles==null||pkg.backupKind==="RECOVERED_SUPPORT_DATABASE_ONLY";}
+function backupArchiveWarning(pkg){
+ if(backupPreservesArchives(pkg))return " Database-only backup: original spreadsheets are not included. Existing spreadsheets on this device will be kept.";
+ const ids=new Set((pkg.sourceFiles||[]).map(f=>f.id));
+ const missing=(pkg.data?.sundayImports||[]).filter(r=>r?.id&&!ids.has(r.id)).length;
+ if(missing)return ` Original spreadsheets are unavailable for ${missing} Sunday report(s). Their saved report records are included, but lost attachments cannot be recreated.`;
+ return "";
+}
 async function createCompleteTransferPackage(kind="FULL_TRANSFER"){
- const sourceFiles=await exportArchivedSourceFiles(),counts=backupCounts();
- return {format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.10.133",backupKind:kind,createdAt:new Date().toISOString(),counts,sourceFilesCount:sourceFiles.length,data:JSON.parse(JSON.stringify(db)),sourceFiles};
+ const data=JSON.parse(JSON.stringify(db)),createdAt=new Date().toISOString();
+ const sourceFiles=await exportArchivedSourceFiles(),counts=backupCounts(data);
+ const pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.10.135",backupKind:kind,createdAt,counts,sourceFilesCount:sourceFiles.length,data,sourceFiles};
+ validateBackupPackage(pkg);
+ return pkg;
 }
 async function savePackageFile(pkg,prefix="Magic-Pin-Data"){
  const blob=new Blob([JSON.stringify(pkg)],{type:"application/json"});
@@ -11871,17 +11944,23 @@ function showTransferPreview(pkg){
  pendingTransferPackage=pkg;
  const c=backupCounts(pkg.data),overlay=document.getElementById("transferPreviewOverlay"),meta=document.getElementById("transferPreviewMeta"),grid=document.getElementById("transferPreviewGrid");
  const when=pkg.createdAt?new Date(pkg.createdAt).toLocaleString():"Unknown";
- if(meta)meta.innerHTML=`<b>Source app:</b> v${escapeHtml(pkg.appVersion||"unknown")}<br><b>Created:</b> ${escapeHtml(when)}<br><b>Archived Sunday source files:</b> ${(pkg.sourceFiles||[]).length}`;
+ if(meta)meta.innerHTML=`<b>Source app:</b> v${escapeHtml(pkg.appVersion||"unknown")}<br><b>Created:</b> ${escapeHtml(when)}<br><b>Archived Sunday source files:</b> ${(pkg.sourceFiles||[]).length}<br><strong>${escapeHtml(backupArchiveWarning(pkg))}</strong>`;
  const items=[["Products / variants",c.products],["Aliases / mappings",c.aliases],["Sunday reports",c.sundayReports],["Delivery dockets",c.deliveries],["Invoices",c.invoices],["Paid invoices",c.payments]];
  if(grid)grid.innerHTML=items.map(([label,n])=>`<div class="transferPreviewStat"><b>${n}</b><span>${label}</span></div>`).join("");
  if(overlay){overlay.classList.add("open");overlay.setAttribute("aria-hidden","false");document.body.style.overflow="hidden"}
 }
 function closeTransferPreview(){const overlay=document.getElementById("transferPreviewOverlay");if(overlay){overlay.classList.remove("open");overlay.setAttribute("aria-hidden","true")}document.body.style.overflow="";pendingTransferPackage=null}
-async function verifyImportedTransfer(pkg){
- const expected=backupCounts(pkg.data),actual=backupCounts(db),expectedSources=(pkg.sourceFiles||[]).length,actualSources=await countArchivedSourceFiles();
+async function verifyImportedTransfer(pkg,preservedSources=0){
+ const expected=backupCounts(pkg.data),actual=backupCounts(db),expectedSources=backupPreservesArchives(pkg)?preservedSources:(pkg.sourceFiles||[]).length,actualSources=await countArchivedSourceFiles();
  const keys=["products","aliases","sundayReports","deliveries","invoices","payments"];
  const mismatches=keys.filter(k=>Number(expected[k])!==Number(actual[k]));
- if(actualSources>=0&&actualSources!==expectedSources)mismatches.push("sourceFiles");
+ if(stableJson(db)!==stableJson(pkg.data))mismatches.push("recordContents");
+ if(actualSources<0||actualSources!==expectedSources)mismatches.push("sourceFiles");
+ if(!backupPreservesArchives(pkg)){
+  const restored=await exportArchivedSourceFiles();
+  const expectedFiles=new Map((pkg.sourceFiles||[]).map(f=>[f.id,f.data]));
+  if(restored.some(f=>expectedFiles.get(f.id)!==f.data))mismatches.push("spreadsheetContents");
+ }
  return {ok:mismatches.length===0,expected,actual,expectedSources,actualSources,mismatches};
 }
 document.getElementById("exportData").onclick=async()=>{
@@ -11891,7 +11970,7 @@ document.getElementById("exportData").onclick=async()=>{
   const result=await savePackageFile(pkg);
   if(result.cancelled){backupStatus("Export cancelled. No app data was changed.");return}
   if(!result.saved)throw new Error("The transfer file could not be saved or shared.");
-  const c=pkg.counts;backupStatus(`Complete app data exported: ${c.products} products, ${c.aliases} aliases, ${c.sundayReports} Sunday reports, ${c.deliveries} deliveries, ${c.invoices} invoices, ${pkg.sourceFilesCount} archived source files.`);
+  const c=pkg.counts;backupStatus(`Complete app data exported: ${c.products} products, ${c.aliases} aliases, ${c.sundayReports} Sunday reports, ${c.deliveries} deliveries, ${c.invoices} invoices, ${pkg.sourceFilesCount} archived source files.${backupArchiveWarning(pkg)}`);
  }catch(e){console.error(e);backupStatus("Complete app-data export could not be created. No app data was changed.",true);alert(e?.message||"The complete app-data export could not be created.")}
  finally{btn.disabled=false}
 };
@@ -11899,7 +11978,7 @@ document.getElementById("importData").onchange=e=>{
  const input=e.target,f=input.files?.[0];if(!f)return;backupStatus("Checking complete app-data file…");
  const r=new FileReader();
  r.onload=()=>{
-  try{const pkg=JSON.parse(r.result);validateBackupPackage(pkg);showTransferPreview(pkg);backupStatus("Preview ready. Nothing has changed on this device.")}
+  try{const pkg=normalizeImportedBackup(JSON.parse(r.result));showTransferPreview(pkg);backupStatus("Preview ready. Nothing has changed on this device.")}
   catch(err){console.error(err);backupStatus(err?.message||"Invalid backup file.",true);alert(err?.message||"This backup file could not be opened.");input.value=""}
  };
  r.onerror=()=>{backupStatus("The selected backup file could not be read.",true);input.value=""};
@@ -11935,11 +12014,11 @@ ${saved.fileName}`;
   );
   if(!continueReplace){backupStatus(`Safety backup created (${saved.fileName}), but the data replacement was cancelled. Nothing on this device was changed.`);return}
   backupStatus("Safety backup confirmed. Replacing this device's data…");
-  await replaceArchivedSourceFiles(pkg.sourceFiles||[]);
   changed=true;
+  if(!backupPreservesArchives(pkg))await replaceArchivedSourceFiles(pkg.sourceFiles||[]);
   Object.keys(db).forEach(k=>delete db[k]);Object.assign(db,JSON.parse(JSON.stringify(pkg.data)));
   localStorage.setItem("mdpin-db",JSON.stringify(db));
-  const check=await verifyImportedTransfer(pkg);
+  const check=await verifyImportedTransfer(pkg,safety.sourceFiles.length);
   if(!check.ok)throw new Error(`Import verification failed: ${check.mismatches.join(", ")}. The pre-import safety backup is available for recovery.`);
   if(pkg._mdCloudMeta?.revision){
    const fp=await cloudStateFingerprint(pkg);
