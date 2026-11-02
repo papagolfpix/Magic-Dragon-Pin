@@ -1,39 +1,30 @@
-MAGIC DRAGON PIN — v0.10.136 DEPLOY
+MAGIC DRAGON PIN — v0.10.137 DEPLOY
 2 November 2026
 
-SUNDAY RECONCILIATION CORRECTION
-- Previous Sunday stock is matched by exact product name AND canonical variant ID.
-- Never reuse an approximate/fuzzy similarly named 5g or Pre-Roll row as 1g stock.
-- A product absent from the prior report and opening at zero may return normally;
-  its recorded deliveries and closing balance must still agree.
-- All stock-flow names and reconciliation warnings display explicit variants,
-  e.g. "Super Lemon Haze · 1g" versus "Super Lemon Haze · 5g".
-- No historical Sunday figures, product aliases, deliveries, invoices or payments
-  are changed by this software update.
+TARGETED HISTORICAL MAPPING REPAIR
+- Corrects confirmed Lamai source typo "Rainbow Bells" to "Rainbow Belts".
+- Keeps variants separate: 1g, 5g and Pre-Roll.
+- Links 25 October and 1 November imported rows to the same canonical product IDs used on 18 October.
+- Preserves original Sunday source spellings, deliveries, invoice, payment, stock quantities, prices and dates.
+- Does not treat an edit made for a later week's delivery as an edit to an already paid earlier invoice.
+- Clarifies future dashboard alerts when no edited delivery docket belongs to a flagged invoice week.
+- Rechecks mapping after cloud restoration; idempotent.
 
-TARGETED VERIFIED CASE (from provided backup, not included in this ZIP)
-- BM Bangrak, Sunday 2026-11-01 versus 2026-10-25.
-- Super Lemon Haze 1g: absent from 2026-10-25, previous 2026-10-11 close 0.
-- 2026-11-01: opening 0 + 30 delivered - 0 sold = 30 close.
-- Super Lemon Haze 5g: 1 + 4 - 1 = 4; Pre-Roll: 0 + 10 - 0 = 10.
-- Corrected stock and financial wizard should unlock if no other issues.
+FORENSICS (using user-provided 2 November backup; user data NOT embedded in ZIP)
+- Lamai 18 Oct closing: Rainbow Belts 1g 6, Pre-Roll 3.
+- Lamai 25 Oct opening: incorrectly mapped Rainbow Bells 1g 6, Pre-Roll 3.
+- After canonical ID repair: both historical Sunday weeks reconcile; payments unchanged.
+- Lamai late-week delivery D1793429786465 was re-dated Oct 31 -> Nov 2, outside the Oct 25 invoice week.
 
 INSTALLATION
-- Save a fresh Complete App Data backup to Files (outside Safari) first.
-- For PRODUCTION deploy v0.10.136 DEPLOY to the Magic-Dragon-Pin production
-  repository using the existing process. Do not use the TEST extractor workflow
-  for a DEPLOY ZIP.
-- For isolated validation deploy the TEST ZIP to the TEST repository only.
-- Refresh app, verify "v0.10.136 DEPLOY" in header, re-open Sunday's workflow.
-- Never clear browser/site data; do not reimport original Sunday spreadsheets.
-- Keep existing data; do not import test data on Pin's phone.
+- Save a fresh Complete App Data backup from the live iPhone BEFORE updating.
+- Deploy this DEPLOY ZIP to production using your established repository process.
+- This ZIP is an app-only update; it does not include or import private shop data.
+- Refresh and verify v0.10.137 DEPLOY; check dashboard alert clears.
+- Do not reimport old Sunday sheets or restore the older backup over current live data.
+- Avoid altering the paid MD-20261025 invoice.
 
-TESTS
-- JavaScript syntax and offline forensic reconciliation against user backup.
-- Static HTML, JavaScript and service-worker cache version consistency.
-- Isolated headless JavaScript tests for cross-variant and missing-row cases.
-- iPhone Safari end-to-end UX and deploy were not run in this environment.
-
-PACKAGE
-- App-only root files. No private shop, invoice or backup information included.
-- v0.10.135 production source remains rollback reference.
+VALIDATION
+- JavaScript source syntax and stock reconciliation with 2 November saved backup.
+- iPhone Safari and live Supabase synchronization not end-to-end tested here.
+- v0.10.136 retained as rollback.

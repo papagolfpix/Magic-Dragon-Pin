@@ -4735,7 +4735,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
       <button class="heroHomeHotspot noPrint" type="button" aria-label="Return to Dashboard" title="Dashboard" onclick="returnToDashboardFromHeader()"></button>
     </div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.10.136 DEPLOY</span>
+      <span class="app-version">v0.10.137 DEPLOY</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -5443,7 +5443,7 @@ if(!Array.isArray(db.adjustments)) db.adjustments=[];
   if(changed)localStorage.setItem("mdpin-db",JSON.stringify(db));
 })();
 
-// v0.10.136 DEPLOY — release-candidate sanitation.
+// v0.10.137 DEPLOY — release-candidate sanitation.
 // Remove ONLY synthetic records created by the retired unpaid-conflict test helper.
 // Normal dockets, Sunday reports, real invoices, payments, mappings and amounts are untouched.
 (function cleanupRetiredConflictTestArtifacts(){
@@ -5528,6 +5528,54 @@ function migrateKnownCanonicalDuplicates(){
       keep.add(p.id);out.push(p);
     });
     db.products=out;
+    localStorage.setItem("mdpin-db",JSON.stringify(db));
+  }
+  return changed;
+}
+
+// v0.10.137: confirmed typo in Lamai Sunday source files (Rainbow Bells vs Rainbow Belts).
+// This repairs only three known retired product IDs to their same-variant canonical
+// IDs. Historical sourceProductName and raw Excel files are retained unchanged;
+// no quantities, sales, payments, invoice signatures or delivery dates are edited.
+function repairConfirmedRainbowBellsHistoryV137(){
+  ensureProductAliases();
+  const pairs=[
+    {oldId:"PMVHLU3ISPN8",newId:"PMV432PFPRU8",kind:"1g",aliases:["rainbow bells","rainbow bells 1g","rainbow belts 1g","rainbow belts"]},
+    {oldId:"PMVHLU3ISUVB",newId:"PMV432PFQY4K",kind:"5g",aliases:["rainbow bells 5g","rainbow belts 5g"]},
+    {oldId:"PMVHLU3ISHZQ",newId:"PMV432PFQ92F",kind:"preroll",aliases:["rainbow bells pre-roll","rainbow bells preroll","rainbow belts pre-roll","rainbow belts preroll"]}
+  ];
+  // Do not perform any speculative migration on a different catalogue.
+  const valid=pairs.every(({newId,kind})=>{
+    const p=(db.products||[]).find(p=>p.id===newId);
+    return p&&normalizeProductKey(productParentName(p))==="rainbow belts"&&String(effectiveDeliveryVariant(p).variantKey)===kind;
+  });
+  if(!valid)return false;
+  let changed=false;
+  pairs.forEach(({oldId,newId,kind,aliases})=>{
+    const old=(db.products||[]).find(p=>p.id===oldId);
+    const target=db.products.find(p=>p.id===newId);
+    if(old && normalizeProductKey(productParentName(old))==="rainbow bells" &&
+       String(effectiveDeliveryVariant(old).variantKey)===kind &&
+       Math.abs(Number(old.cost)-Number(target.cost))<0.001 &&
+       Math.abs(Number(old.retail)-Number(target.retail))<0.001){
+      // Re-link saved weekly/archived lines and draft docket lines; retain old
+      // catalogue entries archived as a historical audit trail.
+      const refs=(db.weeks||[]).some(w=>(w.rows||[]).some(r=>r.productId===oldId))||
+        (db.sundayImports||[]).some(w=>(w.rows||[]).some(r=>r.productId===oldId))||
+        (db.deliveries||[]).some(d=>(d.lines||[]).some(r=>r.productId===oldId))||
+        Object.values(db.productAliases||{}).some(id=>id===oldId);
+      if(refs){reassignProductReferences(oldId,newId);changed=true;}
+    }
+    aliases.forEach(name=>{
+      const key=normalizeProductKey(name);
+      if(db.productAliases[key]!==newId){db.productAliases[key]=newId;changed=true;}
+      if(db.deferredMappings&&Object.prototype.hasOwnProperty.call(db.deferredMappings,key)){
+        delete db.deferredMappings[key];changed=true;
+      }
+    });
+  });
+  if(changed){
+    db.confirmedRainbowBellsMappingRepairV137={appliedAt:new Date().toISOString(),reason:"Confirmed Lamai Rainbow Bells typo mapped to Rainbow Belts by exact variant; no monetary or quantity changes."};
     localStorage.setItem("mdpin-db",JSON.stringify(db));
   }
   return changed;
@@ -10103,6 +10151,7 @@ migrateKnownCanonicalDuplicates();
 ensureKnownCatalogueAdditions();
 repairKnownProductPrices();
 ensureProductFamilyStructure();
+repairConfirmedRainbowBellsHistoryV137();
 repairMissingSep13HistoricalCycleV1();
 let sundayWizardStep=2;
 let sundayWizardTargetDate=null;
@@ -10327,6 +10376,8 @@ function wizardCycleDate(state=null){
   return dates[dates.length-1]||null;
 }
 function wizardReportsForDate(date){
+  // Idempotent: refresh historical mappings after a cloud restore as well as on startup.
+  repairConfirmedRainbowBellsHistoryV137();
   ensureSundayArchive(); rebuildSundayReportChain();
   // v0.10.128: a shop may prepare its Sunday stock report one day early.
   // Preserve the report's true date, but group it into the same billing cycle via cycleDate.
@@ -11216,7 +11267,13 @@ function invoiceReviewContext(inv){
         if(before)return `${before} removed`;
         return after?`${after} added`:"Delivery docket edited";
       }).join("; ")+(latestEdit.changes.length>2?` +${latestEdit.changes.length-2} more`:"")
-    : "A linked delivery docket was edited.";
+    : (()=>{
+        const live=currentWizardStateSafeForInvoice(inv.reportDate);
+        const failures=(live?.items||[]).filter(x=>x.rec?.status!=="ok");
+        if(!failures.length)return "Historical reconciliation needs review; no linked delivery edit was found.";
+        const names=failures.flatMap(x=>(x.rec?.details||[]).filter(z=>z.issues?.length).slice(0,3).map(z=>`${displayBranchName(x.report.branch)}: ${reconciliationProductDisplayName(z,z.productId?db.products.find(p=>p.id===z.productId):null)}`));
+        return `Historical Sunday stock or product-mapping issue${names.length?" — "+names.slice(0,3).join("; "):""}. No linked delivery edit was found.`;
+      })();
   return {sourceEdits,latestEdit,branch,date,changeText};
 }
 function correctionWorkflowMarkup(inv,live,oldBase,livePay,liveDelta){
@@ -11481,7 +11538,7 @@ function renderDashboardAlerts(){
         const reviewKey=sourceEdits.length?invoiceSourceEditAckKey(inv,sourceEdits):"";
         const reviewAcknowledged=!!(reviewKey&&db.alertAcknowledgements?.[reviewKey]);
         if(!reviewAcknowledged){
-          alerts.push(`<div class="dashboardAlert"><div class="dashboardAlertHead"><div class="dashboardAlertTitle">⚠ Invoice needs review</div></div><div class="dashboardAlertText">${escapeHtml(inv.number||'Invoice')} v${Number(inv.version||1)} has source records edited after it was saved, and the week no longer fully reconciles.</div><button class="btn" onclick="openInvoiceRecord('${inv.id}');setTimeout(()=>openConflictResolutionWizard('${inv.id}'),80)">Resolve step by step</button></div>`);
+          alerts.push(`<div class="dashboardAlert"><div class="dashboardAlertHead"><div class="dashboardAlertTitle">⚠ Invoice needs review</div></div><div class="dashboardAlertText">${escapeHtml(inv.number||"Invoice")} v${Number(inv.version||1)} ${sourceEdits.length?"has edited source records and the week no longer reconciles.":"has an unresolved historical Sunday reconciliation issue. No linked delivery edit was found for this invoice week. The saved invoice remains unchanged."}</div><button class="btn" onclick="openInvoiceRecord('${inv.id}');setTimeout(()=>openConflictResolutionWizard('${inv.id}'),80)">Resolve step by step</button></div>`);
         }
         return;
       }
