@@ -4735,7 +4735,7 @@ window.addEventListener("error",e=>{const b=document.getElementById("runtimeErro
       <button class="heroHomeHotspot noPrint" type="button" aria-label="Return to Dashboard" title="Dashboard" onclick="returnToDashboardFromHeader()"></button>
     </div>
     <div class="heroActions noPrint">
-      <span class="app-version">v0.10.135 DEPLOY</span>
+      <span class="app-version">v0.10.136 DEPLOY</span>
       <button class="heroMenuButton" id="heroMenuButton" type="button" aria-expanded="false">Menu</button>
     </div>
   </div>
@@ -5443,7 +5443,7 @@ if(!Array.isArray(db.adjustments)) db.adjustments=[];
   if(changed)localStorage.setItem("mdpin-db",JSON.stringify(db));
 })();
 
-// v0.10.135 DEPLOY — release-candidate sanitation.
+// v0.10.136 DEPLOY — release-candidate sanitation.
 // Remove ONLY synthetic records created by the retired unpaid-conflict test helper.
 // Normal dockets, Sunday reports, real invoices, payments, mappings and amounts are untouched.
 (function cleanupRetiredConflictTestArtifacts(){
@@ -7522,7 +7522,7 @@ function buildFullBackupPayload(kind="SUPPORT",note=""){
   return {
     magicDragonBackup:true,
     app:"Magic Dragon Pin",
-    appVersion:"0.10.135",
+    appVersion:"0.10.136",
     backupKind:String(kind||"SUPPORT").toUpperCase(),
     createdAt:new Date().toISOString(),
     note:String(note||""),
@@ -8433,15 +8433,10 @@ function getNearestEarlierSundayReport(branch,date,currentId=null){
 
 function rowByProductName(report,name){
   if(!report) return null;
-  const n=norm(name);
-  let exact=(report.rows||[]).find(r=>norm(r.product)===n);
-  if(exact) return exact;
-  let best=null,bestScore=0;
-  (report.rows||[]).forEach(r=>{
-    const s=similarity(n,norm(r.product));
-    if(s>bestScore){bestScore=s;best=r}
-  });
-  return bestScore>=0.72?best:null;
+  // Exact names only. Fuzzy suggestions belong to the mapping workflow,
+  // never to authoritative stock arithmetic.
+  const n=normalizeProductKey(name);
+  return (report.rows||[]).find(r=>normalizeProductKey(r.product)===n)||null;
 }
 
 // v0.10.119: test copies are visible in Records but never enter real stock arithmetic.
@@ -8471,18 +8466,31 @@ function appDeliveryQty(branch,startDate,endDate,productId){
       .reduce((a,l)=>a+(Number(l.qty)||0),0),0);
 }
 
+// v0.10.136: stock must never be borrowed from a similar product or another variant.
+// A product omitted from the preceding Sunday stays absent, not a fuzzy name match.
 function previousRowForProduct(report,currentName,currentProduct){
   if(!report) return null;
-  const exact=(report.rows||[]).find(r=>normalizeProductKey(r.product)===normalizeProductKey(currentName));
+  const rows=report.rows||[];
+  const exact=rows.find(r=>normalizeProductKey(r.product)===normalizeProductKey(currentName) &&
+    (!currentProduct || canonicalProductMatchRow(r).product?.id===currentProduct.id));
   if(exact) return exact;
   if(currentProduct){
-    const byCanonical=(report.rows||[]).find(r=>{
+    const byCanonical=rows.find(r=>{
       const m=canonicalProductMatchRow(r);
-      return m.product && m.product.id===currentProduct.id;
+      return m.product?.id===currentProduct.id;
     });
     if(byCanonical) return byCanonical;
   }
-  return rowByProductName(report,currentName);
+  // Never use string similarity for numerical stock continuity. It can turn
+  // a prior 5g pack into a false 1g opening balance when 1g was out of stock.
+  return null;
+}
+
+function reconciliationProductDisplayName(row,product){
+  if(!product) return String(row?.product||row?.sourceProductName||'Unknown product');
+  const variant=productVariantLabel(product);
+  const family=productParentName(product)||product.name||row?.product||'Unknown product';
+  return variant ? `${family} · ${variant}` : family;
 }
 
 function reconcileExcelReport(rep){
@@ -8497,6 +8505,7 @@ function reconcileExcelReport(rep){
   rep.rows.forEach(rr=>{
     const pm=canonicalProductMatchRow(rr);
     const p=pm.product;
+    const displayName=reconciliationProductDisplayName(rr,p);
     const prev=previousRowForProduct(previous,rr.product,p);
     const rowIssues=[];
     let rowVerified=true;
@@ -8569,7 +8578,8 @@ function reconcileExcelReport(rep){
       else{flowStatus=(rowHasStockError?"bad":"data");flowLabel="Check difference";}
     }
     flowRows.push({
-      product:p?.name||rr.product, previousClose,sheetOpening,ledgerDeliveries:appQty,shopDeliveries:shopQty,
+      product:displayName,sourceProductName:rr.product,productId:p?.id||null,
+      previousClose,sheetOpening,ledgerDeliveries:appQty,shopDeliveries:shopQty,
       sheetClosing,sheetSold,takeOut,expectedClosing,openingDifference,deliveryDifference,closingDifference,
       status:flowStatus,label:flowLabel
     });
@@ -8580,7 +8590,7 @@ function reconcileExcelReport(rep){
     if(rowHasHistoryPending) historyPendingRows++;
     if(rowHasMapping) mappingRows++;
     if(rowIssues.length) details.push({
-      product:rr.product,
+      product:rr.product,displayName,productId:p?.id||null,
       inStock:rr.inStock,
       sold:rr.sold,
       delivered:rr.newDeliver,
@@ -8716,7 +8726,7 @@ function renderExcelReconciliation(reports){
           return `<details class="productRecon">
             <summary>
               <div class="productReconMain">
-                <div class="productReconName">${d.product}</div>
+                <div class="productReconName">${escapeHtml(d.displayName||d.product)}</div>
                 <div class="productReconMini">${[
                   d.inStock!=null?`Stock ${d.inStock}`:null,
                   d.sold!=null?`Sold ${d.sold}`:null,
@@ -8733,13 +8743,13 @@ function renderExcelReconciliation(reports){
     const mapBlock=mapping.length?`
       <details class="reconGroup">
         <summary><b>Mapping review</b><span>${mapping.length}</span><span class="chev">⌄</span></summary>
-        <div class="reconGroupBody">${mapping.map(d=>`<div class="mappingItem"><b>${d.product}</b><div class="small">${d.issues.filter(i=>i.type==="warn").map(i=>i.msg).join(" ")}</div></div>`).join("")}</div>
+        <div class="reconGroupBody">${mapping.map(d=>`<div class="mappingItem"><b>${escapeHtml(d.displayName||d.product)}</b><div class="small">${d.issues.filter(i=>i.type==="warn").map(i=>i.msg).join(" ")}</div></div>`).join("")}</div>
       </details>`:"";
 
     const histBlock=history.length?`
       <details class="reconGroup historyGroup">
         <summary><b>History pending</b><span>${history.length} product${history.length===1?"":"s"}</span><span class="chev">⌄</span></summary>
-        <div class="reconGroupBody compactNames">${history.map(d=>`<span>${d.product}</span>`).join("")}</div>
+        <div class="reconGroupBody compactNames">${history.map(d=>`<span>${escapeHtml(d.displayName||d.product)}</span>`).join("")}</div>
       </details>`:"";
 
     return `<details class="reconReport compactReconReport">
@@ -10454,7 +10464,7 @@ function renderStockWizard(items){
         const docketButtons=candidates.map(({d:source,qty})=>`<button class="btn ${businessDeliverySource(source)===null?'alt':''}" type="button" onclick='wizardOpenDeliveryDocket(${JSON.stringify(String(source.id))})'>${businessDeliverySource(source)===null?'Excluded TEST · ':deliveryFromReportBeingChecked(source,r.date)?'Excluded source top-up · ':''}Docket ${escapeHtml(source.date)} · ${escapeHtml(String(qty))}</button>`).join('');
         actionButtons=`<div class="wizardSourceChoice"><b>1. Check saved delivery${candidates.length===1?'':' dockets'}</b><div class="wizardMinimal">${candidates.length?`${candidates.length} matching delivered docket${candidates.length===1?'':'s'} for this week.`:'No matching delivered docket found; review the archive.'}</div><div class="wizardActions">${docketButtons||`<button class="btn" type="button" onclick="wizardAction('delivery')">Open Delivery Dockets</button>`}</div></div><div class="wizardSourceChoice"><b>2. Check the shop Sunday report</b><div class="wizardMinimal">Verify the delivery column against the shop’s original workbook.</div><div class="wizardActions"><button class="btn" type="button" onclick='wizardOpenSundayReport(${JSON.stringify(String(r.id))})'>Open ${escapeHtml(displayBranchName(r.branch))} · ${escapeHtml(r.date)}</button></div></div>`;
       }
-      return `<details class="wizardIssue"><summary><div><div class="wizardIssueTitle">${escapeHtml(d.product)}</div><div class="wizardIssueReason">${escapeHtml(reason)}</div></div><span class="wizardIssueChevron">⌄</span></summary>${finding}<div class="wizardEvidence">${evidence}</div><div class="wizardEvidenceNote">${escapeHtml(hint)}</div><div class="wizardActions wizardSourceActions">${actionButtons}</div></details>`;
+      return `<details class="wizardIssue"><summary><div><div class="wizardIssueTitle">${escapeHtml(d.displayName||d.product)}</div><div class="wizardIssueReason">${escapeHtml(reason)}</div></div><span class="wizardIssueChevron">⌄</span></summary>${finding}<div class="wizardEvidence">${evidence}</div><div class="wizardEvidenceNote">${escapeHtml(hint)}</div><div class="wizardActions wizardSourceActions">${actionButtons}</div></details>`;
     }).join("");
     return `<div class="wizardBranch"><div class="wizardBranchHead"><b>${escapeHtml(r.branch)}</b><span class="reconStatus bad">ACTION REQUIRED</span></div><div class="wizardBranchBody">${visible}${issues.length>12?`<div class="wizardMinimal">+ ${issues.length-12} more items. Resolve the first issues, then return here.</div>`:""}</div></div>`;
   }).join("");
@@ -11926,7 +11936,7 @@ function backupArchiveWarning(pkg){
 async function createCompleteTransferPackage(kind="FULL_TRANSFER"){
  const data=JSON.parse(JSON.stringify(db)),createdAt=new Date().toISOString();
  const sourceFiles=await exportArchivedSourceFiles(),counts=backupCounts(data);
- const pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.10.135",backupKind:kind,createdAt,counts,sourceFilesCount:sourceFiles.length,data,sourceFiles};
+ const pkg={format:BACKUP_FORMAT,schema:BACKUP_SCHEMA,appVersion:"0.10.136",backupKind:kind,createdAt,counts,sourceFilesCount:sourceFiles.length,data,sourceFiles};
  validateBackupPackage(pkg);
  return pkg;
 }
@@ -12420,7 +12430,7 @@ if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
     window.addEventListener("load",syncGeometry,{once:true});
   })();
 
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=1090", {updateViaCache:"none"}).catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=1091", {updateViaCache:"none"}).catch(()=>{}));
 }
 
 /* v0.10.44 deterministic regression check.
